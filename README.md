@@ -32,3 +32,8 @@
 [링크](https://cut-leech-2de.notion.site/Product-Backlog-Epic-Story-Task-12f414b4c0cb800584a8c209fe7f06f4?pvs=4)
 
 추후 Github로 옮길 예정입니다.
+
+## 발표 자료
+|주차|자료|
+|:---:|:---|
+|1|[1주차 발표자료.pdf](https://github.com/user-attachments/files/17597858/1.pdf)|
