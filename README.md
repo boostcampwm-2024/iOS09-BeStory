@@ -19,6 +19,7 @@
 <br>
 
 ## 프로젝트 기획
+[figma](https://www.figma.com/design/a9qGLxRE8SI3N5blpW0Jr4/BeStory?node-id=5-2&t=YjD5UwKi2AnmqDvN-1)
 ![image](https://github.com/user-attachments/assets/8aa9c25c-c5c3-4d85-856a-15e55048d88a)
 
 - 주변 유저와 그룹 맺기 (MultipeerConnectivity를 사용한 근거리 통신)
