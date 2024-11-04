@@ -33,8 +33,6 @@ BeStory에서는 친구들과 촬영한 각자의 동영상을 모아 하나의 
 <br>
 
 ## 프로젝트 기획
-[figma](https://www.figma.com/design/a9qGLxRE8SI3N5blpW0Jr4/BeStory?node-id=5-2&t=YjD5UwKi2AnmqDvN-1)
-![image](https://github.com/user-attachments/assets/8aa9c25c-c5c3-4d85-856a-15e55048d88a)
 
 - 주변 유저와 그룹 맺기 (MultipeerConnectivity를 사용한 근거리 통신)
 - 공유 컨테이너에 동영상 업로드
@@ -45,7 +43,6 @@ BeStory에서는 친구들과 촬영한 각자의 동영상을 모아 하나의 
 <br>
 
 ## Product Backlog
-[링크](https://cut-leech-2de.notion.site/Product-Backlog-Epic-Story-Task-12f414b4c0cb800584a8c209fe7f06f4?pvs=4)
 
 추후 Github로 옮길 예정입니다.
 
