@@ -6,11 +6,47 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		FE0334F42CD9DF2900AA58C9 /* libData.a in Dependencies */ = {isa = PBXBuildFile; fileRef = FEEBA09C2CD9D6BF007AAAA0 /* libData.a */; };
+		FE0334F52CD9DF2900AA58C9 /* libDomain.a in Dependencies */ = {isa = PBXBuildFile; fileRef = FEEBA09E2CD9D6BF007AAAA0 /* libDomain.a */; };
+		FE0334F62CD9DF2900AA58C9 /* libFeature.a in Dependencies */ = {isa = PBXBuildFile; fileRef = FEEBA09F2CD9D6BF007AAAA0 /* libFeature.a */; };
+		FEEBA0A12CD9D6BF007AAAA0 /* SocketProvider.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEEBA09D2CD9D6BF007AAAA0 /* SocketProvider.framework */; };
+		FEEBA0A22CD9D6BF007AAAA0 /* SocketProvider.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FEEBA09D2CD9D6BF007AAAA0 /* SocketProvider.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		FE0334F32CD9DF1800AA58C9 /* Dependencies */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+				FE0334F42CD9DF2900AA58C9 /* libData.a in Dependencies */,
+				FE0334F52CD9DF2900AA58C9 /* libDomain.a in Dependencies */,
+				FE0334F62CD9DF2900AA58C9 /* libFeature.a in Dependencies */,
+			);
+			name = Dependencies;
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		FEEBA09B2CD9D67F007AAAA0 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				FEEBA0A22CD9D6BF007AAAA0 /* SocketProvider.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		FE6EF2EA2CD8B005005DC39D /* App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = App.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		FED968412CD90E4500CD445C /* libData.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libData.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		FED968432CD90E4500CD445C /* libDomain.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libDomain.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		FED968452CD90E4500CD445C /* libFeature.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libFeature.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		FEEBA09C2CD9D6BF007AAAA0 /* libData.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libData.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		FEEBA09D2CD9D6BF007AAAA0 /* SocketProvider.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SocketProvider.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FEEBA09E2CD9D6BF007AAAA0 /* libDomain.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libDomain.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		FEEBA09F2CD9D6BF007AAAA0 /* libFeature.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libFeature.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -39,6 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FEEBA0A12CD9D6BF007AAAA0 /* SocketProvider.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,9 +102,10 @@
 		FE6EF3E12CD8B6A2005DC39D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FED968412CD90E4500CD445C /* libData.a */,
-				FED968432CD90E4500CD445C /* libDomain.a */,
-				FED968452CD90E4500CD445C /* libFeature.a */,
+				FEEBA09C2CD9D6BF007AAAA0 /* libData.a */,
+				FEEBA09D2CD9D6BF007AAAA0 /* SocketProvider.framework */,
+				FEEBA09E2CD9D6BF007AAAA0 /* libDomain.a */,
+				FEEBA09F2CD9D6BF007AAAA0 /* libFeature.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -79,9 +117,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FE6EF2FD2CD8B007005DC39D /* Build configuration list for PBXNativeTarget "App" */;
 			buildPhases = (
+				FEF35FBF2CD9BC8F006FF6F2 /* Run Script */,
 				FE6EF2E62CD8B005005DC39D /* Sources */,
 				FE6EF2E72CD8B005005DC39D /* Frameworks */,
 				FE6EF2E82CD8B005005DC39D /* Resources */,
+				FEEBA09B2CD9D67F007AAAA0 /* Embed Frameworks */,
+				FE0334F32CD9DF1800AA58C9 /* Dependencies */,
 			);
 			buildRules = (
 			);
@@ -141,6 +182,28 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		FEF35FBF2CD9BC8F006FF6F2 /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "ROOT_DIR=\"${PROJECT_DIR}/../\"\nCONFIGPATH=\"/Users/jeongseog-yeong/Github/BeStory/.swiftlint.yml\"\n\n\"${ROOT_DIR}swiftlint\" --config \"${ROOT_DIR}.swiftlint.yml\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		FE6EF2E62CD8B005005DC39D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -160,6 +223,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9L2J37V6PK;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = App/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -193,6 +257,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9L2J37V6PK;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = App/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

@@ -7,22 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FED968382CD9096900CD445C /* libDomain.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FED968372CD9096900CD445C /* libDomain.a */; };
-		FED9685F2CD90FD500CD445C /* SocketProvider.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FED968552CD90FCF00CD445C /* SocketProvider.framework */; };
-		FED968602CD90FD500CD445C /* SocketProvider.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FED968552CD90FCF00CD445C /* SocketProvider.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FE0334F22CD9DE7900AA58C9 /* libDomain.a in Dependencies */ = {isa = PBXBuildFile; fileRef = FED968372CD9096900CD445C /* libDomain.a */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		FED968612CD90FD500CD445C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FE6EF3242CD8B020005DC39D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FED968542CD90FCF00CD445C;
-			remoteInfo = SocketProvider;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXCopyFilesBuildPhase section */
+		FE0334F12CD9DE6B00AA58C9 /* Dependencies */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+				FE0334F22CD9DE7900AA58C9 /* libDomain.a in Dependencies */,
+			);
+			name = Dependencies;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FED968282CD9094300CD445C /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -30,17 +29,6 @@
 			dstSubfolderSpec = 16;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FED968632CD90FD500CD445C /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				FED968602CD90FD500CD445C /* SocketProvider.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -82,8 +70,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FED9685F2CD90FD500CD445C /* SocketProvider.framework in Frameworks */,
-				FED968382CD9096900CD445C /* libDomain.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,15 +127,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FED9682E2CD9094300CD445C /* Build configuration list for PBXNativeTarget "Data" */;
 			buildPhases = (
+				FEEBA08E2CD9D52B007AAAA0 /* ShellScript */,
 				FED968262CD9094300CD445C /* Sources */,
 				FED968272CD9094300CD445C /* Frameworks */,
 				FED968282CD9094300CD445C /* CopyFiles */,
-				FED968632CD90FD500CD445C /* Embed Frameworks */,
+				FE0334F12CD9DE6B00AA58C9 /* Dependencies */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				FED968622CD90FD500CD445C /* PBXTargetDependency */,
 			);
 			name = Data;
 			packageProductDependencies = (
@@ -163,6 +149,7 @@
 			buildConfigurationList = FED9685C2CD90FCF00CD445C /* Build configuration list for PBXNativeTarget "SocketProvider" */;
 			buildPhases = (
 				FED968502CD90FCF00CD445C /* Headers */,
+				FEEBA08F2CD9D558007AAAA0 /* ShellScript */,
 				FED968512CD90FCF00CD445C /* Sources */,
 				FED968522CD90FCF00CD445C /* Frameworks */,
 				FED968532CD90FCF00CD445C /* Resources */,
@@ -229,6 +216,45 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		FEEBA08E2CD9D52B007AAAA0 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "ROOT_DIR=\"${PROJECT_DIR}/../\"\nCONFIGPATH=\"/Users/jeongseog-yeong/Github/BeStory/.swiftlint.yml\"\n\n\"${ROOT_DIR}swiftlint\" --config \"${ROOT_DIR}.swiftlint.yml\"\n";
+		};
+		FEEBA08F2CD9D558007AAAA0 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "ROOT_DIR=\"${PROJECT_DIR}/../\"\nCONFIGPATH=\"/Users/jeongseog-yeong/Github/BeStory/.swiftlint.yml\"\n\n\"${ROOT_DIR}swiftlint\" --config \"${ROOT_DIR}.swiftlint.yml\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		FED968262CD9094300CD445C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -245,14 +271,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		FED968622CD90FD500CD445C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FED968542CD90FCF00CD445C /* SocketProvider */;
-			targetProxy = FED968612CD90FD500CD445C /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		FE6EF3422CD8B021005DC39D /* Debug */ = {
@@ -379,6 +397,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9L2J37V6PK;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 16;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -397,6 +416,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9L2J37V6PK;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 16;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -422,9 +442,11 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -436,6 +458,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = jung.SocketProvider;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
@@ -457,9 +483,11 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -471,6 +499,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = jung.SocketProvider;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
