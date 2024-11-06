@@ -30,8 +30,8 @@ final public class GroupInfoViewController: UIViewController, ViewProtocol {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        input.send(.viewDidLoad)
         setupBind()
+        input.send(.viewDidLoad)
     }
     
     public override func viewWillAppear(_ animated: Bool) {
