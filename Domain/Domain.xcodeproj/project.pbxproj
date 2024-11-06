@@ -22,9 +22,22 @@
 		FE6EF3C72CD8B5CA005DC39D /* libDomain.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libDomain.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		FEF778AA2CDAFB2200FFE089 /* Exceptions for "Domain" folder in "Domain" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Dummy.swift,
+			);
+			target = FE6EF3C62CD8B5CA005DC39D /* Domain */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FE6EF30D2CD8B015005DC39D /* Domain */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				FEF778AA2CDAFB2200FFE089 /* Exceptions for "Domain" folder in "Domain" target */,
+			);
 			path = Domain;
 			sourceTree = "<group>";
 		};
@@ -117,7 +130,6 @@
 /* Begin PBXShellScriptBuildPhase section */
 		FEEBA0902CD9D572007AAAA0 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);

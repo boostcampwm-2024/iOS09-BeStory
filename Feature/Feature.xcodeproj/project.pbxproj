@@ -23,15 +23,6 @@
 			name = Dependencies;
 			runOnlyForDeploymentPostprocessing = 1;
 		};
-		FED968152CD908B000CD445C /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 8;
-			dstPath = "include/$(PRODUCT_NAME)";
-			dstSubfolderSpec = 16;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -39,9 +30,22 @@
 		FED968172CD908B000CD445C /* libFeature.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libFeature.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		FEF778AC2CDAFB2D00FFE089 /* Exceptions for "Feature" folder in "Feature" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ViewController.swift,
+			);
+			target = FED968162CD908B000CD445C /* Feature */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FE6EF3F12CD8B71E005DC39D /* Feature */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				FEF778AC2CDAFB2D00FFE089 /* Exceptions for "Feature" folder in "Feature" target */,
+			);
 			path = Feature;
 			sourceTree = "<group>";
 		};
@@ -91,10 +95,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FED9681B2CD908B000CD445C /* Build configuration list for PBXNativeTarget "Feature" */;
 			buildPhases = (
-				FEEBA0912CD9D58C007AAAA0 /* ShellScript */,
+				FEEBA0912CD9D58C007AAAA0 /* Run Script */,
 				FED968132CD908B000CD445C /* Sources */,
 				FED968142CD908B000CD445C /* Frameworks */,
-				FED968152CD908B000CD445C /* CopyFiles */,
 				FE0334E32CD9DD7400AA58C9 /* Dependencies */,
 			);
 			buildRules = (
@@ -147,9 +150,8 @@
 /* End PBXProject section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		FEEBA0912CD9D58C007AAAA0 /* ShellScript */ = {
+		FEEBA0912CD9D58C007AAAA0 /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -157,6 +159,7 @@
 			);
 			inputPaths = (
 			);
+			name = "Run Script";
 			outputFileListPaths = (
 			);
 			outputPaths = (

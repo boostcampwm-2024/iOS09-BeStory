@@ -40,26 +40,26 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		FED9685B2CD90FCF00CD445C /* Exceptions for "SocketProvider" folder in "SocketProvider" target */ = {
+		FEF778B02CDAFCA100FFE089 /* Exceptions for "Data" folder in "Data" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			publicHeaders = (
-				SocketProvider.h,
+			membershipExceptions = (
+				Dummy.swift,
 			);
-			target = FED968542CD90FCF00CD445C /* SocketProvider */;
+			target = FED968292CD9094300CD445C /* Data */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FE6EF32E2CD8B020005DC39D /* Data */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				FEF778B02CDAFCA100FFE089 /* Exceptions for "Data" folder in "Data" target */,
+			);
 			path = Data;
 			sourceTree = "<group>";
 		};
 		FED968562CD90FCF00CD445C /* SocketProvider */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				FED9685B2CD90FCF00CD445C /* Exceptions for "SocketProvider" folder in "SocketProvider" target */,
-			);
 			path = SocketProvider;
 			sourceTree = "<group>";
 		};
@@ -183,6 +183,7 @@
 					};
 					FED968542CD90FCF00CD445C = {
 						CreatedOnToolsVersion = 16.0;
+						LastSwiftMigration = 1600;
 					};
 				};
 			};
@@ -219,7 +220,6 @@
 /* Begin PBXShellScriptBuildPhase section */
 		FEEBA08E2CD9D52B007AAAA0 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -434,6 +434,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -464,6 +465,7 @@
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -475,6 +477,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
