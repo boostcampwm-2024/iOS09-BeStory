@@ -38,7 +38,7 @@ final public class GroupInfoViewController: UIViewController, ViewProtocol {
         super.viewWillAppear(animated)
         setupViewHierarchies()
         setupViewConstraints()
-        setupViewAttributes(users: participants)
+        setupViewAttributes()
     }
     
     required init?(coder: NSCoder) {
@@ -53,6 +53,8 @@ final public class GroupInfoViewController: UIViewController, ViewProtocol {
                 self?.updateInvitedUserState(user: user)
             case .userDidInvited(user: let user):
                 self?.addInvitedUser(user: user)
+            case .groupCountDidChanged(count: let count):
+                self?.updateGroupCount(to: count)
             case .titleDidChanged(title: let title):
                 self?.updateTitle(to: title)
             }
@@ -90,13 +92,10 @@ private extension GroupInfoViewController {
         }
     }
     
-    func setupViewAttributes(users: [InvitedUser]) {
-        countView.updateCount(to: users.count)
+    func setupViewAttributes() {
         titleLabel.text = title
         participantStackView.axis = .horizontal
         participantStackView.spacing = 14
-        let usersView = users.map { ParticipantInfoView(user: $0) }
-        usersView.forEach { participantStackView.addArrangedSubview($0) }
     }
     
     func addInvitedUser(user: InvitedUser) {
@@ -104,15 +103,15 @@ private extension GroupInfoViewController {
     }
     
     func updateInvitedUserState(user: InvitedUser) {
-        for index in participants.indices {
-            guard participants[index].id == user.id else { continue }
-            participants[index].updateState(to: user.state)
-        }
         Task {
             participantStackView.arrangedSubviews.forEach {
                 ($0 as? ParticipantInfoView)?.updateState(user: user)
             }
         }
+    }
+    
+    func updateGroupCount(to count: Int) {
+        countView.updateCount(to: count)
     }
     
     func updateTitle(to title: String) {
