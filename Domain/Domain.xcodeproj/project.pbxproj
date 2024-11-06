@@ -6,7 +6,19 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		E4E39B932CDBBE30001E08D0 /* DomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF778DC2CDB21B500FFE089 /* DomainInterface.framework */; };
+		E4E39B942CDBBE30001E08D0 /* DomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FEF778DC2CDB21B500FFE089 /* DomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
+		E4E39B952CDBBE30001E08D0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FEF778DB2CDB21B500FFE089;
+			remoteInfo = DomainInterface;
+		};
 		FEF778E82CDB21CF00FFE089 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
@@ -17,6 +29,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		E4E39B972CDBBE30001E08D0 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				E4E39B942CDBBE30001E08D0 /* DomainInterface.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FE6EF3C52CD8B5CA005DC39D /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -34,10 +57,17 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		E4E39B902CDBBD82001E08D0 /* Exceptions for "DomainInterface" folder in "Domain" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				InvitedUser.swift,
+			);
+			target = FE6EF3C62CD8B5CA005DC39D /* Domain */;
+		};
 		FEF778AA2CDAFB2200FFE089 /* Exceptions for "Domain" folder in "Domain" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Dummy.swift,
+				UpdateGroupInfoUseCase.swift,
 			);
 			target = FE6EF3C62CD8B5CA005DC39D /* Domain */;
 		};
@@ -54,6 +84,9 @@
 		};
 		FEF778DD2CDB21B500FFE089 /* DomainInterface */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				E4E39B902CDBBD82001E08D0 /* Exceptions for "DomainInterface" folder in "Domain" target */,
+			);
 			path = DomainInterface;
 			sourceTree = "<group>";
 		};
@@ -64,6 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4E39B932CDBBE30001E08D0 /* DomainInterface.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,11 +111,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E4E39B922CDBBE30001E08D0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		FE6EF3022CD8B015005DC39D = {
 			isa = PBXGroup;
 			children = (
 				FE6EF30D2CD8B015005DC39D /* Domain */,
 				FEF778DD2CDB21B500FFE089 /* DomainInterface */,
+				E4E39B922CDBBE30001E08D0 /* Frameworks */,
 				FE6EF30C2CD8B015005DC39D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -116,11 +158,13 @@
 				FE6EF3C32CD8B5CA005DC39D /* Sources */,
 				FE6EF3C42CD8B5CA005DC39D /* Frameworks */,
 				FE6EF3C52CD8B5CA005DC39D /* CopyFiles */,
+				E4E39B972CDBBE30001E08D0 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				FEF778E92CDB21CF00FFE089 /* PBXTargetDependency */,
+				E4E39B962CDBBE30001E08D0 /* PBXTargetDependency */,
 			);
 			name = Domain;
 			packageProductDependencies = (
@@ -259,6 +303,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		E4E39B962CDBBE30001E08D0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FEF778DB2CDB21B500FFE089 /* DomainInterface */;
+			targetProxy = E4E39B952CDBBE30001E08D0 /* PBXContainerItemProxy */;
+		};
 		FEF778E92CDB21CF00FFE089 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FEF778DB2CDB21B500FFE089 /* DomainInterface */;
