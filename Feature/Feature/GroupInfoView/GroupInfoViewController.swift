@@ -87,7 +87,7 @@ private extension GroupInfoViewController {
     }
     
     func setupViewAttributes(users: [InvitedUser]) {
-        countView.updateCount(to: 3)
+        countView.updateCount(to: users.count)
         titleLabel.text = title
         participantStackView.axis = .horizontal
         participantStackView.spacing = 14
