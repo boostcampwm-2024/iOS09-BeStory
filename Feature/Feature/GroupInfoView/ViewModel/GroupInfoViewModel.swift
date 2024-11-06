@@ -13,6 +13,8 @@ public class GroupInfoViewModel: ViewModelProtocol {
     typealias Input = GroupInfoViewInput
     typealias Output = GroupInfoViewOutput
     
+    private var users = [DomainInterface.InvitedUser]()
+    private var title: String = ""
     let usecase: UpdateGroupInfoUseCaseInterface
     
     public init(usecase: UpdateGroupInfoUseCaseInterface) {
@@ -31,7 +33,7 @@ public class GroupInfoViewModel: ViewModelProtocol {
         input.sink { [weak self] inputResult in
             switch inputResult {
             case .viewDidLoad:
-                self?.userStateDidChanged()
+                self?.output.send(.titleDidChanged(title: self?.title ?? ""))
             case .exitGroupButtonDidTab:
                 self?.exitGroupButtonDidTab()
             }
@@ -39,11 +41,12 @@ public class GroupInfoViewModel: ViewModelProtocol {
         .store(in: &cancellables)
         
         usecase.invitedUser.sink { [weak self] invitedUserResult in
-            self?.output.send(.userDidInvited(user: invitedUserResult))
+            self?.userDidInvited(user: invitedUserResult)
         }
         .store(in: &cancellables)
+        
         usecase.updatedUser.sink { [weak self] updatedUserResult in
-            self?.output.send(.userStateDidChanged(user: updatedUserResult))
+            self?.userStateDidChanged(user: updatedUserResult)
         }
         .store(in: &cancellables)
         usecase.updatedTitle.sink { [weak self] updatedTitle in
