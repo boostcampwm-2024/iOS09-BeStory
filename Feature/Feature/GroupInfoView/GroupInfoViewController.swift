@@ -15,7 +15,6 @@ final public class GroupInfoViewController: UIViewController, ViewProtocol {
     let countView = ParticipantCountView()
     let participantStackView = UIStackView()
     
-    private var participants = [InvitedUser]()
     var input = PassthroughSubject<GroupInfoViewModel.Input, Never>()
     var viewModel = GroupInfoViewModel()
     var cancellables = Set<AnyCancellable>()
