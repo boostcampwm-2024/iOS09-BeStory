@@ -45,7 +45,10 @@
 		FEF778AC2CDAFB2D00FFE089 /* Exceptions for "Feature" folder in "Feature" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				ViewController.swift,
+				GroupInfoView/ViewModel/GroupInfoViewModel.swift,
+				GroupInfoViewController.swift,
+				ParticipantCountView.swift,
+				ParticipantInfoView.swift,
 			);
 			target = FED968162CD908B000CD445C /* Feature */;
 		};
