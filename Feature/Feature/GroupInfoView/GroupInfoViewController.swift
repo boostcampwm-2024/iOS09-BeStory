@@ -6,6 +6,7 @@
 //
 
 import Combine
+import DomainInterface
 import SnapKit
 import UIKit
 
@@ -19,11 +20,8 @@ final public class GroupInfoViewController: UIViewController, ViewProtocol {
     var viewModel = GroupInfoViewModel()
     var cancellables = Set<AnyCancellable>()
     
-    public init(title: String, users: [InvitedUser]) {
+    public init() {
         super.init(nibName: nil, bundle: nil)
-        self.title = title
-        self.participants = users
-        view.backgroundColor = .cyan
     }
     
     public override func viewDidLoad() {
@@ -39,10 +37,6 @@ final public class GroupInfoViewController: UIViewController, ViewProtocol {
         setupViewAttributes(users: participants)
     }
     
-    convenience init(title: String) {
-        self.init(title: title, users: [])
-    }
-    
     required init?(coder: NSCoder) {
         fatalError("init from nib is not supported".uppercased())
     }
@@ -53,6 +47,10 @@ final public class GroupInfoViewController: UIViewController, ViewProtocol {
             switch outputResult {
             case .userStateDidChanged(let user):
                 self?.updateInvitedUserState(user: user)
+            case .userDidInvited(user: let user):
+                self?.addInvitedUser(user: user)
+            case .titleDidChanged(title: let title):
+                self?.updateTitle(to: title)
             }
         }
         .store(in: &cancellables)
@@ -97,6 +95,10 @@ private extension GroupInfoViewController {
         usersView.forEach { participantStackView.addArrangedSubview($0) }
     }
     
+    func addInvitedUser(user: InvitedUser) {
+        participantStackView.addArrangedSubview(ParticipantInfoView(user: user))
+    }
+    
     func updateInvitedUserState(user: InvitedUser) {
         for index in participants.indices {
             guard participants[index].id == user.id else { continue }
@@ -107,6 +109,11 @@ private extension GroupInfoViewController {
                 ($0 as? ParticipantInfoView)?.updateState(user: user)
             }
         }
+    }
+    
+    func updateTitle(to title: String) {
+        self.title = title
+        titleLabel.text = title
     }
 }
 

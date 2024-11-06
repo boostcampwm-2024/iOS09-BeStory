@@ -5,6 +5,7 @@
 //  Created by Yune gim on 11/6/24.
 //
 
+import DomainInterface
 import SnapKit
 import UIKit
 
@@ -84,28 +85,5 @@ private extension ParticipantInfoView {
         case .connecting: stateIndicatorView.backgroundColor = .systemGray6
         default: stateIndicatorView.backgroundColor = .systemRed
         }
-    }
-}
-
-public struct InvitedUser: Identifiable {
-    public typealias ID = String
-    public let id: ID
-    let name: String
-    var state: ConnectState
-    
-    public init(id: String, name: String, state: ConnectState) {
-        self.id = id
-        self.name = name
-        self.state = state
-    }
-    
-    public enum ConnectState {
-        case connecting
-        case connected
-        case notConnected
-    }
-    
-    mutating func updateState(to state: ConnectState) {
-        self.state = state
     }
 }
