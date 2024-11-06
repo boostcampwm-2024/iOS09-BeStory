@@ -16,11 +16,16 @@ final public class GroupInfoViewController: UIViewController, ViewProtocol {
     let participantStackView = UIStackView()
     
     var input = PassthroughSubject<GroupInfoViewModel.Input, Never>()
-    var viewModel = GroupInfoViewModel()
+    var viewModel: GroupInfoViewModel
     var cancellables = Set<AnyCancellable>()
     
-    public init() {
+    public init(viewModel: GroupInfoViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+    }
+    
+    public convenience init() {
+        self.init(viewModel: GroupInfoViewModel())
     }
     
     public override func viewDidLoad() {
