@@ -9,9 +9,6 @@ disabled_rules:
 # 함수 안은 복잡하면 안 됨 (warning: 10, error: 20)
 - cyclomatic_complexity
 
-# Protocol은 class-only여야 함.
-- class_delegate_protocol
-
 # Void 함수를 호출하기 위해 삼항연산자을 사용하는 것은 피해야 한다.
 - void_function_in_ternary
 
@@ -110,7 +107,6 @@ force_try:
   severity: warning # 명시적으로 지정
   
 # path
-include:
 excluded:
 - ./App/App/AppDelegate.swift
 - ./App/App/SceneDelegate.swift
