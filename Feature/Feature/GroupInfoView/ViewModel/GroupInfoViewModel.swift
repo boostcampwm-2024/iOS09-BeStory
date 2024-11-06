@@ -9,13 +9,13 @@ import Combine
 import Domain
 import DomainInterface
 
-class GroupInfoViewModel: ViewModelProtocol {
+public class GroupInfoViewModel: ViewModelProtocol {
     typealias Input = GroupInfoViewInput
     typealias Output = GroupInfoViewOutput
     
     let usecase: UpdateGroupInfoUseCaseInterface
     
-    init(usecase: UpdateGroupInfoUseCaseInterface) {
+    public init(usecase: UpdateGroupInfoUseCaseInterface) {
         self.usecase = usecase
     }
     
