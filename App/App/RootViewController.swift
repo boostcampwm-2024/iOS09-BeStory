@@ -5,6 +5,7 @@
 //  Created by jung on 11/4/24.
 //
 
+import Domain
 import UIKit
 import Feature
 
@@ -17,13 +18,8 @@ final class RootViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let title = "iOS09 - 차은우원빈현빈장원영"
-        let users = [
-            "건우",
-            "지혜",
-            "석영"
-        ].map { InvitedUser(id: $0, name: $0, state: .connected) }
-        let groupInfoViewController = GroupInfoViewController(title: title, users: users)
+
+        let groupInfoViewController = GroupInfoViewController()
         addChild(groupInfoViewController)
         view.addSubview(groupInfoViewController.view)
         //didMove 메서드를 호출해야 ContinerVC.view.superView가 할당됨
