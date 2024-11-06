@@ -49,19 +49,30 @@ public class GroupInfoViewModel: ViewModelProtocol {
             self?.userStateDidChanged(user: updatedUserResult)
         }
         .store(in: &cancellables)
+        
         usecase.updatedTitle.sink { [weak self] updatedTitle in
+            self?.title = updatedTitle
             self?.output.send(.titleDidChanged(title: updatedTitle))
         }
         .store(in: &cancellables)
+        
         return output.eraseToAnyPublisher()
     }
 }
 
 private extension GroupInfoViewModel {
-    func userStateDidChanged() {
-        output.send(.userStateDidChanged(user: InvitedUser(id: "건우",
-                                                     name: "건우",
-                                                     state: .notConnected)))
+    func userStateDidChanged(user: DomainInterface.InvitedUser) {
+        for index in users.indices {
+            guard users[index].id == user.id else { continue }
+            users[index].updateState(to: user.state)
+        }
+        output.send(.userStateDidChanged(user: user))
+    }
+    
+    func userDidInvited(user: DomainInterface.InvitedUser) {
+        users.append(user)
+        output.send(.userDidInvited(user: user))
+        output.send(.groupCountDidChanged(count: users.count))
     }
     
     func exitGroupButtonDidTab() { }
@@ -75,6 +86,7 @@ enum GroupInfoViewInput {
 enum GroupInfoViewOutput {
     case userStateDidChanged(user: DomainInterface.InvitedUser)
     case userDidInvited(user: DomainInterface.InvitedUser)
+    case groupCountDidChanged(count: Int)
     case titleDidChanged(title: String)
 }
 
