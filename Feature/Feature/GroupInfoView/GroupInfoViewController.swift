@@ -9,7 +9,7 @@ import Combine
 import SnapKit
 import UIKit
 
-final public class GroupInfoViewController: UIViewController, ViewProtocol {
+final public class GroupInfoViewController: UIViewController {
     private let titleLabel = UILabel()
     private let countView = ParticipantCountView()
     private let participantStackView = UIStackView()
@@ -148,15 +148,4 @@ private extension GroupInfoViewController {
         self.title = title
         titleLabel.text = title
     }
-}
-
-protocol ViewProtocol {
-    associatedtype Input
-    associatedtype ViewModelType: ViewModelProtocol where ViewModelType.Input == Input
-    
-    var input: PassthroughSubject<Input, Never> { get set }
-    var viewModel: ViewModelType { get set }
-    var cancellables: Set<AnyCancellable> { get set }
-    
-    func setupBind()
 }

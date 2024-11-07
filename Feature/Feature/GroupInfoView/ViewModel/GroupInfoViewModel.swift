@@ -7,7 +7,7 @@
 
 import Combine
 
-public class GroupInfoViewModel: ViewModelProtocol {
+public class GroupInfoViewModel {
     typealias Input = GroupInfoViewInput
     typealias Output = GroupInfoViewOutput
     
@@ -60,14 +60,4 @@ enum GroupInfoViewOutput {
     case userDidInvited(user: InvitedUser)
     case groupCountDidChanged(count: Int)
     case titleDidChanged(title: String)
-}
-
-protocol ViewModelProtocol {
-    associatedtype Input
-    associatedtype Output
-    
-    var output: PassthroughSubject<Output, Never> { get set }
-    var cancellables: Set<AnyCancellable> { get set }
- 
-    func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never>
 }
