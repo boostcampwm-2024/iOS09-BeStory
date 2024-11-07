@@ -9,7 +9,7 @@ import Combine
 import MultipeerConnectivity
 
 public protocol SocketProvidable {
-	var updatedPeers: CurrentValueSubject<[SocketPeer], Never> { get }
+	var updatedPeer: PassthroughSubject<SocketPeer, Never> { get }
 	
 	/// Browsing된 Peer를 리턴합니다.
 	func browsingPeers() -> [SocketPeer]
@@ -24,7 +24,7 @@ public protocol SocketProvidable {
 
 public final class SocketProvider: NSObject, SocketProvidable {
 	// MARK: - Properties
-	public let updatedPeers = CurrentValueSubject<[SocketPeer], Never>([])
+	public let updatedPeer = PassthroughSubject<SocketPeer, Never>()
 	
 	private let serviceType = "beStory"
 	private let peerID = MCPeerID(displayName: UIDevice.current.name)
@@ -103,7 +103,7 @@ extension SocketProvider: MCSessionDelegate {
 		didChange state: MCSessionState
 	) {
 		defer {
-			if let socketPeer = mapToSocketPeer(peerID) { updatedPeers.send([socketPeer])
+			if let socketPeer = mapToSocketPeer(peerID) { updatedPeer.send(socketPeer)
 			}
 		}
 		
@@ -157,7 +157,7 @@ extension SocketProvider: MCNearbyServiceBrowserDelegate {
 		MCPeerIDStorage.shared.append(id: peerID, state: .found)
 		
 		guard let peer = mapToSocketPeer(peerID) else { return }
-		updatedPeers.send([peer])
+		updatedPeer.send(peer)
 	}
 	
 	public func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
@@ -165,7 +165,7 @@ extension SocketProvider: MCNearbyServiceBrowserDelegate {
 		
 		guard var peer = mapToSocketPeer(peerID) else { return }
 		peer.state = .lost
-		updatedPeers.send([peer])
+		updatedPeer.send(peer)
 	}
 }
 

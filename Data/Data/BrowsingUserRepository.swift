@@ -13,14 +13,14 @@ import P2PSocket
 public final class BrowsingUserRepository: BrowsingUserRepositoryInterface {
 	private var cancellables: Set<AnyCancellable> = []
 	private let socketProvider: SocketProvider
-	public let updatedBrowsingUser = CurrentValueSubject<[BrowsingUser], Never>([])
+	public let updatedBrowsingUser = PassthroughSubject<BrowsingUser, Never>()
 	
 	public init(socket: SocketProvider) {
 		self.socketProvider = socket
 		
-		socketProvider.updatedPeers
-			.map { [weak self] peers in
-				peers.compactMap { self?.mappingToBrowsingUser($0) } }
+		socketProvider.updatedPeer
+			.compactMap { [weak self] peer in
+				self?.mappingToBrowsingUser(peer) }
 			.subscribe(updatedBrowsingUser)
 			.store(in: &cancellables)
 	}

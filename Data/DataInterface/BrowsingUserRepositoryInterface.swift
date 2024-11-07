@@ -9,7 +9,7 @@ import Combine
 import Entity
 
 public protocol BrowsingUserRepositoryInterface {
-	var updatedBrowsingUser: CurrentValueSubject<[BrowsingUser], Never> { get }
+	var updatedBrowsingUser: PassthroughSubject<BrowsingUser, Never> { get }
 	
 	func fetchBrowsingUsers() -> [BrowsingUser]
 	func inviteUser(with id: String)
