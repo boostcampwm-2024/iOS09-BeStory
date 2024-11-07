@@ -24,6 +24,7 @@ final class ParticipantInfoView: UIView {
         backgroundColor = .green
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init with XIB not supported")
     }

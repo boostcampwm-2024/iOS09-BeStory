@@ -42,6 +42,7 @@ final public class GroupInfoViewController: UIViewController, ViewProtocol {
         setupViewAttributes()
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init from nib is not supported".uppercased())
     }
