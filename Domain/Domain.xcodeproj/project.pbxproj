@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		FEF779622CDCA9F700FFE089 /* DataInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF779612CDCA9F700FFE089 /* DataInterface.framework */; };
 		FEF779632CDCA9F700FFE089 /* DataInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FEF779612CDCA9F700FFE089 /* DataInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FEF779702CDCB33200FFE089 /* DataInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF7796F2CDCB33200FFE089 /* DataInterface.framework */; };
+		FEF779712CDCB33300FFE089 /* DataInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FEF7796F2CDCB33200FFE089 /* DataInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -18,6 +20,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = FEF778DB2CDB21B500FFE089;
 			remoteInfo = DomainInterface;
+		};
+		FEF7796B2CDCB32800FFE089 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FEF7793F2CDC936900FFE089;
+			remoteInfo = Entity;
+		};
+		FEF7796D2CDCB32B00FFE089 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FEF7793F2CDC936900FFE089;
+			remoteInfo = Entity;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -42,37 +58,49 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FEF779722CDCB33300FFE089 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				FEF779712CDCB33300FFE089 /* DataInterface.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		FE6EF3C72CD8B5CA005DC39D /* libDomain.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libDomain.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		FEF778DC2CDB21B500FFE089 /* DomainInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DomainInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE6EF3C72CD8B5CA005DC39D /* libUseCase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUseCase.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		FEF778DC2CDB21B500FFE089 /* UseCaseInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = UseCaseInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF779402CDC936900FFE089 /* Entity.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Entity.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF779612CDCA9F700FFE089 /* DataInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DataInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FEF7796F2CDCB33200FFE089 /* DataInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DataInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		FEF778AA2CDAFB2200FFE089 /* Exceptions for "Domain" folder in "Domain" target */ = {
+		FEF778AA2CDAFB2200FFE089 /* Exceptions for "UseCase" folder in "UseCase" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				BrowsingUserUseCase.swift,
 			);
-			target = FE6EF3C62CD8B5CA005DC39D /* Domain */;
+			target = FE6EF3C62CD8B5CA005DC39D /* UseCase */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		FE6EF30D2CD8B015005DC39D /* Domain */ = {
+		FE6EF30D2CD8B015005DC39D /* UseCase */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				FEF778AA2CDAFB2200FFE089 /* Exceptions for "Domain" folder in "Domain" target */,
+				FEF778AA2CDAFB2200FFE089 /* Exceptions for "UseCase" folder in "UseCase" target */,
 			);
-			path = Domain;
+			path = UseCase;
 			sourceTree = "<group>";
 		};
-		FEF778DD2CDB21B500FFE089 /* DomainInterface */ = {
+		FEF778DD2CDB21B500FFE089 /* UseCaseInterface */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = DomainInterface;
+			path = UseCaseInterface;
 			sourceTree = "<group>";
 		};
 		FEF779412CDC936900FFE089 /* Entity */ = {
@@ -95,6 +123,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FEF779702CDCB33200FFE089 /* DataInterface.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,8 +140,8 @@
 		FE6EF3022CD8B015005DC39D = {
 			isa = PBXGroup;
 			children = (
-				FE6EF30D2CD8B015005DC39D /* Domain */,
-				FEF778DD2CDB21B500FFE089 /* DomainInterface */,
+				FE6EF30D2CD8B015005DC39D /* UseCase */,
+				FEF778DD2CDB21B500FFE089 /* UseCaseInterface */,
 				FEF779412CDC936900FFE089 /* Entity */,
 				FEF779602CDCA9F700FFE089 /* Frameworks */,
 				FE6EF30C2CD8B015005DC39D /* Products */,
@@ -122,8 +151,8 @@
 		FE6EF30C2CD8B015005DC39D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				FE6EF3C72CD8B5CA005DC39D /* libDomain.a */,
-				FEF778DC2CDB21B500FFE089 /* DomainInterface.framework */,
+				FE6EF3C72CD8B5CA005DC39D /* libUseCase.a */,
+				FEF778DC2CDB21B500FFE089 /* UseCaseInterface.framework */,
 				FEF779402CDC936900FFE089 /* Entity.framework */,
 			);
 			name = Products;
@@ -132,6 +161,7 @@
 		FEF779602CDCA9F700FFE089 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FEF7796F2CDCB33200FFE089 /* DataInterface.framework */,
 				FEF779612CDCA9F700FFE089 /* DataInterface.framework */,
 			);
 			name = Frameworks;
@@ -157,9 +187,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		FE6EF3C62CD8B5CA005DC39D /* Domain */ = {
+		FE6EF3C62CD8B5CA005DC39D /* UseCase */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FE6EF3CB2CD8B5CA005DC39D /* Build configuration list for PBXNativeTarget "Domain" */;
+			buildConfigurationList = FE6EF3CB2CD8B5CA005DC39D /* Build configuration list for PBXNativeTarget "UseCase" */;
 			buildPhases = (
 				FEEBA0902CD9D572007AAAA0 /* ShellScript */,
 				FE6EF3C32CD8B5CA005DC39D /* Sources */,
@@ -170,37 +200,40 @@
 			buildRules = (
 			);
 			dependencies = (
+				FEF7796E2CDCB32B00FFE089 /* PBXTargetDependency */,
 				FEF778E92CDB21CF00FFE089 /* PBXTargetDependency */,
 			);
-			name = Domain;
+			name = UseCase;
 			packageProductDependencies = (
 			);
 			productName = Domain;
-			productReference = FE6EF3C72CD8B5CA005DC39D /* libDomain.a */;
+			productReference = FE6EF3C72CD8B5CA005DC39D /* libUseCase.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		FEF778DB2CDB21B500FFE089 /* DomainInterface */ = {
+		FEF778DB2CDB21B500FFE089 /* UseCaseInterface */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FEF778E32CDB21B500FFE089 /* Build configuration list for PBXNativeTarget "DomainInterface" */;
+			buildConfigurationList = FEF778E32CDB21B500FFE089 /* Build configuration list for PBXNativeTarget "UseCaseInterface" */;
 			buildPhases = (
 				FEF778D72CDB21B500FFE089 /* Headers */,
 				FEF779012CDB3CB900FFE089 /* ShellScript */,
 				FEF778D82CDB21B500FFE089 /* Sources */,
 				FEF778D92CDB21B500FFE089 /* Frameworks */,
 				FEF778DA2CDB21B500FFE089 /* Resources */,
+				FEF779722CDCB33300FFE089 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				FEF7796C2CDCB32800FFE089 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				FEF778DD2CDB21B500FFE089 /* DomainInterface */,
+				FEF778DD2CDB21B500FFE089 /* UseCaseInterface */,
 			);
-			name = DomainInterface;
+			name = UseCaseInterface;
 			packageProductDependencies = (
 			);
 			productName = DomainInterface;
-			productReference = FEF778DC2CDB21B500FFE089 /* DomainInterface.framework */;
+			productReference = FEF778DC2CDB21B500FFE089 /* UseCaseInterface.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		FEF7793F2CDC936900FFE089 /* Entity */ = {
@@ -263,8 +296,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				FE6EF3C62CD8B5CA005DC39D /* Domain */,
-				FEF778DB2CDB21B500FFE089 /* DomainInterface */,
+				FE6EF3C62CD8B5CA005DC39D /* UseCase */,
+				FEF778DB2CDB21B500FFE089 /* UseCaseInterface */,
 				FEF7793F2CDC936900FFE089 /* Entity */,
 			);
 		};
@@ -353,8 +386,18 @@
 /* Begin PBXTargetDependency section */
 		FEF778E92CDB21CF00FFE089 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = FEF778DB2CDB21B500FFE089 /* DomainInterface */;
+			target = FEF778DB2CDB21B500FFE089 /* UseCaseInterface */;
 			targetProxy = FEF778E82CDB21CF00FFE089 /* PBXContainerItemProxy */;
+		};
+		FEF7796C2CDCB32800FFE089 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FEF7793F2CDC936900FFE089 /* Entity */;
+			targetProxy = FEF7796B2CDCB32800FFE089 /* PBXContainerItemProxy */;
+		};
+		FEF7796E2CDCB32B00FFE089 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FEF7793F2CDC936900FFE089 /* Entity */;
+			targetProxy = FEF7796D2CDCB32B00FFE089 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -676,7 +719,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FE6EF3CB2CD8B5CA005DC39D /* Build configuration list for PBXNativeTarget "Domain" */ = {
+		FE6EF3CB2CD8B5CA005DC39D /* Build configuration list for PBXNativeTarget "UseCase" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				FE6EF3CC2CD8B5CA005DC39D /* Debug */,
@@ -685,7 +728,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FEF778E32CDB21B500FFE089 /* Build configuration list for PBXNativeTarget "DomainInterface" */ = {
+		FEF778E32CDB21B500FFE089 /* Build configuration list for PBXNativeTarget "UseCaseInterface" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				FEF778E42CDB21B500FFE089 /* Debug */,

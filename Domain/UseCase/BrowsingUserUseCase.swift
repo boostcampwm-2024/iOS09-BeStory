@@ -6,7 +6,7 @@
 //
 
 import Combine
-import DomainInterface
+import UseCaseInterface
 import Entity
 import DataInterface
 

@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FEF778EB2CDB221600FFE089 /* DomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF778EA2CDB221600FFE089 /* DomainInterface.framework */; };
 		FEF779522CDC94F300FFE089 /* Entity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF7794F2CDC94F300FFE089 /* Entity.framework */; };
 		FEF779532CDC94F300FFE089 /* Entity.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FEF7794F2CDC94F300FFE089 /* Entity.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FEF779662CDCB2CF00FFE089 /* Entity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF779652CDCB2CF00FFE089 /* Entity.framework */; };
+		FEF779672CDCB2CF00FFE089 /* Entity.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FEF779652CDCB2CF00FFE089 /* Entity.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -21,6 +22,13 @@
 			remoteInfo = DataInterface;
 		};
 		FEF779572CDC973800FFE089 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FE6EF3242CD8B020005DC39D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FED968542CD90FCF00CD445C;
+			remoteInfo = P2PSocket;
+		};
+		FEF779692CDCB2D500FFE089 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FE6EF3242CD8B020005DC39D /* Project object */;
 			proxyType = 1;
@@ -60,6 +68,17 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FEF779682CDCB2CF00FFE089 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				FEF779672CDCB2CF00FFE089 /* Entity.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -69,6 +88,7 @@
 		FEF778EA2CDB221600FFE089 /* DomainInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DomainInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF7794E2CDC94F300FFE089 /* DomainInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DomainInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF7794F2CDC94F300FFE089 /* Entity.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Entity.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FEF779652CDCB2CF00FFE089 /* Entity.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Entity.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -107,7 +127,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FEF778EB2CDB221600FFE089 /* DomainInterface.framework in Frameworks */,
+				FEF779662CDCB2CF00FFE089 /* Entity.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -153,6 +173,7 @@
 		FED967FA2CD9026100CD445C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FEF779652CDCB2CF00FFE089 /* Entity.framework */,
 				FEF7794E2CDC94F300FFE089 /* DomainInterface.framework */,
 				FEF7794F2CDC94F300FFE089 /* Entity.framework */,
 				FEF778EA2CDB221600FFE089 /* DomainInterface.framework */,
@@ -189,10 +210,12 @@
 				FED968272CD9094300CD445C /* Frameworks */,
 				FED968282CD9094300CD445C /* CopyFiles */,
 				FE0334F12CD9DE6B00AA58C9 /* Dependencies */,
+				FEF779682CDCB2CF00FFE089 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				FEF7796A2CDCB2D500FFE089 /* PBXTargetDependency */,
 				FEF778D62CDB218800FFE089 /* PBXTargetDependency */,
 			);
 			name = Data;
@@ -404,6 +427,11 @@
 			isa = PBXTargetDependency;
 			target = FED968542CD90FCF00CD445C /* P2PSocket */;
 			targetProxy = FEF779572CDC973800FFE089 /* PBXContainerItemProxy */;
+		};
+		FEF7796A2CDCB2D500FFE089 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FED968542CD90FCF00CD445C /* P2PSocket */;
+			targetProxy = FEF779692CDCB2D500FFE089 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
