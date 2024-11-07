@@ -9,9 +9,9 @@ import SnapKit
 import UIKit
 
 final class ParticipantInfoView: UIView {
-    let profileImageView = UIImageView()
-    let nameLabel = UILabel()
-    let stateIndicatorView = UIView()
+    private let profileImageView = UIImageView()
+    private let nameLabel = UILabel()
+    private let stateIndicatorView = UIView()
     
     private var user: InvitedUser
     

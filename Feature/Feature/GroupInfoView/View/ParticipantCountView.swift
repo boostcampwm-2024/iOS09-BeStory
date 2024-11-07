@@ -8,9 +8,9 @@
 import SnapKit
 import UIKit
 
-class ParticipantCountView: UIView {
-    let groupImageView = UIImageView()
-    let countLabel = UILabel()
+final class ParticipantCountView: UIView {
+    private let groupImageView = UIImageView()
+    private let countLabel = UILabel()
     private var userCount: Int
     
     init(count: Int) {
