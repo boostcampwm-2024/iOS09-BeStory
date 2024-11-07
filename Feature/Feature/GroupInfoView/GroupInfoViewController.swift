@@ -11,8 +11,10 @@ import UIKit
 
 final public class GroupInfoViewController: UIViewController, ViewProtocol {
     private let titleLabel = UILabel()
-    let countView = ParticipantCountView()
-    let participantStackView = UIStackView()
+    private let countView = ParticipantCountView()
+    private let participantStackView = UIStackView()
+    private let participantScrollView = UIScrollView()
+    private let exitButton = UIButton()
     
     var input = PassthroughSubject<GroupInfoViewModel.Input, Never>()
     var viewModel: GroupInfoViewModel
@@ -66,33 +68,51 @@ private extension GroupInfoViewController {
     func setupViewHierarchies() {
         view.addSubview(titleLabel)
         view.addSubview(countView)
-        view.addSubview(participantStackView)
+        view.addSubview(participantScrollView)
+        view.addSubview(exitButton)
+        participantScrollView.addSubview(participantStackView)
     }
     
     func setupViewConstraints() {
         titleLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(10)
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(10)
             $0.leading.equalToSuperview().offset(28)
         }
         countView.snp.makeConstraints {
-            $0.trailing.equalToSuperview().inset(10)
+            $0.trailing.equalToSuperview().inset(28)
             $0.centerY.equalTo(titleLabel)
         }
-        participantStackView.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(20)
+        participantScrollView.snp.makeConstraints {
+            $0.leading.equalToSuperview().inset(20)
+            $0.trailing.equalTo(exitButton.snp.leading).offset(-8)
             $0.top.equalTo(titleLabel.snp.bottom).offset(12)
+            $0.height.equalTo(35)
         }
-        view.snp.makeConstraints {
-            $0.bottom.equalTo(participantStackView.snp.bottom).offset(8)
+        exitButton.snp.makeConstraints {
+            $0.height.equalTo(38)
+            $0.trailing.equalToSuperview().inset(20)
+            $0.centerY.equalTo(participantScrollView)
         }
-        guard let superView = view.superview else { return }
-        view.snp.makeConstraints {
-            $0.top.left.right.equalTo(superView.safeAreaLayoutGuide)
+        participantStackView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.bottom.equalToSuperview()
         }
     }
     
     func setupViewAttributes() {
+        view.backgroundColor = .systemBackground
         titleLabel.text = title
+        
+        var buttonConfig = UIButton.Configuration.filled()
+        buttonConfig.buttonSize = .small
+        buttonConfig.title = "나가기"
+        buttonConfig.titlePadding = 4
+        buttonConfig.baseBackgroundColor = .brown
+        exitButton.configuration = buttonConfig
+        
+        participantScrollView.backgroundColor = .brown
+        participantScrollView.showsVerticalScrollIndicator = false
+        participantScrollView.showsHorizontalScrollIndicator = false
         participantStackView.axis = .horizontal
         participantStackView.spacing = 14
     }
