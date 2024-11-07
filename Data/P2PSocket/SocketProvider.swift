@@ -79,7 +79,7 @@ public extension SocketProvider {
 			.map {
 				let name = $0.value.id.displayName
 				let id = $0.key
-				return SocketPeer(state: .connected, name: name, id: id)
+				return SocketPeer(id: id, name: name, state: .connected)
 			}
 	}
 	
@@ -90,7 +90,7 @@ public extension SocketProvider {
 			.map {
 				let name = $0.value.id.displayName
 				let id = $0.key
-				return SocketPeer(state: .connected, name: name, id: id)
+				return SocketPeer(id: id, name: name, state: .connected)
 			}
 	}
 }
@@ -191,10 +191,10 @@ private extension SocketProvider {
 	
 	func mapToSocketPeer(_ peerID: MCPeerID) -> SocketPeer? {
 		guard let peer = MCPeerIDStorage.shared.findPeer(for: peerID) else { return nil }
-		let status = peer.value.state
+		let state = peer.value.state
 		let name = peer.value.id.displayName
 		let id = peer.key
 		
-		return .init(state: status, name: name, id: id)
+		return .init(id: id, name: name, state: state)
 	}
 }

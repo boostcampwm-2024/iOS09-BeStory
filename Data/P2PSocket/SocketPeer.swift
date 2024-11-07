@@ -14,7 +14,13 @@ public enum SocketPeerState {
 }
 
 public struct SocketPeer {
-	public var state: SocketPeerState
-	public let name: String
 	public let id: String
+	public let name: String
+	public var state: SocketPeerState
+	
+	public init(id: String, name: String, state: SocketPeerState) {
+		self.id = id
+		self.name = name
+		self.state = state
+	}
 }
