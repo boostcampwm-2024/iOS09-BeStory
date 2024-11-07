@@ -6,8 +6,6 @@
 //
 
 import Combine
-import Domain
-import DomainInterface
 
 public class GroupInfoViewModel: ViewModelProtocol {
     typealias Input = GroupInfoViewInput
