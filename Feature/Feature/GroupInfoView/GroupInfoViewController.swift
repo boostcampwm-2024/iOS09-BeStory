@@ -91,7 +91,7 @@ private extension GroupInfoViewController {
         }
         exitButton.snp.makeConstraints {
             $0.height.equalTo(38)
-            $0.trailing.equalToSuperview().inset(20)
+            $0.trailing.equalToSuperview().inset(14)
             $0.centerY.equalTo(participantScrollView)
         }
         participantStackView.snp.makeConstraints {
@@ -101,19 +101,29 @@ private extension GroupInfoViewController {
     }
     
     func setupViewAttributes() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor(red: 17/255, green: 24/255, blue: 38/255, alpha: 1)
         titleLabel.text = title
-        
+        titleLabel.font = .systemFont(ofSize: 16, weight: .semibold)
+        titleLabel.textColor = .white
         var buttonConfig = UIButton.Configuration.filled()
         buttonConfig.buttonSize = .small
         buttonConfig.title = "나가기"
         buttonConfig.titlePadding = 4
-        buttonConfig.baseBackgroundColor = .brown
+        buttonConfig.baseBackgroundColor = UIColor(red: 244/255,
+                                                   green: 244/255,
+                                                   blue: 245/255,
+                                                   alpha: 1)
+        buttonConfig.baseForegroundColor = UIColor(red: 64/255,
+                                                   green: 64/255,
+                                                   blue: 66/255,
+                                                   alpha: 1)
+        buttonConfig.cornerStyle = .large
         exitButton.configuration = buttonConfig
         
-        participantScrollView.backgroundColor = .brown
+        participantScrollView.backgroundColor = .clear
         participantScrollView.showsVerticalScrollIndicator = false
         participantScrollView.showsHorizontalScrollIndicator = false
+        participantScrollView.layer.cornerRadius = 4
         participantStackView.axis = .horizontal
         participantStackView.spacing = 14
     }

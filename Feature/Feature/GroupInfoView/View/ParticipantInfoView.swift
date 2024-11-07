@@ -21,7 +21,7 @@ final class ParticipantInfoView: UIView {
         setupViewHierarchies()
         setupViewConstraints()
         setupViewAttributes()
-        backgroundColor = .green
+        backgroundColor = UIColor(red: 31/255, green: 41/255, blue: 55/255, alpha: 1)
     }
     
     @available(*, unavailable)
@@ -71,6 +71,8 @@ private extension ParticipantInfoView {
         layer.cornerRadius = 12
         profileImageView.backgroundColor = .black
         setupName(to: user.name)
+        nameLabel.font = .systemFont(ofSize: 14, weight: .semibold)
+        nameLabel.textColor = .white
         setupStateIndicator(to: user.state)
         stateIndicatorView.layer.cornerRadius = 4
     }
