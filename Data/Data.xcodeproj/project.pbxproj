@@ -44,7 +44,7 @@
 
 /* Begin PBXFileReference section */
 		FED9682A2CD9094300CD445C /* libData.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libData.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		FED968552CD90FCF00CD445C /* SocketProvider.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SocketProvider.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FED968552CD90FCF00CD445C /* P2PSocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = P2PSocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF778C72CDB214C00FFE089 /* DataInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DataInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF778EA2CDB221600FFE089 /* DomainInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DomainInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -68,9 +68,9 @@
 			path = Data;
 			sourceTree = "<group>";
 		};
-		FED968562CD90FCF00CD445C /* SocketProvider */ = {
+		FED968562CD90FCF00CD445C /* P2PSocket */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = SocketProvider;
+			path = P2PSocket;
 			sourceTree = "<group>";
 		};
 		FEF778C82CDB214C00FFE089 /* DataInterface */ = {
@@ -110,7 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				FE6EF32E2CD8B020005DC39D /* Data */,
-				FED968562CD90FCF00CD445C /* SocketProvider */,
+				FED968562CD90FCF00CD445C /* P2PSocket */,
 				FEF778C82CDB214C00FFE089 /* DataInterface */,
 				FED967FA2CD9026100CD445C /* Frameworks */,
 				FE6EF32D2CD8B020005DC39D /* Products */,
@@ -121,7 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				FED9682A2CD9094300CD445C /* libData.a */,
-				FED968552CD90FCF00CD445C /* SocketProvider.framework */,
+				FED968552CD90FCF00CD445C /* P2PSocket.framework */,
 				FEF778C72CDB214C00FFE089 /* DataInterface.framework */,
 			);
 			name = Products;
@@ -177,9 +177,9 @@
 			productReference = FED9682A2CD9094300CD445C /* libData.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		FED968542CD90FCF00CD445C /* SocketProvider */ = {
+		FED968542CD90FCF00CD445C /* P2PSocket */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FED9685C2CD90FCF00CD445C /* Build configuration list for PBXNativeTarget "SocketProvider" */;
+			buildConfigurationList = FED9685C2CD90FCF00CD445C /* Build configuration list for PBXNativeTarget "P2PSocket" */;
 			buildPhases = (
 				FED968502CD90FCF00CD445C /* Headers */,
 				FEEBA08F2CD9D558007AAAA0 /* ShellScript */,
@@ -192,13 +192,13 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				FED968562CD90FCF00CD445C /* SocketProvider */,
+				FED968562CD90FCF00CD445C /* P2PSocket */,
 			);
-			name = SocketProvider;
+			name = P2PSocket;
 			packageProductDependencies = (
 			);
 			productName = SocketProvider;
-			productReference = FED968552CD90FCF00CD445C /* SocketProvider.framework */;
+			productReference = FED968552CD90FCF00CD445C /* P2PSocket.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		FEF778C62CDB214C00FFE089 /* DataInterface */ = {
@@ -263,7 +263,7 @@
 			projectRoot = "";
 			targets = (
 				FED968292CD9094300CD445C /* Data */,
-				FED968542CD90FCF00CD445C /* SocketProvider */,
+				FED968542CD90FCF00CD445C /* P2PSocket */,
 				FEF778C62CDB214C00FFE089 /* DataInterface */,
 			);
 		};
@@ -537,6 +537,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -580,6 +581,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -714,7 +716,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FED9685C2CD90FCF00CD445C /* Build configuration list for PBXNativeTarget "SocketProvider" */ = {
+		FED9685C2CD90FCF00CD445C /* Build configuration list for PBXNativeTarget "P2PSocket" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				FED9685D2CD90FCF00CD445C /* Debug */,
