@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		FEF779622CDCA9F700FFE089 /* DataInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF779612CDCA9F700FFE089 /* DataInterface.framework */; };
+		FEF779632CDCA9F700FFE089 /* DataInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FEF779612CDCA9F700FFE089 /* DataInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		FEF778E82CDB21CF00FFE089 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -26,19 +31,31 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FEF779642CDCA9F700FFE089 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				FEF779632CDCA9F700FFE089 /* DataInterface.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		FE6EF3C72CD8B5CA005DC39D /* libDomain.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libDomain.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF778DC2CDB21B500FFE089 /* DomainInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DomainInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF779402CDC936900FFE089 /* Entity.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Entity.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FEF779612CDCA9F700FFE089 /* DataInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DataInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
 		FEF778AA2CDAFB2200FFE089 /* Exceptions for "Domain" folder in "Domain" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Dummy.swift,
+				BrowsingUserUseCase.swift,
 			);
 			target = FE6EF3C62CD8B5CA005DC39D /* Domain */;
 		};
@@ -70,6 +87,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FEF779622CDCA9F700FFE089 /* DataInterface.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,6 +114,7 @@
 				FE6EF30D2CD8B015005DC39D /* Domain */,
 				FEF778DD2CDB21B500FFE089 /* DomainInterface */,
 				FEF779412CDC936900FFE089 /* Entity */,
+				FEF779602CDCA9F700FFE089 /* Frameworks */,
 				FE6EF30C2CD8B015005DC39D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -108,6 +127,14 @@
 				FEF779402CDC936900FFE089 /* Entity.framework */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		FEF779602CDCA9F700FFE089 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FEF779612CDCA9F700FFE089 /* DataInterface.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -138,6 +165,7 @@
 				FE6EF3C32CD8B5CA005DC39D /* Sources */,
 				FE6EF3C42CD8B5CA005DC39D /* Frameworks */,
 				FE6EF3C52CD8B5CA005DC39D /* CopyFiles */,
+				FEF779642CDCA9F700FFE089 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
