@@ -6,7 +6,6 @@
 //
 
 import Combine
-import DataInterface
 import Entity
 
 public protocol BrowsingUserUseCaseInterface {

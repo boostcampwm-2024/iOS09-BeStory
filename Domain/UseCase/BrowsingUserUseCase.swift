@@ -6,9 +6,8 @@
 //
 
 import Combine
-import UseCaseInterface
+import Interfaces
 import Entity
-import DataInterface
 
 public final class BrowsingUserUseCase: BrowsingUserUseCaseInterface {
 	private var cancellables: Set<AnyCancellable> = []

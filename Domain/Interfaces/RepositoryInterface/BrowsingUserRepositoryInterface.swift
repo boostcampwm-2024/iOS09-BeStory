@@ -7,9 +7,12 @@
 
 import Combine
 import Entity
+import P2PSocket
 
 public protocol BrowsingUserRepositoryInterface {
 	var updatedBrowsingUser: PassthroughSubject<BrowsingUser, Never> { get }
+	
+	init(socketProvider: SocketProvidable)
 	
 	func fetchBrowsingUsers() -> [BrowsingUser]
 	func inviteUser(with id: String)

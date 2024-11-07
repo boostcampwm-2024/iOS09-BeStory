@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		FE0334DA2CD9DA1100AA58C9 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = FE0334D92CD9DA1100AA58C9 /* SnapKit */; };
-		FEF7797A2CDCB38B00FFE089 /* UseCaseInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF779792CDCB38B00FFE089 /* UseCaseInterface.framework */; };
-		FEF7797B2CDCB38B00FFE089 /* UseCaseInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FEF779792CDCB38B00FFE089 /* UseCaseInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,7 +37,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				FEF7797B2CDCB38B00FFE089 /* UseCaseInterface.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -50,8 +47,6 @@
 		FE0334EE2CD9DE4600AA58C9 /* libDomain.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libDomain.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FED968172CD908B000CD445C /* libFeature.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libFeature.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF778F12CDB227500FFE089 /* FeatureInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FeatureInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		FEF779752CDCB37700FFE089 /* UseCaseInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UseCaseInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		FEF779792CDCB38B00FFE089 /* UseCaseInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UseCaseInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -85,7 +80,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FEF7797A2CDCB38B00FFE089 /* UseCaseInterface.framework in Frameworks */,
 				FE0334DA2CD9DA1100AA58C9 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -122,8 +116,6 @@
 		FE6EF4272CD8B843005DC39D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FEF779792CDCB38B00FFE089 /* UseCaseInterface.framework */,
-				FEF779752CDCB37700FFE089 /* UseCaseInterface.framework */,
 				FE0334EE2CD9DE4600AA58C9 /* libDomain.a */,
 			);
 			name = Frameworks;
