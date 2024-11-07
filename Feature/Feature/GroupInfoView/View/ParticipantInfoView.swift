@@ -5,7 +5,6 @@
 //  Created by Yune gim on 11/6/24.
 //
 
-import DomainInterface
 import SnapKit
 import UIKit
 
