@@ -24,10 +24,6 @@ public struct InvitedUser: Identifiable {
         case connected
         case notConnected
     }
-    
-    public mutating func updateState(to state: ConnectState) {
-        self.state = state
-    }
 }
 
 extension InvitedUser: Equatable { }

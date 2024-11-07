@@ -36,7 +36,7 @@ private extension GroupInfoViewModel {
     func userStateDidChanged(user: InvitedUser) {
         for index in users.indices {
             guard users[index].id == user.id else { continue }
-            users[index].updateState(to: user.state)
+            users[index] = user
         }
         output.send(.userStateDidChanged(user: user))
     }
