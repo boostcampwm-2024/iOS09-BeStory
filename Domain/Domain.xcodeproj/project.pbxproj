@@ -57,17 +57,10 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		E4E39B902CDBBD82001E08D0 /* Exceptions for "DomainInterface" folder in "Domain" target */ = {
+		E41E3A822CDC804D005DB164 /* Exceptions for "Domain" folder in "Domain" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				InvitedUser.swift,
-			);
-			target = FE6EF3C62CD8B5CA005DC39D /* Domain */;
-		};
-		FEF778AA2CDAFB2200FFE089 /* Exceptions for "Domain" folder in "Domain" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				UpdateGroupInfoUseCase.swift,
+				Dummy.swift,
 			);
 			target = FE6EF3C62CD8B5CA005DC39D /* Domain */;
 		};
@@ -77,16 +70,13 @@
 		FE6EF30D2CD8B015005DC39D /* Domain */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				FEF778AA2CDAFB2200FFE089 /* Exceptions for "Domain" folder in "Domain" target */,
+				E41E3A822CDC804D005DB164 /* Exceptions for "Domain" folder in "Domain" target */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
 		};
 		FEF778DD2CDB21B500FFE089 /* DomainInterface */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				E4E39B902CDBBD82001E08D0 /* Exceptions for "DomainInterface" folder in "Domain" target */,
-			);
 			path = DomainInterface;
 			sourceTree = "<group>";
 		};
@@ -209,10 +199,11 @@
 				TargetAttributes = {
 					FE6EF3C62CD8B5CA005DC39D = {
 						CreatedOnToolsVersion = 16.0;
+						LastSwiftMigration = 1610;
 					};
 					FEF778DB2CDB21B500FFE089 = {
 						CreatedOnToolsVersion = 16.0;
-						LastSwiftMigration = 1600;
+						LastSwiftMigration = 1610;
 					};
 				};
 			};
@@ -438,6 +429,7 @@
 		FE6EF3CC2CD8B5CA005DC39D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9L2J37V6PK;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -449,6 +441,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -457,6 +450,7 @@
 		FE6EF3CD2CD8B5CA005DC39D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9L2J37V6PK;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -480,7 +474,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = NO;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 9L2J37V6PK;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -518,7 +512,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = NO;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 9L2J37V6PK;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
