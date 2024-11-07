@@ -41,7 +41,7 @@ extension BrowsingUserUseCaseTest {
 		
 		// when
 		mockSocketProvider.mockPeers = mockBrowsingUsers
-		let browsingUsers = mockSocketProvider.browsingPeers()
+		let browsingUsers = sut.fetchBrowsingUsers()
 		
 		// then
 		XCTAssertEqual(browsingUsers.count, 4)
