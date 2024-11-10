@@ -44,6 +44,8 @@ final public class ConnectionViewController: UIViewController {
         setupViewConstraints()
 
         bind()
+
+        viewModel.fetchUsers()
     }
 }
 

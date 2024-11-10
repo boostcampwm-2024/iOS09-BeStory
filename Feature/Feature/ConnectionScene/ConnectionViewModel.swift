@@ -87,7 +87,9 @@ extension ConnectionViewModel {
                 x: center.x + randomRadius * cos(angle),
                 y: center.y + randomRadius * sin(angle)
             )
-        } while usedPositions.contains(where: { $0.value.distance(to: position) < 50 }) && attempts < maxAttempts
+        } while usedPositions.contains(where: {
+            $0.value.distance(to: position) < 50
+        }) && attempts < maxAttempts
 
         return position
     }
