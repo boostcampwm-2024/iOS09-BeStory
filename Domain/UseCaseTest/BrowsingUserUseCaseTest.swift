@@ -49,20 +49,17 @@ extension BrowsingUserUseCaseTest {
 	
 	func test_새로운_유저가_잘_감지되는지() {
 		// given
-		let expectation = XCTestExpectation(description: "새로운 유저 테스트")
 		let mockBrowsingUser = SocketPeer(id: "4", name: "JK", state: .found)
-		let publisher = sut.browsingUser
-		var receivedPeer: BrowsingUser?
-		let cancellable = publisher.sink { peer in
+		let publisher = sut.browsedUser
+		var receivedPeer: BrowsedUser?
+		let cancellable = publisher.sink { peer in 
 			receivedPeer = peer
-			expectation.fulfill()
 		}
 		
 		// when
 		mockSocketProvider.updatedPeer.send(mockBrowsingUser)
 		
 		// then
-		wait(for: [expectation], timeout: 0.2)
 		XCTAssertEqual(receivedPeer?.id, mockBrowsingUser.id)
 		cancellable.cancel()
 	}
