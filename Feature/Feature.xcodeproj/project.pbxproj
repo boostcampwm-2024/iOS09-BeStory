@@ -45,6 +45,19 @@
 		FEF778AC2CDAFB2D00FFE089 /* Exceptions for "Feature" folder in "Feature" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Helper/EventPublisher.swift,
+				Helper/ReadOnlyPublisher.swift,
+				"Helper/UIColor+HexInitialization.swift",
+				VideoDetailView/VideoDetailViewController.swift,
+				VideoListView/Components/DurationView.swift,
+				VideoListView/Components/IconButton.swift,
+				VideoListView/Components/VideoListHeaderView.swift,
+				VideoListView/PresentationModel/VideoListPresentationModel.swift,
+				VideoListView/VideoListCollectionViewCell.swift,
+				VideoListView/VideoListViewController.swift,
+				VideoListView/ViewModel/MockVideoListViewModel.swift,
+				VideoListView/ViewModel/MultipeerVideoListViewModel.swift,
+				VideoListView/ViewModel/VideoListViewModel.swift,
 				ViewController.swift,
 			);
 			target = FED968162CD908B000CD445C /* Feature */;
