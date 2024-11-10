@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		FE0334DA2CD9DA1100AA58C9 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = FE0334D92CD9DA1100AA58C9 /* SnapKit */; };
-		FE0334F02CD9DE4C00AA58C9 /* libDomain.a in Dependencies */ = {isa = PBXBuildFile; fileRef = FE0334EE2CD9DE4600AA58C9 /* libDomain.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,10 +27,19 @@
 			dstPath = "";
 			dstSubfolderSpec = 0;
 			files = (
-				FE0334F02CD9DE4C00AA58C9 /* libDomain.a in Dependencies */,
 			);
 			name = Dependencies;
 			runOnlyForDeploymentPostprocessing = 1;
+		};
+		FEF7797C2CDCB38B00FFE089 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -134,6 +142,7 @@
 				FED968132CD908B000CD445C /* Sources */,
 				FED968142CD908B000CD445C /* Frameworks */,
 				FE0334E32CD9DD7400AA58C9 /* Dependencies */,
+				FEF7797C2CDCB38B00FFE089 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
