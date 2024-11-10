@@ -32,7 +32,7 @@ final class BrowsingUserUseCaseTest: XCTestCase {
 extension BrowsingUserUseCaseTest {
 	func test_이미_있는_유저가_잘_감지되는지() {
 		// given
-		let mockBrowsingUsers: [SocketPeer] = [
+		let mockBrowsedUsers: [SocketPeer] = [
 			.init(id: "0", name: "석영", state: .found),
 			.init(id: "1", name: "윤회", state: .found),
 			.init(id: "2", name: "건우", state: .found),
@@ -40,11 +40,11 @@ extension BrowsingUserUseCaseTest {
 		]
 		
 		// when
-		mockSocketProvider.mockPeers = mockBrowsingUsers
-		let browsingUsers = sut.fetchBrowsingUsers()
+		mockSocketProvider.mockPeers = mockBrowsedUsers
+		let browsedUsers = sut.fetchBrowsedUsers()
 		
 		// then
-		XCTAssertEqual(browsingUsers.count, 4)
+		XCTAssertEqual(browsedUsers.count, 4)
 	}
 	
 	func test_새로운_유저가_잘_감지되는지() {
@@ -71,8 +71,8 @@ extension BrowsingUserUseCaseTest {
 		// given
 		let expectation = XCTestExpectation(description: "새로운 유저 테스트")
 		let mockBrowsingUser = SocketPeer(id: "4", name: "JK", state: .lost)
-		let publisher = sut.browsingUser
-		var receivedPeer: BrowsingUser?
+		let publisher = sut.browsedUser
+		var receivedPeer: BrowsedUser?
 		let cancellable = publisher.sink { peer in
 			receivedPeer = peer
 			expectation.fulfill()

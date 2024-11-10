@@ -13,7 +13,7 @@ import P2PSocket
 public final class BrowsingUserRepository: BrowsingUserRepositoryInterface {
 	private var cancellables: Set<AnyCancellable> = []
 	private let socketProvider: SocketProvidable
-	public let updatedBrowsingUser = PassthroughSubject<BrowsingUser, Never>()
+	public let updatedBrowsingUser = PassthroughSubject<BrowsedUser, Never>()
 	
 	public init(socketProvider: SocketProvidable) {
 		self.socketProvider = socketProvider
@@ -28,7 +28,7 @@ public final class BrowsingUserRepository: BrowsingUserRepositoryInterface {
 
 // MARK: - Public Methods
 public extension BrowsingUserRepository {
-	func fetchBrowsingUsers() -> [BrowsingUser] {
+	func fetchBrowsingUsers() -> [BrowsedUser] {
 		return socketProvider.browsingPeers()
 			.compactMap { mappingToBrowsingUser($0) }
 	}
@@ -38,7 +38,7 @@ public extension BrowsingUserRepository {
 
 // MARK: - Private Methods
 private extension BrowsingUserRepository {
-	func mappingToBrowsingUser(_ peer: SocketPeer) -> BrowsingUser? {
+	func mappingToBrowsingUser(_ peer: SocketPeer) -> BrowsedUser? {
 		switch peer.state {
 			case .found:
 				return .init(id: peer.id, state: .found, name: peer.name)

@@ -13,7 +13,7 @@ public final class BrowsingUserUseCase: BrowsingUserUseCaseInterface {
 	private var cancellables: Set<AnyCancellable> = []
 	private let repository: BrowsingUserRepositoryInterface
 	
-	public let browsingUser = PassthroughSubject<BrowsingUser, Never>()
+	public let browsedUser = PassthroughSubject<BrowsedUser, Never>()
 
 	public init(repository: BrowsingUserRepositoryInterface) {
 		self.repository = repository
@@ -23,7 +23,7 @@ public final class BrowsingUserUseCase: BrowsingUserUseCaseInterface {
 
 // MARK: - Public Methods
 public extension BrowsingUserUseCase {
-	func fetchBrowsingUsers() -> [BrowsingUser] {
+	func fetchBrowsedUsers() -> [BrowsedUser] {
 		return repository.fetchBrowsingUsers()
 	}
 	
@@ -36,7 +36,7 @@ public extension BrowsingUserUseCase {
 private extension BrowsingUserUseCase {
 	func bind() {
 		repository.updatedBrowsingUser
-			.subscribe(browsingUser)
+			.subscribe(browsedUser)
 			.store(in: &cancellables)
 	}
 }

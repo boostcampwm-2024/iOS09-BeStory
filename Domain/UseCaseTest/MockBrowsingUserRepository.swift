@@ -13,7 +13,7 @@ import P2PSocket
 final class MockBrowsingUserRepository: BrowsingUserRepositoryInterface {
 	private let socketProvider: SocketProvidable
 	private var cancellables: Set<AnyCancellable> = []
-	let updatedBrowsingUser = PassthroughSubject<BrowsingUser, Never>()
+	let updatedBrowsingUser = PassthroughSubject<BrowsedUser, Never>()
 	
 	init(socketProvider: SocketProvidable) {
 		self.socketProvider = socketProvider
@@ -25,7 +25,7 @@ final class MockBrowsingUserRepository: BrowsingUserRepositoryInterface {
 			.store(in: &cancellables)
 	}
 	
-	func fetchBrowsingUsers() -> [BrowsingUser] {
+	func fetchBrowsingUsers() -> [BrowsedUser] {
 		return socketProvider.browsingPeers()
 			.compactMap { mappingToBrowsingUser($0) }
 	}
@@ -35,7 +35,7 @@ final class MockBrowsingUserRepository: BrowsingUserRepositoryInterface {
 
 // MARK: - Private Methods
 private extension MockBrowsingUserRepository {
-	func mappingToBrowsingUser(_ peer: SocketPeer) -> BrowsingUser? {
+	func mappingToBrowsingUser(_ peer: SocketPeer) -> BrowsedUser? {
 		switch peer.state {
 			case .found:
 				return .init(id: peer.id, state: .found, name: peer.name)

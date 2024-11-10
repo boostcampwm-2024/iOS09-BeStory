@@ -12,17 +12,17 @@ import Entity
 final class MockBrowinsgUseCase: BrowsingUserUseCaseInterface {
 	private var cancellables: Set<AnyCancellable> = []
 	private let repository: BrowsingUserRepositoryInterface
-	let browsingUser = PassthroughSubject<BrowsingUser, Never>()
+	let browsedUser = PassthroughSubject<BrowsedUser, Never>()
 	
 	init(repository: BrowsingUserRepositoryInterface) {
 		self.repository = repository
 		
 		repository.updatedBrowsingUser
-			.subscribe(browsingUser)
+			.subscribe(browsedUser)
 			.store(in: &cancellables)
 	}
 	
-	func fetchBrowsingUsers() -> [BrowsingUser] {
+	func fetchBrowsedUsers() -> [BrowsedUser] {
 		return repository.fetchBrowsingUsers()
 	}
 	

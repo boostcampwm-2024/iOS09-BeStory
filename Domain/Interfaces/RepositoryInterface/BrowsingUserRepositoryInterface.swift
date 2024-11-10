@@ -10,10 +10,10 @@ import Entity
 import P2PSocket
 
 public protocol BrowsingUserRepositoryInterface {
-	var updatedBrowsingUser: PassthroughSubject<BrowsingUser, Never> { get }
+	var updatedBrowsingUser: PassthroughSubject<BrowsedUser, Never> { get }
 	
 	init(socketProvider: SocketProvidable)
 	
-	func fetchBrowsingUsers() -> [BrowsingUser]
+	func fetchBrowsingUsers() -> [BrowsedUser]
 	func inviteUser(with id: String)
 }

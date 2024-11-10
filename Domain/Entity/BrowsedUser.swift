@@ -5,7 +5,7 @@
 //  Created by jung on 11/7/24.
 //
 
-public struct BrowsingUser: Identifiable {
+public struct BrowsedUser: Identifiable {
 	public enum State {
 		case lost
 		case found

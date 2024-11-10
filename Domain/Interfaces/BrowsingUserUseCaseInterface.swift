@@ -9,10 +9,10 @@ import Combine
 import Entity
 
 public protocol BrowsingUserUseCaseInterface {
-	var browsingUser: PassthroughSubject<BrowsingUser, Never> { get }
+	var browsedUser: PassthroughSubject<BrowsedUser, Never> { get }
 	
 	init(repository: BrowsingUserRepositoryInterface)
 	
-	func fetchBrowsingUsers() -> [BrowsingUser]
+	func fetchBrowsedUsers() -> [BrowsedUser]
 	func inviteUser(with id: String)
 }
