@@ -9,5 +9,9 @@ import Combine
 import Entity
 
 public protocol ConnectedUserUseCaseInterface {
+    var connectedUSer: PassthroughSubject<ConnectedUser, Never> { get }
 
+    init(repository: ConnectedUserRepositoryInterface)
+
+    func fetchConnectedUser() -> [ConnectedUser]
 }
