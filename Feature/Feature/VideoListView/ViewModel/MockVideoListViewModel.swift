@@ -5,9 +5,8 @@
 //  Created by 디해 on 11/7/24.
 //
 
-// import Foundation
-import UIKit
 import Combine
+import UIKit
 
 final public class MockVideoListViewModel: VideoListViewModel {
     public var videos: ReadOnlyPublisher<[VideoListPresentationModel]>

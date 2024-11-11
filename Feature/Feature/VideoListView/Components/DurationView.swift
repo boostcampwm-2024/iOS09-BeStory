@@ -5,8 +5,8 @@
 //  Created by 디해 on 11/7/24.
 //
 
-import UIKit
 import SnapKit
+import UIKit
 
 final class DurationView: UIView {
     // MARK: - UI Components

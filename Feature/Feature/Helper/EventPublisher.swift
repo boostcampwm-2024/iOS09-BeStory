@@ -5,8 +5,8 @@
 //  Created by 디해 on 11/11/24.
 //
 
-import UIKit
 import Combine
+import UIKit
 
 extension UIControl {
     func publisher(for event: UIControl.Event) -> UIControl.EventPublisher {

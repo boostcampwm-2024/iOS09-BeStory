@@ -5,8 +5,8 @@
 //  Created by 디해 on 11/10/24.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 final class MultipeerVideoListViewModel: VideoListViewModel {
     var videos: ReadOnlyPublisher<[VideoListPresentationModel]>
