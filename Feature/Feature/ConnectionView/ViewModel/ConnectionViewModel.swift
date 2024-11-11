@@ -9,52 +9,68 @@ import Foundation
 import UIKit
 import Combine
 
+protocol ConnectionViewModelable: ViewModelable where
+Input == ConnectionInput,
+Output == ConnectionOutput { }
+
 final public class ConnectionViewModel {
     // MARK: - Properties
     private let usecase: BrowsingUserUseCaseInterface
     private var cancellables: Set<AnyCancellable> = []
 
+    var output = PassthroughSubject<Output, Never>()
+
     private let emojis = ["😀", "😇", "😎", "🤓", "😡", "🥶", "🤯", "🤖", "👻", "👾"]
     private var usedPositions: [String: CGPoint] = [:]
-
-    @Published private(set) var users: [BrowsingUser] = []
 
     // MARK: - Initializer
 
     init(usecase: BrowsingUserUseCaseInterface) {
         self.usecase = usecase
-        bind()
+        setupBind()
     }
+}
 
-    func fetchUsers() {
-        if users.isEmpty {
-            users = usecase.fetchBrowsingUsers()
+// MARK: - Transform
+
+extension ConnectionViewModel: ConnectionViewModelable {
+    func transform(_ input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
+        input.sink { [weak self] result in
+            switch result {
+            case .fetchUsers:
+                guard let users = self?.fetchUsers() else { return }
+                self?.output.send(.fetched(users))
+            case .invite(let id):
+                self?.invite(id: id)
+            }
         }
-    }
+        .store(in: &cancellables)
 
-    func invite(id: String) {
-        usecase.inviteUser(with: id)
+        return output.eraseToAnyPublisher()
     }
 }
 
 // MARK: - Binding
 
 private extension ConnectionViewModel {
-    func bind() {
+    func setupBind() {
         usecase.browsingUser
             .sink { [weak self] updatedUser in
-                guard let self = self else { return }
-
-                if !users.contains(where: { $0.id == updatedUser.id }) {
-                    users.append(updatedUser)
-                } else {
-                    for (index, user) in users.enumerated() where user.id == updatedUser.id {
-                        users[index] = updatedUser
-                        break
-                    }
-                }
+                self?.output.send(.updated(updatedUser))
             }
             .store(in: &cancellables)
+    }
+}
+
+// MARK: - Private Methods
+
+private extension ConnectionViewModel {
+    func fetchUsers() -> [BrowsingUser] {
+        return usecase.fetchBrowsingUsers()
+    }
+
+    func invite(id: String) {
+        usecase.inviteUser(with: id)
     }
 }
 

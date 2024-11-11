@@ -48,7 +48,10 @@
 				"ConnectionView/CGPoint+Extension.swift",
 				ConnectionView/ConnectionViewController.swift,
 				ConnectionView/View/CustomCircleView.swift,
+				ConnectionView/ViewModel/ConnectionInputOutput.swift,
 				ConnectionView/ViewModel/ConnectionViewModel.swift,
+				ConnectionView/ViewModel/ViewBindable.swift,
+				ConnectionView/ViewModel/ViewModelable.swift,
 			);
 			target = FED968162CD908B000CD445C /* Feature */;
 		};

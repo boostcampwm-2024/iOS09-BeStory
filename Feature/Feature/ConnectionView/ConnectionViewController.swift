@@ -13,6 +13,7 @@ final public class ConnectionViewController: UIViewController {
     // MARK: - Properties
 
     private let viewModel: ConnectionViewModel
+    private let input = PassthroughSubject<ConnectionInput, Never>()
     private var cancellables = Set<AnyCancellable>()
 
     // MARK: - UI Components
@@ -43,21 +44,30 @@ final public class ConnectionViewController: UIViewController {
         setupViewHierarchies()
         setupViewConstraints()
 
-        bind()
-
-        viewModel.fetchUsers()
+        setupBind()
+        input.send(.fetchUsers)
     }
 }
 
 // MARK: - Binding
 
-private extension ConnectionViewController {
-    func bind() {
-        viewModel.$users
-            .sink { [weak self] users in
+extension ConnectionViewController: ViewBindable {
+    typealias Output = ConnectionOutput
+
+    func setupBind() {
+        let output = viewModel.transform(input.eraseToAnyPublisher())
+        output.sink { [weak self] result in
+            switch result {
+            case .fetched(let users):
                 self?.updateUserCircleViews(users)
+            case .updated(let user):
+                self?.updateUserCircleViews([user])
+            case .none:
+                break
             }
-            .store(in: &cancellables)
+        }
+        .store(in: &cancellables)
+
     }
 }
 
@@ -70,7 +80,7 @@ private extension ConnectionViewController {
         showAlert(
             title: "Invite",
             message: "초대하시겠습니까?",
-            onConfirm: { self.viewModel.invite(id: id) }
+            onConfirm: { self.input.send(.invite(id: id)) }
         )
     }
 }
