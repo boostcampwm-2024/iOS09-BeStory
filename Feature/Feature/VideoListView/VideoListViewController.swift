@@ -140,6 +140,7 @@ private extension VideoListViewController {
     }
     
     func addVideo() {
+        viewModel.appendVideo()
     }
 }
 

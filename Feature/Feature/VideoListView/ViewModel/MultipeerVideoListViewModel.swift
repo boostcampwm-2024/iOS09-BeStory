@@ -23,4 +23,7 @@ extension MultipeerVideoListViewModel {
     func viewDidLoad() {
         load()
     }
+    
+    func appendVideo() {
+    }
 }

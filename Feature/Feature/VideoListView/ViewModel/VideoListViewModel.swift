@@ -10,6 +10,7 @@ import Foundation
 
 public protocol VideoListViewModelInput {
     func viewDidLoad()
+    func appendVideo()
 }
 
 public protocol VideoListViewModelOutput {

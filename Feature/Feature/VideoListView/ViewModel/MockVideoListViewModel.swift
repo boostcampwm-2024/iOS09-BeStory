@@ -24,6 +24,17 @@ final public class MockVideoListViewModel: VideoListViewModel {
                                                 date: "2024.07.15")])
     }
     
+    private func appendDummyVideo() {
+        let dummyVideo = VideoListItem(title: "테스트_비디오.avi",
+                                       authorTitle: "from 지혜",
+                                       thumbnailImage: Data.imageData() ?? Data(),
+                                       duration: "1:30",
+                                       date: "2024.01.03")
+        var currentVideos = videos.value
+        currentVideos.append(dummyVideo)
+        videos.send(currentVideos)
+    }
+    
     public init() {
         self.videos = ReadOnlyPublisher([])
     }
@@ -32,6 +43,10 @@ final public class MockVideoListViewModel: VideoListViewModel {
 extension MockVideoListViewModel {
     public func viewDidLoad() {
         load()
+    }
+    
+    public func appendVideo() {
+        appendDummyVideo()
     }
 }
 
