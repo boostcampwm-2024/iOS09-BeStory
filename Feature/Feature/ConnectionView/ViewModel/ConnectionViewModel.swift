@@ -5,9 +5,9 @@
 //  Created by 이숲 on 11/7/24.
 //
 
+import Combine
 import Foundation
 import UIKit
-import Combine
 
 protocol ConnectionViewModelable: ViewModelable where
 Input == ConnectionInput,

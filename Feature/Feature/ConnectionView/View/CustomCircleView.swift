@@ -5,8 +5,8 @@
 //  Created by 이숲 on 11/7/24.
 //
 
-import UIKit
 import SnapKit
+import UIKit
 
 enum CircleViewStyle {
     case large
