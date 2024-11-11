@@ -16,9 +16,8 @@ Output == ConnectionOutput { }
 final public class ConnectionViewModel {
     // MARK: - Properties
     private let usecase: BrowsingUserUseCaseInterface
+    private var output = PassthroughSubject<Output, Never>()
     private var cancellables: Set<AnyCancellable> = []
-
-    var output = PassthroughSubject<Output, Never>()
 
     private let emojis = ["😀", "😇", "😎", "🤓", "😡", "🥶", "🤯", "🤖", "👻", "👾"]
     private var usedPositions: [String: CGPoint] = [:]

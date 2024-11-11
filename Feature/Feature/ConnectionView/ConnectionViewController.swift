@@ -67,7 +67,6 @@ extension ConnectionViewController: ViewBindable {
             }
         }
         .store(in: &cancellables)
-
     }
 }
 
