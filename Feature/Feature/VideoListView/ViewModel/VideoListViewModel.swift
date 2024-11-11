@@ -13,7 +13,7 @@ public protocol VideoListViewModelInput {
 }
 
 public protocol VideoListViewModelOutput {
-    var videos: ReadOnlyPublisher<[VideoListPresentationModel]> { get }
+    var videos: ReadOnlyPublisher<[VideoListItem]> { get }
 }
 
 public typealias VideoListViewModel = VideoListViewModelInput & VideoListViewModelOutput

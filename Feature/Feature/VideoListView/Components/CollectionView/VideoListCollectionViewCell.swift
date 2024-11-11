@@ -34,7 +34,7 @@ final class VideoListCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
       
-    func configure(with presentationModel: VideoListPresentationModel) {
+    func configure(with presentationModel: VideoListItem) {
         thumbnailImageView.image = UIImage(data: presentationModel.thumbnailImage)
         durationView.configure(with: presentationModel.duration)
         titleLabel.text = presentationModel.title

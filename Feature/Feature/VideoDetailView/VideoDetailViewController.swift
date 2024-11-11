@@ -10,7 +10,7 @@ import UIKit
 
 public final class VideoDetailViewController: UIViewController {
     // MARK: - Initializers
-    init(video: VideoListPresentationModel) {
+    init(video: VideoListItem) {
         super.init(nibName: nil, bundle: nil)
     }
     

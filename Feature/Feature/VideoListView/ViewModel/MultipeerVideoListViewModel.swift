@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 final class MultipeerVideoListViewModel: VideoListViewModel {
-    var videos: ReadOnlyPublisher<[VideoListPresentationModel]>
+    var videos: ReadOnlyPublisher<[VideoListItem]>
     
     init() {
         videos = ReadOnlyPublisher([])
