@@ -13,20 +13,17 @@ public final class VideoListViewController: UIViewController {
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - UI Components
-    private let spacing: CGFloat = 20
-    
-    private let layout = UICollectionViewFlowLayout()
-    
     private let headerView = VideoListHeaderView()
-    
-    private let collectionView: UICollectionView
+    private var collectionView: UICollectionView!
+    private var dataSource: VideoListDataSource!
+    private let spacing: CGFloat = 20
     
     // MARK: - Initializers
     public init(viewModel: VideoListViewModel) {
         self.viewModel = viewModel
-        self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        
         super.init(nibName: nil, bundle: nil)
+        
+        setupCollectionView()
     }
     
     @available(*, unavailable)
@@ -41,7 +38,6 @@ public final class VideoListViewController: UIViewController {
         setupViewHierarchies()
         setupViewConstraints()
         setupViewBinding()
-        setupCollectionView()
         viewModel.viewDidLoad()
     }
     
@@ -57,7 +53,6 @@ private extension VideoListViewController {
         view.backgroundColor = .black
         collectionView.register(VideoListCollectionViewCell.self,
                                 forCellWithReuseIdentifier: VideoListCollectionViewCell.identifier)
-        collectionView.dataSource = self
         collectionView.delegate = self
     }
     
@@ -96,14 +91,51 @@ private extension VideoListViewController {
     }
     
     func setupCollectionView() {
-        layout.minimumLineSpacing = spacing
-        layout.minimumInteritemSpacing = spacing
+        let layout = makeLayout()
+        
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.backgroundColor = UIColor.clear
+        
+        let dataSource = makeDataSource()
+        self.dataSource = dataSource
+        collectionView.dataSource = dataSource
+        
+        applySnapshot(with: [])
+    }
+    
+    func makeLayout() -> UICollectionViewLayout {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = spacing
+        layout.minimumInteritemSpacing = spacing
+        return layout
+    }
+    
+    func makeDataSource() -> VideoListDataSource {
+        let dataSource = VideoListDataSource(collectionView: collectionView,
+                                              cellProvider: { collectionView, indexPath, item in
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: VideoListCollectionViewCell.identifier,
+                for: indexPath
+            )
+            guard let cell = cell as? VideoListCollectionViewCell
+                else { return UICollectionViewCell() }
+            cell.configure(with: item)
+            return cell
+        })
+        return dataSource
+    }
+    
+    func applySnapshot(with items: [VideoListItem]) {
+        var snapshot = NSDiffableDataSourceSnapshot<String, VideoListItem>()
+        snapshot.appendSections(["list"])
+        snapshot.appendItems(items, toSection: "list")
+        
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
     
     func reload() {
-        collectionView.reloadData()
+        applySnapshot(with: viewModel.videos.value)
         headerView.configure(with: viewModel.videos.value.count)
     }
     
@@ -112,25 +144,6 @@ private extension VideoListViewController {
 }
 
 // MARK: - Collection View
-extension VideoListViewController: UICollectionViewDataSource {
-    public func collectionView(
-        _ collectionView: UICollectionView,
-        numberOfItemsInSection section: Int
-    ) -> Int {
-        viewModel.videos.value.count
-    }
-    
-    public func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath
-    ) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VideoListCollectionViewCell.identifier,
-                                                      for: indexPath)
-        guard let cell = cell as? VideoListCollectionViewCell else { return UICollectionViewCell() }
-        cell.configure(with: viewModel.videos.value[indexPath.row])
-        return cell
-    }
-}
 
 extension VideoListViewController: UICollectionViewDelegate {
     public func collectionView(
