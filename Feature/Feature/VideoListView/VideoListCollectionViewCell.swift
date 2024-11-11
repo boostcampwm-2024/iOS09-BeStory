@@ -11,42 +11,20 @@ final class VideoListCollectionViewCell: UICollectionViewCell {
     static let identifier: String = "VideoListCollectionViewCell"
     
     // MARK: - UI Components
-    private let thumbnailImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.layer.cornerRadius = 20
-        imageView.clipsToBounds = true
-        return imageView
-    }()
+    private let thumbnailImageView = UIImageView()
     
     private let durationView = DurationView()
     
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor.white
-        label.font = UIFont.systemFont(ofSize: 15)
-        label.numberOfLines = 1
-        return label
-    }()
+    private let titleLabel = UILabel()
     
-    private let authorLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor(hex: "7A808A")
-        label.font = UIFont.systemFont(ofSize: 12)
-        label.numberOfLines = 1
-        return label
-    }()
+    private let authorLabel = UILabel()
     
-    private let dateLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor(hex: "7C818B")
-        label.font = UIFont.systemFont(ofSize: 12)
-        label.numberOfLines = 1
-        return label
-    }()
+    private let dateLabel = UILabel()
     
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: .zero)
+        setupViewAttributes()
         setupViewHierarchies()
         setupViewConstraints()
     }
@@ -67,6 +45,13 @@ final class VideoListCollectionViewCell: UICollectionViewCell {
 
 // MARK: - Setting
 private extension VideoListCollectionViewCell {
+    func setupViewAttributes() {
+        setupThumbnailImageView()
+        setupTitleLabel()
+        setupAuthorLabel()
+        setupDateLabel()
+    }
+    
     func setupViewHierarchies() {
         addSubview(thumbnailImageView)
         addSubview(durationView)
@@ -105,5 +90,28 @@ private extension VideoListCollectionViewCell {
             make.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
         }
+    }
+    
+    func setupThumbnailImageView() {
+        thumbnailImageView.layer.cornerRadius = 20
+        thumbnailImageView.clipsToBounds = true
+    }
+    
+    func setupTitleLabel() {
+        titleLabel.textColor = UIColor.white
+        titleLabel.font = UIFont.systemFont(ofSize: 15)
+        titleLabel.numberOfLines = 1
+    }
+    
+    func setupAuthorLabel() {
+        authorLabel.textColor = UIColor(hex: "7A808A")
+        authorLabel.font = UIFont.systemFont(ofSize: 12)
+        authorLabel.numberOfLines = 1
+    }
+    
+    func setupDateLabel() {
+        dateLabel.textColor = UIColor(hex: "7C818B")
+        dateLabel.font = UIFont.systemFont(ofSize: 12)
+        dateLabel.numberOfLines = 1
     }
 }

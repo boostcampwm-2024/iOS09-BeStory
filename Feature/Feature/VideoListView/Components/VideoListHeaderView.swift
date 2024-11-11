@@ -9,36 +9,20 @@ import UIKit
 
 final class VideoListHeaderView: UIView {
     // MARK: - UI Components
-    let titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "함께 편집할 영상 불러오기"
-        label.textColor = UIColor.white
-        label.font = UIFont.boldSystemFont(ofSize: 16)
-        label.numberOfLines = 1
-        return label
-    }()
+    let titleLabel = UILabel()
     
-    let subTitleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor.init(hex: "787E87")
-        label.font = UIFont.boldSystemFont(ofSize: 15)
-        label.numberOfLines = 1
-        return label
-    }()
+    let subTitleLabel = UILabel()
     
-    let addVideoButton: IconButton = {
-        let button = IconButton()
-        let image = UIImage.init(systemName: "photo")
-        button.configure(with: image, title: "영상 추가")
-        return button
-    }()
+    let addVideoButton = IconButton()
     
     // MARK: - Initializers
     init() {
         super.init(frame: .zero)
-        
         setupViewHierarchies()
         setupViewConstraints()
+        setupTitleLabel()
+        setupSubtitleLabel()
+        setupAddVideoButton()
     }
     
     @available(*, unavailable)
@@ -77,5 +61,23 @@ private extension VideoListHeaderView {
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview()
         }
+    }
+    
+    func setupTitleLabel() {
+        titleLabel.text = "함께 편집할 영상 불러오기"
+        titleLabel.textColor = UIColor.white
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 16)
+        titleLabel.numberOfLines = 1
+    }
+    
+    func setupSubtitleLabel() {
+        subTitleLabel.textColor = UIColor.init(hex: "787E87")
+        subTitleLabel.font = UIFont.boldSystemFont(ofSize: 15)
+        subTitleLabel.numberOfLines = 1
+    }
+    
+    func setupAddVideoButton() {
+        let image = UIImage.init(systemName: "photo")
+        addVideoButton.configure(with: image, title: "영상 추가")
     }
 }

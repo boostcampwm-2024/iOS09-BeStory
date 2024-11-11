@@ -15,21 +15,16 @@ public final class VideoListViewController: UIViewController {
     // MARK: - UI Components
     private let spacing: CGFloat = 20
     
+    private let layout = UICollectionViewFlowLayout()
+    
     private let headerView = VideoListHeaderView()
     
-    private lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = spacing
-        layout.minimumInteritemSpacing = spacing
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.backgroundColor = UIColor.clear
-        return collectionView
-    }()
+    private let collectionView: UICollectionView
     
     // MARK: - Initializers
     public init(viewModel: VideoListViewModel) {
         self.viewModel = viewModel
+        self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -46,6 +41,7 @@ public final class VideoListViewController: UIViewController {
         setupViewHierarchies()
         setupViewConstraints()
         setupViewBinding()
+        setupCollectionView()
         viewModel.viewDidLoad()
     }
     
@@ -97,6 +93,13 @@ private extension VideoListViewController {
                 self?.addVideo()
             }
             .store(in: &cancellables)
+    }
+    
+    func setupCollectionView() {
+        layout.minimumLineSpacing = spacing
+        layout.minimumInteritemSpacing = spacing
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.backgroundColor = UIColor.clear
     }
     
     func reload() {

@@ -10,13 +10,7 @@ import SnapKit
 
 final class DurationView: UIView {
     // MARK: - UI Components
-    private let durationLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor(hex: "C9C9C9")
-        label.font = UIFont.boldSystemFont(ofSize: 15)
-        label.numberOfLines = 1
-        return label
-    }()
+    private let durationLabel = UILabel()
     
     // MARK: - Initializers
     init() {
@@ -25,6 +19,7 @@ final class DurationView: UIView {
         setupViewAttributes()
         setupViewHierarchies()
         setupViewConstraints()
+        setupDurationLabel()
     }
     
     @available(*, unavailable)
@@ -52,5 +47,11 @@ private extension DurationView {
         durationLabel.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(5)
         }
+    }
+    
+    func setupDurationLabel() {
+        durationLabel.textColor = UIColor(hex: "C9C9C9")
+        durationLabel.font = UIFont.boldSystemFont(ofSize: 15)
+        durationLabel.numberOfLines = 1
     }
 }
