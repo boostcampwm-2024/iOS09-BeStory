@@ -127,9 +127,9 @@ private extension VideoListViewController {
     }
     
     func applySnapshot(with items: [VideoListItem]) {
-        var snapshot = NSDiffableDataSourceSnapshot<String, VideoListItem>()
-        snapshot.appendSections(["list"])
-        snapshot.appendItems(items, toSection: "list")
+        var snapshot = NSDiffableDataSourceSnapshot<VideoListSection, VideoListItem>()
+        snapshot.appendSections([.list])
+        snapshot.appendItems(items, toSection: .list)
         
         dataSource.apply(snapshot, animatingDifferences: true)
     }

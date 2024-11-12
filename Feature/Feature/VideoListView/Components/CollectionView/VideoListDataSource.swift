@@ -7,4 +7,4 @@
 
 import UIKit
 
-class VideoListDataSource: UICollectionViewDiffableDataSource<String, VideoListItem> { }
+class VideoListDataSource: UICollectionViewDiffableDataSource<VideoListSection, VideoListItem> { }
