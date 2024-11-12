@@ -10,7 +10,6 @@
 		E4E39BA32CDBC872001E08D0 /* libFeature.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FED968172CD908B000CD445C /* libFeature.a */; platformFilter = ios; };
 		E4E39BAE2CDBCA04001E08D0 /* libDomain.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E39BAD2CDBCA04001E08D0 /* libDomain.a */; };
 		FE0334DA2CD9DA1100AA58C9 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = FE0334D92CD9DA1100AA58C9 /* SnapKit */; };
-		FE0334F02CD9DE4C00AA58C9 /* libDomain.a in Dependencies */ = {isa = PBXBuildFile; fileRef = FE0334EE2CD9DE4600AA58C9 /* libDomain.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,10 +36,19 @@
 			dstPath = "";
 			dstSubfolderSpec = 0;
 			files = (
-				FE0334F02CD9DE4C00AA58C9 /* libDomain.a in Dependencies */,
 			);
 			name = Dependencies;
 			runOnlyForDeploymentPostprocessing = 1;
+		};
+		FEF7797C2CDCB38B00FFE089 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -188,6 +196,7 @@
 				FED968132CD908B000CD445C /* Sources */,
 				FED968142CD908B000CD445C /* Frameworks */,
 				FE0334E32CD9DD7400AA58C9 /* Dependencies */,
+				FEF7797C2CDCB38B00FFE089 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
