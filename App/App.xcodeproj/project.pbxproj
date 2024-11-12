@@ -7,11 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FE0336512CDA55FF00AA58C9 /* libDomain.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FE0336502CDA55FF00AA58C9 /* libDomain.a */; };
 		FEF778B92CDB00F000FFE089 /* libData.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF778B72CDB00F000FFE089 /* libData.a */; };
 		FEF778BA2CDB00F000FFE089 /* libFeature.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF778B82CDB00F000FFE089 /* libFeature.a */; };
-		FEF778BC2CDB0B3C00FFE089 /* SocketProvider.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF778BB2CDB0B3C00FFE089 /* SocketProvider.framework */; };
-		FEF778BD2CDB0B3C00FFE089 /* SocketProvider.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FEF778BB2CDB0B3C00FFE089 /* SocketProvider.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FEF779742CDCB35800FFE089 /* libUseCase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF779732CDCB35800FFE089 /* libUseCase.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,7 +29,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				FEF778BD2CDB0B3C00FFE089 /* SocketProvider.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -39,11 +36,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		FE0336502CDA55FF00AA58C9 /* libDomain.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libDomain.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE6EF2EA2CD8B005005DC39D /* App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = App.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF778B72CDB00F000FFE089 /* libData.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libData.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF778B82CDB00F000FFE089 /* libFeature.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libFeature.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		FEF778BB2CDB0B3C00FFE089 /* SocketProvider.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SocketProvider.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FEF779732CDCB35800FFE089 /* libUseCase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libUseCase.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -72,10 +68,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FEF778BC2CDB0B3C00FFE089 /* SocketProvider.framework in Frameworks */,
-				FE0336512CDA55FF00AA58C9 /* libDomain.a in Frameworks */,
 				FEF778B92CDB00F000FFE089 /* libData.a in Frameworks */,
 				FEF778BA2CDB00F000FFE089 /* libFeature.a in Frameworks */,
+				FEF779742CDCB35800FFE089 /* libUseCase.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,10 +97,9 @@
 		FE6EF3E12CD8B6A2005DC39D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FEF778BB2CDB0B3C00FFE089 /* SocketProvider.framework */,
+				FEF779732CDCB35800FFE089 /* libUseCase.a */,
 				FEF778B72CDB00F000FFE089 /* libData.a */,
 				FEF778B82CDB00F000FFE089 /* libFeature.a */,
-				FE0336502CDA55FF00AA58C9 /* libDomain.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
