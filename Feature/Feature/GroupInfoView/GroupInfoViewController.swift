@@ -31,14 +31,14 @@ final public class GroupInfoViewController: UIViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+        setupViewHierarchies()
+        setupViewConstraints()
         setupBind()
         input.send(.viewDidLoad)
     }
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupViewHierarchies()
-        setupViewConstraints()
         setupViewAttributes()
     }
     
