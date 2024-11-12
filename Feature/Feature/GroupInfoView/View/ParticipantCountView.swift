@@ -33,6 +33,7 @@ final class ParticipantCountView: UIView {
     public override var intrinsicContentSize: CGSize {
         return CGSize(width: 40, height: 20)
     }
+    
     func updateCount(to count: Int) {
         userCount = count
         countLabel.text = "\(count)"
