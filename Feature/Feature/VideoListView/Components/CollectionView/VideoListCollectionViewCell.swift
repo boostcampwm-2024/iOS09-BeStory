@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 final class VideoListCollectionViewCell: UICollectionViewCell {
     static let identifier: String = "VideoListCollectionViewCell"
@@ -13,7 +14,9 @@ final class VideoListCollectionViewCell: UICollectionViewCell {
     // MARK: - UI Components
     private let thumbnailImageView = UIImageView()
     
-    private let durationView = DurationView()
+    private let durationView = UIView()
+    
+    private let durationLabel = UILabel()
     
     private let titleLabel = UILabel()
     
@@ -36,7 +39,7 @@ final class VideoListCollectionViewCell: UICollectionViewCell {
       
     func configure(with presentationModel: VideoListItem) {
         thumbnailImageView.image = UIImage(data: presentationModel.thumbnailImage)
-        durationView.configure(with: presentationModel.duration)
+        durationLabel.text = presentationModel.duration
         titleLabel.text = presentationModel.title
         authorLabel.text = presentationModel.authorTitle
         dateLabel.text = presentationModel.date
@@ -48,6 +51,8 @@ private extension VideoListCollectionViewCell {
     func setupViewAttributes() {
         setupThumbnailImageView()
         setupTitleLabel()
+        setupDurationLabel()
+        setupDurationView()
         setupAuthorLabel()
         setupDateLabel()
     }
@@ -58,12 +63,18 @@ private extension VideoListCollectionViewCell {
         addSubview(titleLabel)
         addSubview(authorLabel)
         addSubview(dateLabel)
+        
+        durationView.addSubview(durationLabel)
     }
     
     func setupViewConstraints() {
         thumbnailImageView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.horizontalEdges.equalToSuperview()
+        }
+        
+        durationLabel.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(5)
         }
         
         durationView.snp.makeConstraints { make in
@@ -101,6 +112,17 @@ private extension VideoListCollectionViewCell {
         titleLabel.textColor = UIColor.white
         titleLabel.font = UIFont.systemFont(ofSize: 15)
         titleLabel.numberOfLines = 1
+    }
+    
+    func setupDurationLabel() {
+        durationLabel.textColor = UIColor(hex: "C9C9C9")
+        durationLabel.font = UIFont.boldSystemFont(ofSize: 15)
+        durationLabel.numberOfLines = 1
+    }
+    
+    func setupDurationView() {
+        durationView.layer.cornerRadius = 7
+        durationView.backgroundColor = .black.withAlphaComponent(0.5)
     }
     
     func setupAuthorLabel() {
