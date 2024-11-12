@@ -52,7 +52,7 @@
 				VideoListView/Components/CollectionView/VideoListCollectionViewCell.swift,
 				VideoListView/Components/CollectionView/VideoListDataSource.swift,
 				VideoListView/Components/CollectionView/VideoListItem.swift,
-				VideoListView/Components/DurationView.swift,
+				VideoListView/Components/CollectionView/VideoListSection.swift,
 				VideoListView/Components/IconButton.swift,
 				VideoListView/Components/VideoListHeaderView.swift,
 				VideoListView/VideoListViewController.swift,
