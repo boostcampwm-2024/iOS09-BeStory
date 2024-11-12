@@ -8,6 +8,7 @@
 import Combine
 import UIKit
 
+/// 비디오 리스트를 테스트하기 위한 Mock View Model
 final public class MockVideoListViewModel: VideoListViewModel {
     public var videos: ReadOnlyPublisher<[VideoListItem]>
     
@@ -24,6 +25,7 @@ final public class MockVideoListViewModel: VideoListViewModel {
                                                 date: "2024.07.15")])
     }
     
+    /// 테스트를 위해 Dummy Video를 추가합니다.
     private func appendDummyVideo() {
         let dummyVideo = VideoListItem(title: "테스트_비디오.avi",
                                        authorTitle: "from 지혜",
@@ -40,6 +42,7 @@ final public class MockVideoListViewModel: VideoListViewModel {
     }
 }
 
+// MARK: - ViewModelInput
 extension MockVideoListViewModel {
     public func viewDidLoad() {
         load()
@@ -50,6 +53,7 @@ extension MockVideoListViewModel {
     }
 }
 
+// MARK: - Color Image Genenrator
 private extension Data {
     static func imageData() -> Data? {
         let color = UIColor.red

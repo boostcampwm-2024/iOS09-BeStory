@@ -19,6 +19,7 @@ final class MultipeerVideoListViewModel: VideoListViewModel {
     }
 }
 
+// MARK: - ViewModelInput
 extension MultipeerVideoListViewModel {
     func viewDidLoad() {
         load()
