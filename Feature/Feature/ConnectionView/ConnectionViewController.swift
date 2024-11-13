@@ -110,7 +110,7 @@ private extension ConnectionViewController {
         userCircleView.accessibilityLabel = user.id
 
         userContainerView.addSubview(userCircleView)
-        userContainerView.setNeedsLayout()
+        userContainerView.layoutIfNeeded()
     }
 
     func removeUserCircleView(user: BrowsingUser, position: CGPoint) {
@@ -119,7 +119,7 @@ private extension ConnectionViewController {
                 $0.removeFromSuperview()
             }
         }
-        userContainerView.setNeedsLayout()
+        userContainerView.layoutIfNeeded()
     }
 
     func showAlert(title: String, message: String, onConfirm: @escaping () -> Void) {
