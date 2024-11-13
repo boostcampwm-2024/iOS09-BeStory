@@ -8,6 +8,8 @@
 import SnapKit
 import UIKit
 
+// MARK: - Style Types
+
 enum CircleViewStyle {
     case large
     case small
