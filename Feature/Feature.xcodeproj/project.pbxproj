@@ -42,35 +42,62 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		85DBCE402CDCB74A0085F8EB /* Exceptions for "Feature" folder in "Feature" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"ConnectionView/CGPoint+Extension.swift",
-				ConnectionView/ConnectionViewController.swift,
-				ConnectionView/View/CustomCircleView.swift,
-				ConnectionView/ViewModel/ConnectionInputOutput.swift,
-				ConnectionView/ViewModel/ConnectionViewModel.swift,
-				ConnectionView/ViewModel/ViewBindable.swift,
-				ConnectionView/ViewModel/ViewModelable.swift,
-			);
-			target = FED968162CD908B000CD445C /* Feature */;
-		};
+    85DBCE402CDCB74A0085F8EB /* Exceptions for "Feature" folder in "Feature" target */ = {
+        isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+        membershipExceptions = (
+            "ConnectionView/CGPoint+Extension.swift",
+            ConnectionView/ConnectionViewController.swift,
+            ConnectionView/View/CustomCircleView.swift,
+            ConnectionView/ViewModel/ConnectionInputOutput.swift,
+            ConnectionView/ViewModel/ConnectionViewModel.swift,
+            ConnectionView/ViewModel/ViewBindable.swift,
+            ConnectionView/ViewModel/ViewModelable.swift,
+            Helper/EventPublisher.swift,
+            Helper/ReadOnlyPublisher.swift,
+            "Helper/UIColor+HexInitialization.swift",
+            VideoDetailView/VideoDetailViewController.swift,
+            VideoListView/Components/CollectionView/VideoListCollectionViewCell.swift,
+            VideoListView/Components/CollectionView/VideoListDataSource.swift,
+            VideoListView/Components/CollectionView/VideoListItem.swift,
+            VideoListView/Components/CollectionView/VideoListSection.swift,
+            VideoListView/Components/IconButton.swift,
+            VideoListView/Components/VideoListHeaderView.swift,
+            VideoListView/VideoListViewController.swift,
+            VideoListView/ViewModel/MockVideoListViewModel.swift,
+            VideoListView/ViewModel/MultipeerVideoListViewModel.swift,
+            VideoListView/ViewModel/VideoListViewModel.swift,
+            GroupInfoView/GroupInfoViewController.swift,
+            GroupInfoView/InvitedUser.swift,
+            GroupInfoView/View/ParticipantCountView.swift,
+            GroupInfoView/View/ParticipantInfoView.swift,
+            GroupInfoView/ViewModel/GroupInfoViewModel.swift,
+        );
+        target = FED968162CD908B000CD445C /* Feature */;
+    };
+    E4E39BAA2CDBC893001E08D0 /* Exceptions for "Feature" folder in "GroupInfoTest" target */ = {
+        isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+        membershipExceptions = (
+            GroupInfoView/ViewModel/GroupInfoViewModel.swift,
+        );
+        target = E4E39B9E2CDBC872001E08D0 /* GroupInfoTest */;
+    };
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		FE6EF3F12CD8B71E005DC39D /* Feature */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				85DBCE402CDCB74A0085F8EB /* Exceptions for "Feature" folder in "Feature" target */,
-			);
-			path = Feature;
-			sourceTree = "<group>";
-		};
-		FEF778F22CDB227500FFE089 /* FeatureInterface */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = FeatureInterface;
-			sourceTree = "<group>";
-		};
+    FE6EF3F12CD8B71E005DC39D /* Feature */ = {
+        isa = PBXFileSystemSynchronizedRootGroup;
+        exceptions = (
+            85DBCE402CDCB74A0085F8EB /* Exceptions for "Feature" folder in "Feature" target */,
+            E4E39BAA2CDBC893001E08D0 /* Exceptions for "Feature" folder in "GroupInfoTest" target */,
+        );
+        path = Feature;
+        sourceTree = "<group>";
+    };
+    FEF778F22CDB227500FFE089 /* FeatureInterface */ = {
+        isa = PBXFileSystemSynchronizedRootGroup;
+        path = FeatureInterface;
+        sourceTree = "<group>";
+    };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +134,7 @@
 			children = (
 				FED968172CD908B000CD445C /* libFeature.a */,
 				FEF778F12CDB227500FFE089 /* FeatureInterface.framework */,
+				E4E39B9F2CDBC872001E08D0 /* GroupInfoTest.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -114,6 +142,7 @@
 		FE6EF4272CD8B843005DC39D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E4E39BAD2CDBCA04001E08D0 /* libDomain.a */,
 				FE0334EE2CD9DE4600AA58C9 /* libDomain.a */,
 			);
 			name = Frameworks;
