@@ -16,6 +16,6 @@ enum ConnectionInput {
 
 enum ConnectionOutput {
     case none
-    case found(user: BrowsedUser, position: CGPoint, emoji: String)
-    case lost(user: BrowsedUser, position: CGPoint)
+    case found(user: BrowsedUser, position: (Double, Double), emoji: String)
+    case lost(user: BrowsedUser, position: (Double, Double))
 }

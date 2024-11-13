@@ -47,9 +47,9 @@ final public class ConnectionViewController: UIViewController {
         setupBind()
 
         viewModel.configure(
-            centerPosition: view.center,
-            innerDiameter: Constants.centralCircleViewSize,
-            outerDiameter: Constants.outerGrayCircleViewSize
+            centerPosition: (view.center.x, view.center.y),
+            innerDiameter: Float(Constants.centralCircleViewSize),
+            outerDiameter: Float(Constants.outerGrayCircleViewSize)
         )
 
         input.send(.fetchUsers)
@@ -66,8 +66,10 @@ extension ConnectionViewController: ViewBindable {
         output.sink { [weak self] result in
             switch result {
             case .found(let user, let position, let emoji):
+                let position = CGPoint(x: position.0, y: position.1)
                 self?.addUserCircleView(user: user, position: position, emoji: emoji)
             case .lost(let user, let position):
+                let position = CGPoint(x: position.0, y: position.1)
                 self?.removeUserCircleView(user: user, position: position)
             case .none:
                 break

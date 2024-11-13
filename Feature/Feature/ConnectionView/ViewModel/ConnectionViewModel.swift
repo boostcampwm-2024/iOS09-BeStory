@@ -9,7 +9,6 @@ import Combine
 import Entity
 import Foundation
 import Interfaces
-import UIKit
 
 protocol ConnectionViewModelable: ViewModelable where
 Input == ConnectionInput,
@@ -21,10 +20,10 @@ final public class ConnectionViewModel {
     private var output = PassthroughSubject<Output, Never>()
     private var cancellables: Set<AnyCancellable> = []
 
-    private var centerPosition: CGPoint?
-    private var innerDiameter: CGFloat?
-    private var outerDiameter: CGFloat?
-    private var usedPositions: [String: CGPoint] = [:]
+    private var centerPosition: (Double, Double)?
+    private var innerDiameter: Float?
+    private var outerDiameter: Float?
+    private var usedPositions: [String: (Double, Double)] = [:]
 
     private let emojis = ["😀", "😊", "🤪", "🤓", "😡", "🥶", "🤯", "🤖", "👻", "👾"]
 
@@ -36,9 +35,9 @@ final public class ConnectionViewModel {
     }
 
     func configure(
-        centerPosition: CGPoint,
-        innerDiameter: CGFloat,
-        outerDiameter: CGFloat
+        centerPosition: (Double, Double),
+        innerDiameter: Float,
+        outerDiameter: Float
     ) {
         self.centerPosition = centerPosition
         self.innerDiameter = innerDiameter
@@ -88,6 +87,8 @@ private extension ConnectionViewModel {
                     self?.found(updatedUser)
                 case .lost:
                     self?.lost(updatedUser)
+                default:
+                    break
                 }
             }
             .store(in: &cancellables)
@@ -130,7 +131,7 @@ extension ConnectionViewModel {
         return emojis.randomElement()
     }
 
-    func getRandomPosition() -> CGPoint? {
+    func getRandomPosition() -> (Double, Double)? {
         guard
             let centerPosition = self.centerPosition,
             let innerDiameter = self.innerDiameter,
@@ -139,7 +140,7 @@ extension ConnectionViewModel {
 
         let maxAttempts = usedPositions.count + 1
         var attempts = 0
-        var position: CGPoint
+        var position: (Double, Double)
 
         repeat {
             attempts += 1
@@ -147,25 +148,26 @@ extension ConnectionViewModel {
             let innerRadius = innerDiameter / 2
             let outerRadius = outerDiameter / 2
 
-            let randomRadius = CGFloat.random(in: innerRadius...outerRadius)
-            let angle = CGFloat.random(in: 0...(2 * .pi))
+            let randomRadius = Float.random(in: innerRadius...outerRadius)
+            let angle = Float.random(in: 0...(2 * .pi))
 
-            position = CGPoint(
-                x: centerPosition.x + randomRadius * cos(angle),
-                y: centerPosition.y + randomRadius * sin(angle)
+            position = (
+                centerPosition.0 + Double(randomRadius * cos(angle)),
+                centerPosition.1 + Double(randomRadius * sin(angle))
             )
         } while usedPositions.contains(where: {
-            $0.value.distance(to: position) < 50
+            $0.value.0.distance(to: position.0) < 50 ||
+            $0.value.1.distance(to: position.1) < 50
         }) && attempts < maxAttempts
 
         return position
     }
 
-    func getCurrentPosition(id: String) -> CGPoint? {
+    func getCurrentPosition(id: String) -> (Double, Double)? {
         return usedPositions[id]
     }
 
-    func addCurrentPosition(id: String, position: CGPoint) {
+    func addCurrentPosition(id: String, position: (Double, Double)) {
         usedPositions[id] = position
     }
 
