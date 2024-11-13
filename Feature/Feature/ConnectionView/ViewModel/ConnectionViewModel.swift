@@ -6,7 +6,9 @@
 //
 
 import Combine
+import Entity
 import Foundation
+import Interfaces
 import UIKit
 
 protocol ConnectionViewModelable: ViewModelable where
@@ -66,8 +68,8 @@ extension ConnectionViewModel: ConnectionViewModelable {
 // MARK: - UseCase Methods
 
 private extension ConnectionViewModel {
-    func fetchUsers() -> [BrowsingUser] {
-        return usecase.fetchBrowsingUsers()
+    func fetchUsers() -> [BrowsedUser] {
+        return usecase.fetchBrowsedUsers()
     }
 
     func invite(id: String) {
@@ -79,7 +81,7 @@ private extension ConnectionViewModel {
 
 private extension ConnectionViewModel {
     func setupBind() {
-        usecase.browsingUser
+        usecase.browsedUser
             .sink { [weak self] updatedUser in
                 switch updatedUser.state {
                 case .found:
@@ -95,7 +97,7 @@ private extension ConnectionViewModel {
 // MARK: - Output Methods
 
 private extension ConnectionViewModel {
-    func found(_ user: BrowsingUser) {
+    func found(_ user: BrowsedUser) {
         if self.getCurrentPosition(id: user.id) != nil { return }
 
         guard
@@ -114,7 +116,7 @@ private extension ConnectionViewModel {
         )
     }
 
-    func lost(_ user: BrowsingUser) {
+    func lost(_ user: BrowsedUser) {
         guard let position =  self.getCurrentPosition(id: user.id) else { return }
         self.removeCurrentPosition(id: user.id)
         self.output.send(.lost(user: user, position: position))

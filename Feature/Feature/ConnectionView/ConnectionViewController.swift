@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Entity
 import SnapKit
 import UIKit
 
@@ -93,7 +94,7 @@ private extension ConnectionViewController {
 // MARK: - Methods
 
 private extension ConnectionViewController {
-    func addUserCircleView(user: BrowsingUser, position: CGPoint, emoji: String) {
+    func addUserCircleView(user: BrowsedUser, position: CGPoint, emoji: String) {
         let userCircleView = CircleView(style: .small)
         userCircleView.configure(emoji: emoji, name: user.name)
 
@@ -113,7 +114,7 @@ private extension ConnectionViewController {
         userContainerView.layoutIfNeeded()
     }
 
-    func removeUserCircleView(user: BrowsingUser, position: CGPoint) {
+    func removeUserCircleView(user: BrowsedUser, position: CGPoint) {
         userContainerView.subviews.forEach {
             if $0.center == position {
                 $0.removeFromSuperview()

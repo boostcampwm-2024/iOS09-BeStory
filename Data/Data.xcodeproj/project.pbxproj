@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		852EBF842CE4D6FA007CD897 /* MCPeerIDStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852EBF802CE4D6FA007CD897 /* MCPeerIDStorage.swift */; };
+		852EBF852CE4D6FA007CD897 /* SocketProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852EBF822CE4D6FA007CD897 /* SocketProvider.swift */; };
+		852EBF862CE4D6FA007CD897 /* SocketPeer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852EBF812CE4D6FA007CD897 /* SocketPeer.swift */; };
 		FEF778EB2CDB221600FFE089 /* DomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF778EA2CDB221600FFE089 /* DomainInterface.framework */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +46,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		852EBF802CE4D6FA007CD897 /* MCPeerIDStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MCPeerIDStorage.swift; sourceTree = "<group>"; };
+		852EBF812CE4D6FA007CD897 /* SocketPeer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketPeer.swift; sourceTree = "<group>"; };
+		852EBF822CE4D6FA007CD897 /* SocketProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketProvider.swift; sourceTree = "<group>"; };
 		FED9682A2CD9094300CD445C /* libData.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libData.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FED968552CD90FCF00CD445C /* SocketProvider.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SocketProvider.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF778C72CDB214C00FFE089 /* DataInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DataInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -53,16 +59,6 @@
 		FE6EF32E2CD8B020005DC39D /* Data */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Data;
-			sourceTree = "<group>";
-		};
-		FED968562CD90FCF00CD445C /* SocketProvider */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = SocketProvider;
-			sourceTree = "<group>";
-		};
-		FEF778C82CDB214C00FFE089 /* DataInterface */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = DataInterface;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -93,12 +89,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		852EBF832CE4D6FA007CD897 /* P2PSocket */ = {
+			isa = PBXGroup;
+			children = (
+				852EBF802CE4D6FA007CD897 /* MCPeerIDStorage.swift */,
+				852EBF812CE4D6FA007CD897 /* SocketPeer.swift */,
+				852EBF822CE4D6FA007CD897 /* SocketProvider.swift */,
+			);
+			path = P2PSocket;
+			sourceTree = "<group>";
+		};
 		FE6EF3232CD8B020005DC39D = {
 			isa = PBXGroup;
 			children = (
+				852EBF832CE4D6FA007CD897 /* P2PSocket */,
 				FE6EF32E2CD8B020005DC39D /* Data */,
-				FED968562CD90FCF00CD445C /* SocketProvider */,
-				FEF778C82CDB214C00FFE089 /* DataInterface */,
 				FED967FA2CD9026100CD445C /* Frameworks */,
 				FE6EF32D2CD8B020005DC39D /* Products */,
 			);
@@ -178,9 +183,6 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				FED968562CD90FCF00CD445C /* SocketProvider */,
-			);
 			name = SocketProvider;
 			packageProductDependencies = (
 			);
@@ -201,9 +203,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				FEF778C82CDB214C00FFE089 /* DataInterface */,
 			);
 			name = DataInterface;
 			packageProductDependencies = (
@@ -349,6 +348,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				852EBF842CE4D6FA007CD897 /* MCPeerIDStorage.swift in Sources */,
+				852EBF852CE4D6FA007CD897 /* SocketProvider.swift in Sources */,
+				852EBF862CE4D6FA007CD897 /* SocketPeer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Entity
 import UIKit
 
 enum ConnectionInput {
@@ -15,6 +16,6 @@ enum ConnectionInput {
 
 enum ConnectionOutput {
     case none
-    case found(user: BrowsingUser, position: CGPoint, emoji: String)
-    case lost(user: BrowsingUser, position: CGPoint)
+    case found(user: BrowsedUser, position: CGPoint, emoji: String)
+    case lost(user: BrowsedUser, position: CGPoint)
 }
