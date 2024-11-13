@@ -141,7 +141,6 @@ extension ConnectionViewModel {
         var attempts = 0
         var position: CGPoint
 
-
         repeat {
             attempts += 1
 
