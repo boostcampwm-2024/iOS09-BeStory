@@ -54,7 +54,7 @@ extension ConnectionViewModel: ConnectionViewModelable {
 
             switch result {
             case .fetchUsers:
-                fetchUsers().forEach({ self.found($0) })
+                fetchUsers().forEach({ self.found(user: $0) })
             case .invite(let id):
                 invite(id: id)
             }
@@ -87,9 +87,9 @@ private extension ConnectionViewModel {
 
                 switch updatedUser.state {
                 case .found:
-                    found(updatedUser)
+                    found(user: updatedUser)
                 case .lost:
-                    lost(updatedUser)
+                    lost(user: updatedUser)
                 default:
                     break
                 }
@@ -101,10 +101,9 @@ private extension ConnectionViewModel {
 // MARK: - Output Methods
 
 private extension ConnectionViewModel {
-    func found(_ user: BrowsedUser) {
-        if self.getCurrentPosition(id: user.id) != nil { return }
-
+    func found(user: BrowsedUser) {
         guard
+            self.getCurrentPosition(id: user.id) == nil,
             let position = self.getRandomPosition(),
             let emoji = self.getRandomEmoji()
         else { return }
@@ -120,7 +119,7 @@ private extension ConnectionViewModel {
         )
     }
 
-    func lost(_ user: BrowsedUser) {
+    func lost(user: BrowsedUser) {
         guard let position =  self.getCurrentPosition(id: user.id) else { return }
         self.removeCurrentPosition(id: user.id)
         self.output.send(.lost(user: user, position: position))
