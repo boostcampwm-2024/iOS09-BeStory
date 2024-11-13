@@ -24,7 +24,7 @@ final public class ConnectionViewModel {
     private var outerDiameter: CGFloat?
     private var usedPositions: [String: CGPoint] = [:]
 
-    private let emojis = ["😀", "😇", "😎", "🤓", "😡", "🥶", "🤯", "🤖", "👻", "👾"]
+    private let emojis = ["😀", "😊", "🤪", "🤓", "😡", "🥶", "🤯", "🤖", "👻", "👾"]
 
     // MARK: - Initializer
 
@@ -121,9 +121,9 @@ private extension ConnectionViewModel {
     }
 }
 
-// MARK: - Private Methods
+// MARK: - Internal Methods
 
-private extension ConnectionViewModel {
+extension ConnectionViewModel {
     func getRandomEmoji() -> String? {
         return emojis.randomElement()
     }

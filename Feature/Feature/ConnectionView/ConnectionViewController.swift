@@ -170,7 +170,7 @@ private extension ConnectionViewController {
     }
 
     func setupCentralCircleView() {
-        centralCircleView.setupConfigure(emoji: viewModel.getRandomEmoji(), name: "나")
+        centralCircleView.configure(emoji: "😎", name: "나")
 
         centralCircleView.layer.borderColor = UIColor.gray.cgColor
         centralCircleView.layer.borderWidth = Constants.grayCircleViewBorderWidth
