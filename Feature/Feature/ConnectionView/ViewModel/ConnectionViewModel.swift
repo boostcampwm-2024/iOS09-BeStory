@@ -50,12 +50,13 @@ final public class ConnectionViewModel {
 extension ConnectionViewModel: ConnectionViewModelable {
     func transform(_ input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] result in
+            guard let self else { return }
+
             switch result {
             case .fetchUsers:
-                guard let users = self?.fetchUsers() else { return }
-                users.forEach({ self?.found($0) })
+                fetchUsers().forEach({ self.found($0) })
             case .invite(let id):
-                self?.invite(id: id)
+                invite(id: id)
             }
         }
         .store(in: &cancellables)
@@ -82,11 +83,13 @@ private extension ConnectionViewModel {
     func setupBind() {
         usecase.browsedUser
             .sink { [weak self] updatedUser in
+                guard let self else { return }
+
                 switch updatedUser.state {
                 case .found:
-                    self?.found(updatedUser)
+                    found(updatedUser)
                 case .lost:
-                    self?.lost(updatedUser)
+                    lost(updatedUser)
                 default:
                     break
                 }

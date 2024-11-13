@@ -7,7 +7,6 @@
 
 import Combine
 import Entity
-import UIKit
 
 enum ConnectionInput {
     case fetchUsers
