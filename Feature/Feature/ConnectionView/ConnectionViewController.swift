@@ -14,7 +14,7 @@ final public class ConnectionViewController: UIViewController {
     // MARK: - Properties
 
     private let viewModel: ConnectionViewModel
-    private let input = PassthroughSubject<ConnectionInput, Never>()
+    private let input = PassthroughSubject<ConnectionViewModel.Input, Never>()
     private var cancellables = Set<AnyCancellable>()
 
     // MARK: - UI Components
@@ -58,9 +58,7 @@ final public class ConnectionViewController: UIViewController {
 
 // MARK: - Binding
 
-extension ConnectionViewController: ViewBindable {
-    typealias Output = ConnectionOutput
-
+extension ConnectionViewController {
     func setupBind() {
         let output = viewModel.transform(input.eraseToAnyPublisher())
         output.sink { [weak self] result in

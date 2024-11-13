@@ -10,12 +10,14 @@ import Entity
 import Foundation
 import Interfaces
 
-protocol ConnectionViewModelable: ViewModelable where
-Input == ConnectionInput,
-Output == ConnectionOutput { }
-
 final public class ConnectionViewModel {
+    // MARK: - Typealias
+
+    typealias Input = ConnectionViewInput
+    typealias Output = ConnectionViewOutput
+
     // MARK: - Properties
+
     private let usecase: BrowsingUserUseCaseInterface
     private var output = PassthroughSubject<Output, Never>()
     private var cancellables: Set<AnyCancellable> = []
@@ -47,7 +49,7 @@ final public class ConnectionViewModel {
 
 // MARK: - Transform
 
-extension ConnectionViewModel: ConnectionViewModelable {
+extension ConnectionViewModel {
     func transform(_ input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] result in
             guard let self else { return }
