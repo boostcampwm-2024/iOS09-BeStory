@@ -6,6 +6,7 @@
 //
 
 import Combine
+import UIKit
 
 enum ConnectionInput {
     case fetchUsers
@@ -14,6 +15,6 @@ enum ConnectionInput {
 
 enum ConnectionOutput {
     case none
-    case fetched(_ users: [BrowsingUser])
-    case updated(_ user: BrowsingUser)
+    case found(user: BrowsingUser, position: CGPoint, emoji: String)
+    case lost(user: BrowsingUser, position: CGPoint)
 }

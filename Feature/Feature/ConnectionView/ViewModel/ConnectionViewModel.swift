@@ -19,14 +19,28 @@ final public class ConnectionViewModel {
     private var output = PassthroughSubject<Output, Never>()
     private var cancellables: Set<AnyCancellable> = []
 
-    private let emojis = ["😀", "😇", "😎", "🤓", "😡", "🥶", "🤯", "🤖", "👻", "👾"]
+    private var centerPosition: CGPoint?
+    private var innerDiameter: CGFloat?
+    private var outerDiameter: CGFloat?
     private var usedPositions: [String: CGPoint] = [:]
+
+    private let emojis = ["😀", "😇", "😎", "🤓", "😡", "🥶", "🤯", "🤖", "👻", "👾"]
 
     // MARK: - Initializer
 
     init(usecase: BrowsingUserUseCaseInterface) {
         self.usecase = usecase
         setupBind()
+    }
+
+    func configure(
+        centerPosition: CGPoint,
+        innerDiameter: CGFloat,
+        outerDiameter: CGFloat
+    ) {
+        self.centerPosition = centerPosition
+        self.innerDiameter = innerDiameter
+        self.outerDiameter = outerDiameter
     }
 }
 
@@ -38,7 +52,7 @@ extension ConnectionViewModel: ConnectionViewModelable {
             switch result {
             case .fetchUsers:
                 guard let users = self?.fetchUsers() else { return }
-                self?.output.send(.fetched(users))
+                users.forEach({ self?.found($0) })
             case .invite(let id):
                 self?.invite(id: id)
             }
@@ -49,19 +63,7 @@ extension ConnectionViewModel: ConnectionViewModelable {
     }
 }
 
-// MARK: - Binding
-
-private extension ConnectionViewModel {
-    func setupBind() {
-        usecase.browsingUser
-            .sink { [weak self] updatedUser in
-                self?.output.send(.updated(updatedUser))
-            }
-            .store(in: &cancellables)
-    }
-}
-
-// MARK: - Private Methods
+// MARK: - UseCase Methods
 
 private extension ConnectionViewModel {
     func fetchUsers() -> [BrowsingUser] {
@@ -73,21 +75,70 @@ private extension ConnectionViewModel {
     }
 }
 
-// MARK: - Internal Methods
+// MARK: - Binding
 
-extension ConnectionViewModel {
-    func getRandomEmoji() -> String {
-        return emojis.randomElement() ?? "🙂"
+private extension ConnectionViewModel {
+    func setupBind() {
+        usecase.browsingUser
+            .sink { [weak self] updatedUser in
+                switch updatedUser.state {
+                case .found:
+                    self?.found(updatedUser)
+                case .lost:
+                    self?.lost(updatedUser)
+                }
+            }
+            .store(in: &cancellables)
+    }
+}
+
+// MARK: - Output Methods
+
+private extension ConnectionViewModel {
+    func found(_ user: BrowsingUser) {
+        if self.getCurrentPosition(id: user.id) != nil { return }
+
+        guard
+            let position = self.getRandomPosition(),
+            let emoji = self.getRandomEmoji()
+        else { return }
+
+        self.addCurrentPosition(id: user.id, position: position)
+
+        self.output.send(
+            .found(
+                user: user,
+                position: position,
+                emoji: emoji
+            )
+        )
     }
 
-    func getRandomPosition(
-        innerDiameter: CGFloat,
-        outerDiameter: CGFloat,
-        center: CGPoint,
-        maxAttempts: Int
-    ) -> CGPoint {
-        var position: CGPoint
+    func lost(_ user: BrowsingUser) {
+        guard let position =  self.getCurrentPosition(id: user.id) else { return }
+        self.removeCurrentPosition(id: user.id)
+        self.output.send(.lost(user: user, position: position))
+    }
+}
+
+// MARK: - Private Methods
+
+private extension ConnectionViewModel {
+    func getRandomEmoji() -> String? {
+        return emojis.randomElement()
+    }
+
+    func getRandomPosition() -> CGPoint? {
+        guard
+            let centerPosition = self.centerPosition,
+            let innerDiameter = self.innerDiameter,
+            let outerDiameter = self.outerDiameter
+        else { return nil }
+
+        let maxAttempts = usedPositions.count + 1
         var attempts = 0
+        var position: CGPoint
+
 
         repeat {
             attempts += 1
@@ -99,8 +150,8 @@ extension ConnectionViewModel {
             let angle = CGFloat.random(in: 0...(2 * .pi))
 
             position = CGPoint(
-                x: center.x + randomRadius * cos(angle),
-                y: center.y + randomRadius * sin(angle)
+                x: centerPosition.x + randomRadius * cos(angle),
+                y: centerPosition.y + randomRadius * sin(angle)
             )
         } while usedPositions.contains(where: {
             $0.value.distance(to: position) < 50
@@ -109,12 +160,12 @@ extension ConnectionViewModel {
         return position
     }
 
-    func addCurrentPosition(id: String, position: CGPoint) {
-        usedPositions[id] = position
-    }
-
     func getCurrentPosition(id: String) -> CGPoint? {
         return usedPositions[id]
+    }
+
+    func addCurrentPosition(id: String, position: CGPoint) {
+        usedPositions[id] = position
     }
 
     func removeCurrentPosition(id: String) {

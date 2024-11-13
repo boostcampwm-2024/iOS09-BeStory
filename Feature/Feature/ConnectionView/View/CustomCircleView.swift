@@ -38,7 +38,7 @@ final class CircleView: UIView {
 
     // MARK: - Configuration Method
 
-    func setupConfigure(emoji: String, name: String) {
+    func configure(emoji: String, name: String) {
         emojiLabel.text = emoji
         nameLabel.text = name
     }

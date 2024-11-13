@@ -43,8 +43,14 @@ final public class ConnectionViewController: UIViewController {
         setupViewAttributes()
         setupViewHierarchies()
         setupViewConstraints()
-
         setupBind()
+
+        viewModel.configure(
+            centerPosition: view.center,
+            innerDiameter: Constants.centralCircleViewSize,
+            outerDiameter: Constants.outerGrayCircleViewSize
+        )
+
         input.send(.fetchUsers)
     }
 }
@@ -58,10 +64,10 @@ extension ConnectionViewController: ViewBindable {
         let output = viewModel.transform(input.eraseToAnyPublisher())
         output.sink { [weak self] result in
             switch result {
-            case .fetched(let users):
-                self?.updateUserCircleViews(users)
-            case .updated(let user):
-                self?.updateUserCircleViews([user])
+            case .found(let user, let position, let emoji):
+                self?.addUserCircleView(user: user, position: position, emoji: emoji)
+            case .lost(let user, let position):
+                self?.removeUserCircleView(user: user, position: position)
             case .none:
                 break
             }
@@ -87,55 +93,33 @@ private extension ConnectionViewController {
 // MARK: - Methods
 
 private extension ConnectionViewController {
-    func updateUserCircleViews(_ users: [BrowsingUser]) {
-        for user in users {
-            if user.state == .found {
-                if viewModel.getCurrentPosition(id: user.id) != nil { continue }
-                addUserCircleView(user: user, maxAttempts: users.count)
-            } else if user.state == .lost {
-                guard let currentPosition = viewModel.getCurrentPosition(id: user.id) else { continue }
-                viewModel.removeCurrentPosition(id: user.id)
-                removeUserCircleView(position: currentPosition)
-            }
-        }
-
-        userContainerView.setNeedsLayout()
-    }
-
-    func addUserCircleView(user: BrowsingUser, maxAttempts: Int) {
-        let center = view.center
-        let innerDiameter = Constants.centralCircleViewSize
-        let outerDiameter = Constants.outerGrayCircleViewSize
-
-        let position = viewModel.getRandomPosition(
-            innerDiameter: innerDiameter,
-            outerDiameter: outerDiameter,
-            center: center,
-            maxAttempts: maxAttempts
-        )
-
-        viewModel.addCurrentPosition(id: user.id, position: position)
-
+    func addUserCircleView(user: BrowsingUser, position: CGPoint, emoji: String) {
         let userCircleView = CircleView(style: .small)
-        userCircleView.setupConfigure(emoji: viewModel.getRandomEmoji(), name: user.name)
-        userContainerView.addSubview(userCircleView)
+        userCircleView.configure(emoji: emoji, name: user.name)
 
         userCircleView.snp.makeConstraints { make in
             make.center.equalTo(position)
             make.size.equalTo(Constants.userCircleViewSize)
         }
 
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(userDidTapped(_:)))
+        let tapGesture = UITapGestureRecognizer(
+            target: self,
+            action: #selector(userDidTapped(_:))
+        )
         userCircleView.addGestureRecognizer(tapGesture)
         userCircleView.accessibilityLabel = user.id
+
+        userContainerView.addSubview(userCircleView)
+        userContainerView.setNeedsLayout()
     }
 
-    func removeUserCircleView(position: CGPoint) {
+    func removeUserCircleView(user: BrowsingUser, position: CGPoint) {
         userContainerView.subviews.forEach {
             if $0.center == position {
                 $0.removeFromSuperview()
             }
         }
+        userContainerView.setNeedsLayout()
     }
 
     func showAlert(title: String, message: String, onConfirm: @escaping () -> Void) {
