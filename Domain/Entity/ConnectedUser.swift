@@ -7,8 +7,13 @@
 
 public struct ConnectedUser: Identifiable {
     public enum State {
+		/// 초대를 수락한 경우
         case connected
+		
+		/// 초대를 거절한 경우
         case disconnected
+		
+		/// 초대를 수락을 누른 경우
         case connecting
     }
 
