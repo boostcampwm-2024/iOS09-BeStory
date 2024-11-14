@@ -2,8 +2,7 @@ name: Slack Ping
 
 on:
   pull_request:
-    types:
-      - opened
+    types: [opened, edited, synchronize]
   pull_request_review:
     types:
       - submitted
