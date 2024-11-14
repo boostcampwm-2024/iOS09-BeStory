@@ -20,7 +20,6 @@ jobs:
           SLACK_USER_ID: ${{ secrets.SLACK_USER_ID }}
         run: |
           MESSAGE=""
-          SLACK_USER_ID=""
 
           if [[ "${{ github.event.requested_reviewer.login }}" == "LURKS02" ]]; then
             SLACK_USER_ID=$SLACK_USER_ID
