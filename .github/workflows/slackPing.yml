@@ -41,8 +41,8 @@ jobs:
           fi
 
           if [[ -n "$MESSAGE" ]]; then
-          echo "SLACK_USER_ID: $SLACK_USER_ID"
-          echo "SLACK_TOKEN: $SLACK_TOKEN"
+          echo "SLACK_USER_ID: ${{ secrets.SLACK_USER_ID }}"
+          echo "SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}"
             curl -X POST -H "Authorization: Bearer $SLACK_TOKEN" -H "Content-Type: application/json" \
             -d "{\"channel\":\"$SLACK_USER_ID\", \"text\":\"$MESSAGE\"}" \
             https://slack.com/api/chat.postMessage
