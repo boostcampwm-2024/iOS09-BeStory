@@ -6,6 +6,8 @@
 //
 
 final class DIContainer {
+    static let shared = DIContainer()
+
     private var services: [String: Any] = [:]
 
     func register<T>(type: T.Type, instance: T) {
