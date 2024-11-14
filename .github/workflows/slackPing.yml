@@ -17,7 +17,7 @@ jobs:
           SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
         run: |
           declare -A USER_SLACK_IDS
-          USER_SLACK_IDS["LURKS02"]="${{ secrets.SLACK_USER_ID }}"
+          USER_SLACK_IDS["LURKS02"]="${{ secrets.SLACK_LURKS02 }}"
         
           MESSAGE=""
 
