@@ -21,15 +21,22 @@ jobs:
         run: |
           MESSAGE=""
           SLACK_USER_ID=""
+
+          if [[ "${{ github.event.requested_reviewer.login }}" == "LURKS02" ]]; then
+            SLACK_USER_ID=$SLACK_USER_ID
+          fi
+
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            MESSAGE="PR이 등록되었습니다. 제목: ${{ github.event.pull_request.title }} - 링크: ${{ github.event.pull_request.html_url }}"
           
-          if [[ "${{ github.event_name }}" == "pull_request" ]] && [[ "${{ github.event.action }}" == "review_requested" ]] && [[ "${{ github.event.requested_reviewer.login }}" == "YOUR_GITHUB_USERNAME" ]]; then
-            MESSAGE="리뷰 요청: 나를 리뷰어로 지정한 PR이 생성되었습니다. 제목: ${{ github.event.pull_request.title }} - 링크: ${{ github.event.pull_request.html_url }}"
+          # if [[ "${{ github.event_name }}" == "pull_request" ]] && [[ "${{ github.event.action }}" == "review_requested" ]]; then
+          #   MESSAGE="리뷰 요청: 나를 리뷰어로 지정한 PR이 생성되었습니다. 제목: ${{ github.event.pull_request.title }} - 링크: ${{ github.event.pull_request.html_url }}"
 
-          elif [[ "${{ github.event_name }}" == "pull_request_review" ]] && [[ "${{ github.event.action }}" == "submitted" ]] && [[ "${{ github.event.review.state }}" == "approved" ]] && [[ "${{ github.event.pull_request.user.login }}" == "YOUR_GITHUB_USERNAME" ]]; then
-            MESSAGE="리뷰 완료: 내 PR에 리뷰어가 리뷰를 완료했습니다. 제목: ${{ github.event.pull_request.title }} - 링크: ${{ github.event.pull_request.html_url }}"
+          #   for GITHUB_USER in $(echo '${{ toJson(github.event.pull_request.requested_reviewers) }}' | jq -r '.[].login'); do
+          #     SLACK_USER_ID=
 
-          elif [[ "${{ github.event_name }}" == "issue_comment" ]] && [[ "${{ github.event.issue.pull_request }}" != "null" ]] && [[ "${{ github.event.comment.user.login }}" != "YOUR_GITHUB_USERNAME" ]]; then
-            MESSAGE="댓글 알림: 내가 리뷰한 PR에 새로운 댓글이 달렸습니다. 제목: ${{ github.event.issue.title }} - 링크: ${{ github.event.comment.html_url }}"
+          elif [[ "${{ github.event_name }}" == "pull_request_review" ]] && [[ "${{ github.event.action }}" == "submitted" ]]; then
+            MESSAGE="리뷰 완료(${{ github.event.review.state }}): 내 PR에 리뷰어가 리뷰를 완료했습니다. 제목: ${{ github.event.pull_request.title }} - 링크: ${{ github.event.pull_request.html_url }}"
 
           fi
 
