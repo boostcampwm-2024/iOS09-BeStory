@@ -6,8 +6,8 @@
 //
 
 import Combine
+import DataInterface
 import Entity
-import P2PSocket
 
 public protocol BrowsingUserRepositoryInterface {
 	var updatedBrowsingUser: PassthroughSubject<BrowsedUser, Never> { get }

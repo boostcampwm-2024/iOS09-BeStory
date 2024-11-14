@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FEF778B92CDB00F000FFE089 /* libData.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF778B72CDB00F000FFE089 /* libData.a */; };
+		853CE8A12CE5DD1800936AD3 /* libData.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 853CE8A02CE5DD1800936AD3 /* libData.a */; };
 		FEF778BA2CDB00F000FFE089 /* libFeature.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF778B82CDB00F000FFE089 /* libFeature.a */; };
 		FEF779742CDCB35800FFE089 /* libUseCase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF779732CDCB35800FFE089 /* libUseCase.a */; };
 /* End PBXBuildFile section */
@@ -36,6 +36,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		853CE8A02CE5DD1800936AD3 /* libData.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libData.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE6EF2EA2CD8B005005DC39D /* App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = App.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF778B72CDB00F000FFE089 /* libData.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libData.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF778B82CDB00F000FFE089 /* libFeature.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libFeature.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -68,7 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FEF778B92CDB00F000FFE089 /* libData.a in Frameworks */,
+				853CE8A12CE5DD1800936AD3 /* libData.a in Frameworks */,
 				FEF778BA2CDB00F000FFE089 /* libFeature.a in Frameworks */,
 				FEF779742CDCB35800FFE089 /* libUseCase.a in Frameworks */,
 			);
@@ -97,6 +98,7 @@
 		FE6EF3E12CD8B6A2005DC39D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				853CE8A02CE5DD1800936AD3 /* libData.a */,
 				FEF779732CDCB35800FFE089 /* libUseCase.a */,
 				FEF778B72CDB00F000FFE089 /* libData.a */,
 				FEF778B82CDB00F000FFE089 /* libFeature.a */,
@@ -216,7 +218,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9L2J37V6PK;
+				DEVELOPMENT_TEAM = H3XT4B3TXU;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = App/Info.plist;
@@ -250,7 +252,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9L2J37V6PK;
+				DEVELOPMENT_TEAM = H3XT4B3TXU;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = App/Info.plist;

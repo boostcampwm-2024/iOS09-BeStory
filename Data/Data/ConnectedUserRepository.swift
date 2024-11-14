@@ -6,9 +6,9 @@
 //
 
 import Combine
+import DataInterface
 import Interfaces
 import Entity
-import P2PSocket
 
 public final class ConnectedUserRepository: ConnectedUserRepositoryInterface {
     private var cancellables: Set<AnyCancellable> = []

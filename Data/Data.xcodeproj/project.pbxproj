@@ -7,10 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		852EBF842CE4D6FA007CD897 /* MCPeerIDStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852EBF802CE4D6FA007CD897 /* MCPeerIDStorage.swift */; };
-		852EBF852CE4D6FA007CD897 /* SocketProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852EBF822CE4D6FA007CD897 /* SocketProvider.swift */; };
-		852EBF862CE4D6FA007CD897 /* SocketPeer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852EBF812CE4D6FA007CD897 /* SocketPeer.swift */; };
-		FEF778EB2CDB221600FFE089 /* DomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF778EA2CDB221600FFE089 /* DomainInterface.framework */; };
+		853CE8342CE5D25E00936AD3 /* Entity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853CE8332CE5D25E00936AD3 /* Entity.framework */; };
+		853CE8362CE5D26500936AD3 /* Interfaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853CE8352CE5D26500936AD3 /* Interfaces.framework */; };
+		853CE8C32CE5F31300936AD3 /* MCPeerIDStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852EBF802CE4D6FA007CD897 /* MCPeerIDStorage.swift */; };
+		853CE8C42CE5F31300936AD3 /* SocketPeer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852EBF812CE4D6FA007CD897 /* SocketPeer.swift */; };
+		853CE8C52CE5F31300936AD3 /* SocketProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 852EBF822CE4D6FA007CD897 /* SocketProvider.swift */; };
+		853CE8CD2CE5F5AF00936AD3 /* DataInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF778C72CDB214C00FFE089 /* DataInterface.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,15 +51,31 @@
 		852EBF802CE4D6FA007CD897 /* MCPeerIDStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MCPeerIDStorage.swift; sourceTree = "<group>"; };
 		852EBF812CE4D6FA007CD897 /* SocketPeer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketPeer.swift; sourceTree = "<group>"; };
 		852EBF822CE4D6FA007CD897 /* SocketProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketProvider.swift; sourceTree = "<group>"; };
+		853CE8332CE5D25E00936AD3 /* Entity.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Entity.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		853CE8352CE5D26500936AD3 /* Interfaces.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Interfaces.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FED9682A2CD9094300CD445C /* libData.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libData.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FED968552CD90FCF00CD445C /* SocketProvider.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SocketProvider.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF778C72CDB214C00FFE089 /* DataInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DataInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF778EA2CDB221600FFE089 /* DomainInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DomainInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		853CE8A72CE5DF0500936AD3 /* Exceptions for "Data" folder in "Data" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				BrowsingUserRepository.swift,
+				ConnectedUserRepository.swift,
+			);
+			target = FED968292CD9094300CD445C /* Data */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FE6EF32E2CD8B020005DC39D /* Data */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				853CE8A72CE5DF0500936AD3 /* Exceptions for "Data" folder in "Data" target */,
+			);
 			path = Data;
 			sourceTree = "<group>";
 		};
@@ -68,7 +86,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FEF778EB2CDB221600FFE089 /* DomainInterface.framework in Frameworks */,
+				853CE8CD2CE5F5AF00936AD3 /* DataInterface.framework in Frameworks */,
+				853CE8362CE5D26500936AD3 /* Interfaces.framework in Frameworks */,
+				853CE8342CE5D25E00936AD3 /* Entity.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -122,6 +142,8 @@
 		FED967FA2CD9026100CD445C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				853CE8352CE5D26500936AD3 /* Interfaces.framework */,
+				853CE8332CE5D25E00936AD3 /* Entity.framework */,
 				FEF778EA2CDB221600FFE089 /* DomainInterface.framework */,
 			);
 			name = Frameworks;
@@ -348,9 +370,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				852EBF842CE4D6FA007CD897 /* MCPeerIDStorage.swift in Sources */,
-				852EBF852CE4D6FA007CD897 /* SocketProvider.swift in Sources */,
-				852EBF862CE4D6FA007CD897 /* SocketPeer.swift in Sources */,
+				853CE8C32CE5F31300936AD3 /* MCPeerIDStorage.swift in Sources */,
+				853CE8C42CE5F31300936AD3 /* SocketPeer.swift in Sources */,
+				853CE8C52CE5F31300936AD3 /* SocketProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -530,7 +552,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = NO;
-				DEVELOPMENT_TEAM = 9L2J37V6PK;
+				DEVELOPMENT_TEAM = H3XT4B3TXU;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -573,7 +595,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = NO;
-				DEVELOPMENT_TEAM = 9L2J37V6PK;
+				DEVELOPMENT_TEAM = H3XT4B3TXU;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -615,7 +637,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = NO;
-				DEVELOPMENT_TEAM = 9L2J37V6PK;
+				DEVELOPMENT_TEAM = H3XT4B3TXU;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -653,7 +675,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = NO;
-				DEVELOPMENT_TEAM = 9L2J37V6PK;
+				DEVELOPMENT_TEAM = H3XT4B3TXU;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";

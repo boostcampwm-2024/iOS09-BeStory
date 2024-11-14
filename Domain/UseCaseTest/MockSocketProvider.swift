@@ -5,7 +5,7 @@
 //  Created by jung on 11/7/24.
 //
 
-@testable import P2PSocket
+@testable import DataInterface
 import Combine
 import Entity
 

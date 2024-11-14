@@ -7,8 +7,8 @@
 
 @testable import Interfaces
 import Combine
+import DataInterface
 import Entity
-import P2PSocket
 
 final class MockBrowsingUserRepository: BrowsingUserRepositoryInterface {
 	private let socketProvider: SocketProvidable

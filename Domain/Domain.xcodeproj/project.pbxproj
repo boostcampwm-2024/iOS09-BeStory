@@ -7,32 +7,33 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		853CE8AB2CE5ED1200936AD3 /* DataInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853CE8AA2CE5ED1200936AD3 /* DataInterface.framework */; };
+		853CE8AC2CE5ED1200936AD3 /* DataInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 853CE8AA2CE5ED1200936AD3 /* DataInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		853CE8BF2CE5F09D00936AD3 /* Entity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF779402CDC936900FFE089 /* Entity.framework */; };
+		853CE8C02CE5F09D00936AD3 /* Entity.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FEF779402CDC936900FFE089 /* Entity.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		853CE8C82CE5F53200936AD3 /* Entity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF779402CDC936900FFE089 /* Entity.framework */; };
+		853CE8C92CE5F53200936AD3 /* Entity.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FEF779402CDC936900FFE089 /* Entity.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		853CE8CB2CE5F53300936AD3 /* Interfaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF778DC2CDB21B500FFE089 /* Interfaces.framework */; };
+		853CE8CC2CE5F53300936AD3 /* Interfaces.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FEF778DC2CDB21B500FFE089 /* Interfaces.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FEF779852CDCB44E00FFE089 /* libUseCase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FE6EF3C72CD8B5CA005DC39D /* libUseCase.a */; platformFilter = ios; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		E4E39B952CDBBE30001E08D0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FEF778DB2CDB21B500FFE089;
-			remoteInfo = DomainInterface;
-		};
-		FEF778E82CDB21CF00FFE089 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FEF778DB2CDB21B500FFE089;
-			remoteInfo = DomainInterface;
-		};
-		FEF7796B2CDCB32800FFE089 /* PBXContainerItemProxy */ = {
+		853CE8B62CE5F00800936AD3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = FEF7793F2CDC936900FFE089;
 			remoteInfo = Entity;
 		};
-		FEF7796D2CDCB32B00FFE089 /* PBXContainerItemProxy */ = {
+		853CE8C12CE5F09D00936AD3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FEF7793F2CDC936900FFE089;
+			remoteInfo = Entity;
+		};
+		FEF7796B2CDCB32800FFE089 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
 			proxyType = 1;
@@ -49,13 +50,26 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		E4E39B972CDBBE30001E08D0 /* Embed Frameworks */ = {
+		853CE8AD2CE5ED1300936AD3 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E4E39B942CDBBE30001E08D0 /* DomainInterface.framework in Embed Frameworks */,
+				853CE8AC2CE5ED1200936AD3 /* DataInterface.framework in Embed Frameworks */,
+				853CE8C02CE5F09D00936AD3 /* Entity.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		853CE8CA2CE5F53200936AD3 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				853CE8CC2CE5F53300936AD3 /* Interfaces.framework in Embed Frameworks */,
+				853CE8C92CE5F53200936AD3 /* Entity.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -72,6 +86,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		853CE8AA2CE5ED1200936AD3 /* DataInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DataInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE6EF3C72CD8B5CA005DC39D /* libUseCase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUseCase.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF778DC2CDB21B500FFE089 /* Interfaces.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Interfaces.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF779402CDC936900FFE089 /* Entity.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Entity.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -83,6 +98,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				BrowsingUserUseCase.swift,
+				ConnectedUserUseCase.swift,
 			);
 			target = FE6EF3C62CD8B5CA005DC39D /* UseCase */;
 		};
@@ -119,7 +135,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4E39B932CDBBE30001E08D0 /* DomainInterface.framework in Frameworks */,
+				853CE8CB2CE5F53300936AD3 /* Interfaces.framework in Frameworks */,
+				853CE8C82CE5F53200936AD3 /* Entity.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -127,6 +144,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				853CE8AB2CE5ED1200936AD3 /* DataInterface.framework in Frameworks */,
+				853CE8BF2CE5F09D00936AD3 /* Entity.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -148,13 +167,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		E4E39B922CDBBE30001E08D0 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		FE6EF3022CD8B015005DC39D = {
 			isa = PBXGroup;
 			children = (
@@ -181,6 +193,7 @@
 		FEF779602CDCA9F700FFE089 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				853CE8AA2CE5ED1200936AD3 /* DataInterface.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -213,14 +226,12 @@
 				FE6EF3C32CD8B5CA005DC39D /* Sources */,
 				FE6EF3C42CD8B5CA005DC39D /* Frameworks */,
 				FE6EF3C52CD8B5CA005DC39D /* CopyFiles */,
-				E4E39B972CDBBE30001E08D0 /* Embed Frameworks */,
+				853CE8CA2CE5F53200936AD3 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				FEF7796E2CDCB32B00FFE089 /* PBXTargetDependency */,
-				FEF778E92CDB21CF00FFE089 /* PBXTargetDependency */,
-				E4E39B962CDBBE30001E08D0 /* PBXTargetDependency */,
+				853CE8B72CE5F00800936AD3 /* PBXTargetDependency */,
 			);
 			name = UseCase;
 			packageProductDependencies = (
@@ -238,11 +249,13 @@
 				FEF778D82CDB21B500FFE089 /* Sources */,
 				FEF778D92CDB21B500FFE089 /* Frameworks */,
 				FEF778DA2CDB21B500FFE089 /* Resources */,
+				853CE8AD2CE5ED1300936AD3 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				FEF7796C2CDCB32800FFE089 /* PBXTargetDependency */,
+				853CE8C22CE5F09D00936AD3 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				FEF778DD2CDB21B500FFE089 /* Interfaces */,
@@ -444,25 +457,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		E4E39B962CDBBE30001E08D0 /* PBXTargetDependency */ = {
+		853CE8B72CE5F00800936AD3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = FEF778DB2CDB21B500FFE089 /* DomainInterface */;
-			targetProxy = E4E39B952CDBBE30001E08D0 /* PBXContainerItemProxy */;
+			target = FEF7793F2CDC936900FFE089 /* Entity */;
+			targetProxy = 853CE8B62CE5F00800936AD3 /* PBXContainerItemProxy */;
 		};
-		FEF778E92CDB21CF00FFE089 /* PBXTargetDependency */ = {
+		853CE8C22CE5F09D00936AD3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = FEF778DB2CDB21B500FFE089 /* Interfaces */;
-			targetProxy = FEF778E82CDB21CF00FFE089 /* PBXContainerItemProxy */;
+			target = FEF7793F2CDC936900FFE089 /* Entity */;
+			targetProxy = 853CE8C12CE5F09D00936AD3 /* PBXContainerItemProxy */;
 		};
 		FEF7796C2CDCB32800FFE089 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FEF7793F2CDC936900FFE089 /* Entity */;
 			targetProxy = FEF7796B2CDCB32800FFE089 /* PBXContainerItemProxy */;
-		};
-		FEF7796E2CDCB32B00FFE089 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FEF7793F2CDC936900FFE089 /* Entity */;
-			targetProxy = FEF7796D2CDCB32B00FFE089 /* PBXContainerItemProxy */;
 		};
 		FEF779872CDCB44E00FFE089 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -641,7 +649,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 9L2J37V6PK;
+				DEVELOPMENT_TEAM = H3XT4B3TXU;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -679,7 +687,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 9L2J37V6PK;
+				DEVELOPMENT_TEAM = H3XT4B3TXU;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -716,7 +724,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = NO;
-				DEVELOPMENT_TEAM = 9L2J37V6PK;
+				DEVELOPMENT_TEAM = H3XT4B3TXU;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -753,7 +761,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = NO;
-				DEVELOPMENT_TEAM = 9L2J37V6PK;
+				DEVELOPMENT_TEAM = H3XT4B3TXU;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";

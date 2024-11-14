@@ -6,20 +6,20 @@
 //
 
 import Combine
+import DataInterface
 import Interfaces
 import Entity
-import P2PSocket
 
 public final class BrowsingUserRepository: BrowsingUserRepositoryInterface {
 	private var cancellables: Set<AnyCancellable> = []
 	private let socketProvider: SocketProvidable
 	public let updatedBrowsingUser = PassthroughSubject<BrowsedUser, Never>()
-	
+
 	public init(socketProvider: SocketProvidable) {
 		self.socketProvider = socketProvider
 		
 		socketProvider.updatedPeer
-			.compactMap { [weak self] peer in
+            .compactMap { [weak self] peer in
 				self?.mappingToBrowsingUser(peer) }
 			.subscribe(updatedBrowsingUser)
 			.store(in: &cancellables)

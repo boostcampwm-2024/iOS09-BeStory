@@ -130,7 +130,7 @@ private extension VideoListViewController {
         var snapshot = NSDiffableDataSourceSnapshot<VideoListSection, VideoListItem>()
         snapshot.appendSections([.list])
         snapshot.appendItems(items, toSection: .list)
-        
+
         dataSource.apply(snapshot, animatingDifferences: true)
     }
     

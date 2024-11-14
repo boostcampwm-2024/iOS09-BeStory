@@ -7,8 +7,8 @@
 
 import XCTest
 @testable import Interfaces
+import DataInterface
 import Entity
-import P2PSocket
 
 final class BrowsingUserUseCaseTest: XCTestCase {
 	private var sut: MockBrowinsgUseCase!

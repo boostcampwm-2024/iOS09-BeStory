@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		853CE8AF2CE5ED7A00936AD3 /* libUseCase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 853CE8AE2CE5ED7A00936AD3 /* libUseCase.a */; };
 		E4E39BA32CDBC872001E08D0 /* libFeature.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FED968172CD908B000CD445C /* libFeature.a */; platformFilter = ios; };
 		E4E39BAE2CDBCA04001E08D0 /* libDomain.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E39BAD2CDBCA04001E08D0 /* libDomain.a */; };
 		FE0334DA2CD9DA1100AA58C9 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = FE0334D92CD9DA1100AA58C9 /* SnapKit */; };
@@ -53,6 +54,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		853CE8AE2CE5ED7A00936AD3 /* libUseCase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libUseCase.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4E39B9F2CDBC872001E08D0 /* GroupInfoTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GroupInfoTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4E39BAD2CDBCA04001E08D0 /* libDomain.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libDomain.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE0334EE2CD9DE4600AA58C9 /* libDomain.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libDomain.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -132,6 +134,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FE0334DA2CD9DA1100AA58C9 /* SnapKit in Frameworks */,
+				853CE8AF2CE5ED7A00936AD3 /* libUseCase.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -168,6 +171,7 @@
 		FE6EF4272CD8B843005DC39D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				853CE8AE2CE5ED7A00936AD3 /* libUseCase.a */,
 				E4E39BAD2CDBCA04001E08D0 /* libDomain.a */,
 				FE0334EE2CD9DE4600AA58C9 /* libDomain.a */,
 			);
@@ -603,7 +607,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = NO;
-				DEVELOPMENT_TEAM = 9L2J37V6PK;
+				DEVELOPMENT_TEAM = H3XT4B3TXU;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -641,7 +645,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = NO;
-				DEVELOPMENT_TEAM = 9L2J37V6PK;
+				DEVELOPMENT_TEAM = H3XT4B3TXU;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
