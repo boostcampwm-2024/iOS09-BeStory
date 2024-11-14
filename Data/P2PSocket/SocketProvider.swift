@@ -10,11 +10,17 @@ import MultipeerConnectivity
 
 public protocol SocketProvidable {
 	var updatedPeer: PassthroughSubject<SocketPeer, Never> { get }
-	
+	var invitationReceived: PassthroughSubject<SocketPeer, Never> { get }
 	/// Browsing된 Peer를 리턴합니다.
 	func browsingPeers() -> [SocketPeer]
 	/// Session에 연결된 Peer를 리턴합니다.
 	func connectedPeers() -> [SocketPeer]
+	
+	/// 유저를 초대합니다.
+	func invite(peer id: String)
+	
+	func acceptInvitation()
+	func rejectInvitation()
 	
 	func startAdvertising()
 	func stopAdvertising()
@@ -23,10 +29,18 @@ public protocol SocketProvidable {
 }
 
 public final class SocketProvider: NSObject, SocketProvidable {
+	fileprivate enum Constant {
+		static let invitationTimeOut = TimeInterval(30)
+		static let serviceType = "beStory"
+	}
+	
 	// MARK: - Properties
 	public let updatedPeer = PassthroughSubject<SocketPeer, Never>()
-	
-	private let serviceType = "beStory"
+	public let invitationReceived = PassthroughSubject<SocketPeer, Never>()
+
+	private var invitationTimer: Timer?
+	private var invitationHandler: ((Bool, MCSession?) -> Void)?
+
 	private let peerID = MCPeerID(displayName: UIDevice.current.name)
 	private let browser: MCNearbyServiceBrowser
 	private let advertiser: MCNearbyServiceAdvertiser
@@ -34,11 +48,11 @@ public final class SocketProvider: NSObject, SocketProvidable {
 	
 	// MARK: - Initializers
 	public override init() {
-		self.browser = .init(peer: peerID, serviceType: serviceType)
+		self.browser = .init(peer: peerID, serviceType: Constant.serviceType)
 		self.advertiser = .init(
 			peer: peerID,
 			discoveryInfo: nil,
-			serviceType: serviceType
+			serviceType: Constant.serviceType
 		)
 		self.session = .init(peer: peerID)
 		super.init()
@@ -92,6 +106,31 @@ public extension SocketProvider {
 				let id = $0.key
 				return SocketPeer(id: id, name: name, state: .connected)
 			}
+	}
+	
+	func invite(peer id: String) {
+		guard let peer = MCPeerIDStorage.shared.peerIDByIdentifier[id] else { return }
+
+		browser.invitePeer(
+			peer.id,
+			to: session,
+			withContext: nil,
+			timeout: Constant.invitationTimeOut
+		)
+	}
+	
+	func acceptInvitation() {
+		invitationHandler?(true, session)
+		
+		invitationHandler = nil
+		stopInvitationTimer()
+	}
+	
+	func rejectInvitation() {
+		invitationHandler?(false, session)
+		
+		invitationHandler = nil
+		stopInvitationTimer()
 	}
 }
 
@@ -177,7 +216,13 @@ extension SocketProvider: MCNearbyServiceAdvertiserDelegate {
 		withContext context: Data?,
 		invitationHandler: @escaping (Bool, MCSession?) -> Void
 	) {
-		invitationHandler(true, session)
+		guard
+			self.invitationHandler == nil,
+			let invitationPeer = mapToSocketPeer(peerID)
+		else { return }
+		
+		invitationReceived.send(invitationPeer)
+		self.invitationHandler = invitationHandler
 	}
 }
 
@@ -196,5 +241,25 @@ private extension SocketProvider {
 		let id = peer.key
 		
 		return .init(id: id, name: name, state: state)
+	}
+	
+	func startInvitationTimer() {
+		invitationTimer?.invalidate()
+		invitationTimer = Timer.scheduledTimer(
+			timeInterval: Constant.invitationTimeOut,
+			target: self,
+			selector: #selector(invitationTimerDidFired),
+			userInfo: nil,
+			repeats: false
+		)
+	}
+	
+	func stopInvitationTimer() {
+		invitationTimer?.invalidate()
+		invitationTimer = nil
+	}
+	
+	@objc func invitationTimerDidFired() {
+		// TODO: - Send to Stream
 	}
 }
