@@ -3,7 +3,7 @@ name: Slack Ping
 on:
   pull_request:
     types:
-      - review_requested
+      - opened
   pull_request_review:
     types:
       - submitted
