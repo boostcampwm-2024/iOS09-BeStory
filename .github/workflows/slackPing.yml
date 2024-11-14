@@ -1,0 +1,41 @@
+name: Slack Ping
+
+on:
+  pull_request:
+    types:
+      - review_requested
+  pull_request_review:
+    types:
+      - submitted
+  issue_comment:
+    types:
+      - created
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Slack message
+        env:
+          SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
+          SLACK_USER_ID: ${{ secrets.SLACK_USER_ID }}
+        run: |
+          MESSAGE=""
+          SLACK_USER_ID=""
+          
+          if [[ "${{ github.event_name }}" == "pull_request" ]] && [[ "${{ github.event.action }}" == "review_requested" ]] && [[ "${{ github.event.requested_reviewer.login }}" == "YOUR_GITHUB_USERNAME" ]]; then
+            MESSAGE="리뷰 요청: 나를 리뷰어로 지정한 PR이 생성되었습니다. 제목: ${{ github.event.pull_request.title }} - 링크: ${{ github.event.pull_request.html_url }}"
+
+          elif [[ "${{ github.event_name }}" == "pull_request_review" ]] && [[ "${{ github.event.action }}" == "submitted" ]] && [[ "${{ github.event.review.state }}" == "approved" ]] && [[ "${{ github.event.pull_request.user.login }}" == "YOUR_GITHUB_USERNAME" ]]; then
+            MESSAGE="리뷰 완료: 내 PR에 리뷰어가 리뷰를 완료했습니다. 제목: ${{ github.event.pull_request.title }} - 링크: ${{ github.event.pull_request.html_url }}"
+
+          elif [[ "${{ github.event_name }}" == "issue_comment" ]] && [[ "${{ github.event.issue.pull_request }}" != "null" ]] && [[ "${{ github.event.comment.user.login }}" != "YOUR_GITHUB_USERNAME" ]]; then
+            MESSAGE="댓글 알림: 내가 리뷰한 PR에 새로운 댓글이 달렸습니다. 제목: ${{ github.event.issue.title }} - 링크: ${{ github.event.comment.html_url }}"
+
+          fi
+
+          if [[ -n "$MESSAGE" ]]; then
+            curl -X POST -H "Authorization: Bearer $SLACK_TOKEN" -H "Content-Type: application/json" \
+            -d "{\"channel\":\"$SLACK_USER_ID\", \"text\":\"$MESSAGE\"}" \
+            https://slack.com/api/chat.postMessage
+          fi
