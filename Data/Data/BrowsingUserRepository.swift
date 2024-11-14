@@ -42,6 +42,14 @@ public extension BrowsingUserRepository {
 	func rejectInvitation(from id: String) {
 		socketProvider.rejectInvitation()
 	}
+	
+	func startReceiveInvitation() {
+		socketProvider.startReceiveInvitation()
+	}
+	
+	func stopReceiveInvitation() {
+		socketProvider.stopReceiveInvitation()
+	}
 }
 
 // MARK: - Private Methods

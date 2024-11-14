@@ -11,6 +11,12 @@ import Entity
 
 public final class BrowsingUserUseCase: BrowsingUserUseCaseInterface {
 	private var cancellables: Set<AnyCancellable> = []
+	private var isInviting: Bool = false {
+		didSet {
+			isInviting ? repository.stopReceiveInvitation() : repository.startReceiveInvitation()
+		}
+	}
+	
 	private let repository: BrowsingUserRepositoryInterface
 	
 	public let browsedUser = PassthroughSubject<BrowsedUser, Never>()
@@ -30,14 +36,17 @@ public extension BrowsingUserUseCase {
 	}
 	
 	func inviteUser(with id: String) {
+		isInviting = true
 		repository.inviteUser(with: id)
 	}
 	
 	func acceptInvitation(from id: String) {
+		isInviting = false
 		repository.acceptInvitation(from: id)
 	}
 	
 	func rejectInvitation(from id: String) {
+		isInviting = false
 		repository.rejectInvitation(from: id)
 	}
 }

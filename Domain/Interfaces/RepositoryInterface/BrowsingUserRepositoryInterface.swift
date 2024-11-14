@@ -20,4 +20,6 @@ public protocol BrowsingUserRepositoryInterface {
 	func inviteUser(with id: String)
 	func acceptInvitation(from id: String)
 	func rejectInvitation(from id: String)
+	func startReceiveInvitation()
+	func stopReceiveInvitation()
 }

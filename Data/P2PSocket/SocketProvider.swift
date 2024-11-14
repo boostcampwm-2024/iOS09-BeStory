@@ -22,6 +22,9 @@ public protocol SocketProvidable {
 	func acceptInvitation()
 	func rejectInvitation()
 	
+	func startReceiveInvitation()
+	func stopReceiveInvitation()
+	
 	func startAdvertising()
 	func stopAdvertising()
 	func startBrowsing()
@@ -39,6 +42,7 @@ public final class SocketProvider: NSObject, SocketProvidable {
 	public let invitationReceived = PassthroughSubject<SocketPeer, Never>()
 
 	private var invitationTimer: Timer?
+	private var isAllowedInvitation: Bool = true
 	private var invitationHandler: ((Bool, MCSession?) -> Void)?
 
 	private let peerID = MCPeerID(displayName: UIDevice.current.name)
@@ -117,6 +121,14 @@ public extension SocketProvider {
 			withContext: nil,
 			timeout: Constant.invitationTimeOut
 		)
+	}
+	
+	func startReceiveInvitation() {
+		isAllowedInvitation = true
+	}
+	
+	func stopReceiveInvitation() {
+		isAllowedInvitation = false
 	}
 	
 	func acceptInvitation() {
@@ -216,6 +228,8 @@ extension SocketProvider: MCNearbyServiceAdvertiserDelegate {
 		withContext context: Data?,
 		invitationHandler: @escaping (Bool, MCSession?) -> Void
 	) {
+		guard isAllowedInvitation else { return rejectInvitation() }
+		
 		guard
 			self.invitationHandler == nil,
 			let invitationPeer = mapToSocketPeer(peerID)
