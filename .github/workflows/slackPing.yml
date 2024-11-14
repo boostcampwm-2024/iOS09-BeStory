@@ -2,7 +2,7 @@ name: Slack Ping
 
 on:
   pull_request:
-    types: [opened, edited, synchronize]
+    types: [opened, edited]
   pull_request_review:
     types:
       - submitted
@@ -26,7 +26,7 @@ jobs:
           fi
 
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            MESSAGE="PR이 등록되었습니다.\n - 제목: ${{ github.event.pull_request.title }} \n - 링크: ${{ github.event.pull_request.html_url }}"
+            MESSAGE="PR이 등록되었습니다.\n - 제목: ${{ github.event.pull_request.title }}\n - 링크: <${{ github.event.pull_request.html_url }}|PR 링크>"
           
           # if [[ "${{ github.event_name }}" == "pull_request" ]] && [[ "${{ github.event.action }}" == "opened" ]]; then
           #   MESSAGE="리뷰 요청: 나를 리뷰어로 지정한 PR이 생성되었습니다. 제목: ${{ github.event.pull_request.title }} - 링크: ${{ github.event.pull_request.html_url }}"
