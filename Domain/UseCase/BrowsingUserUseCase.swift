@@ -14,7 +14,9 @@ public final class BrowsingUserUseCase: BrowsingUserUseCaseInterface {
 	private let repository: BrowsingUserRepositoryInterface
 	
 	public let browsedUser = PassthroughSubject<BrowsedUser, Never>()
-
+	public let invitationResult = PassthroughSubject<InvitedUser, Never>()
+	public let invitationReceived = PassthroughSubject<BrowsedUser, Never>()
+	
 	public init(repository: BrowsingUserRepositoryInterface) {
 		self.repository = repository
 		bind()
@@ -28,7 +30,15 @@ public extension BrowsingUserUseCase {
 	}
 	
 	func inviteUser(with id: String) {
-		return repository.inviteUser(with: id)
+		repository.inviteUser(with: id)
+	}
+	
+	func acceptInvitation(from id: String) {
+		repository.acceptInvitation(from: id)
+	}
+	
+	func rejectInvitation(from id: String) {
+		repository.rejectInvitation(from: id)
 	}
 }
 
@@ -37,6 +47,14 @@ private extension BrowsingUserUseCase {
 	func bind() {
 		repository.updatedBrowsingUser
 			.subscribe(browsedUser)
+			.store(in: &cancellables)
+		
+		repository.updatedInvitedUser
+			.subscribe(invitationResult)
+			.store(in: &cancellables)
+		
+		repository.invitationReceived
+			.subscribe(invitationReceived)
 			.store(in: &cancellables)
 	}
 }
