@@ -26,8 +26,8 @@ final class BrowsingUserUseCaseTest: XCTestCase {
 		let repository = BrowsingUserRepository(socketProvider: mockSocketProvider)
 		let secondaryRepository = BrowsingUserRepository(socketProvider: secondaryMockSocketProvider)
 		
-		sut = BrowsingUserUseCase(repository: repository, invitationTimeOut: 1.0)
-		secondarySut = BrowsingUserUseCase(repository: secondaryRepository, invitationTimeOut: 1.0)
+		sut = BrowsingUserUseCase(repository: repository, invitationTimeout: 1.0)
+		secondarySut = BrowsingUserUseCase(repository: secondaryRepository, invitationTimeout: 1.0)
 	}
 	
 	override func tearDown() {
