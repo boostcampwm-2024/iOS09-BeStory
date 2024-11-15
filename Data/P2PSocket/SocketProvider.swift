@@ -33,7 +33,6 @@ public protocol SocketProvidable {
 
 public final class SocketProvider: NSObject, SocketProvidable {
 	fileprivate enum Constant {
-		static let invitationTimeOut = TimeInterval(30)
 		static let serviceType = "beStory"
 	}
 	
