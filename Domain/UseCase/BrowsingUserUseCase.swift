@@ -15,13 +15,9 @@ public final class BrowsingUserUseCase: BrowsingUserUseCaseInterface {
 		static let invitationTimeout: Double = 30
 	}
 	
+	private var isInvitating: Bool { invitationTimer != nil }
 	private var invitationTimer: Timer?
 	private var cancellables: Set<AnyCancellable> = []
-	private var isInviting: Bool = false {
-		didSet {
-			isInviting ? repository.stopReceiveInvitation() : repository.startReceiveInvitation()
-		}
-	}
 	
 	private let repository: BrowsingUserRepositoryInterface
 	
@@ -77,14 +73,17 @@ private extension BrowsingUserUseCase {
 		
 		repository.invitationReceived
 			.sink { [weak self] _ in
-				guard let self else { return }
-				
-				self.isInviting = true
+				self?.invitationDidReceive()
 			}
 			.store(in: &cancellables)
 	}
 	
 	func invitationResultDidReceive(with invitedUser: InvitedUser) {
+		guard !isInvitating else {
+			let convertStateInvitedUser = invitedUser.convertState(to: .alreadyInvited)
+			return invitationResult.send(convertStateInvitedUser)
+		}
+		
 		repository.startReceiveInvitation()
 		invitationResult.send(invitedUser)
 	}

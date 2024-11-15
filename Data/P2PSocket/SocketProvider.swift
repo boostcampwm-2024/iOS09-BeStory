@@ -153,7 +153,7 @@ extension SocketProvider: MCSessionDelegate {
 		defer {
 			if let socketPeer = mapToSocketPeer(peerID) { updatedPeer.send(socketPeer)
 			}
-		}
+		} 
 		
 		switch state {
 			case .connected:
@@ -225,10 +225,8 @@ extension SocketProvider: MCNearbyServiceAdvertiserDelegate {
 		withContext context: Data?,
 		invitationHandler: @escaping (Bool, MCSession?) -> Void
 	) {
-		guard isAllowedInvitation else { return rejectInvitation() }
-		
 		guard
-			self.invitationHandler == nil,
+			isAllowedInvitation,
 			let invitationPeer = mapToSocketPeer(peerID)
 		else { return }
 		
