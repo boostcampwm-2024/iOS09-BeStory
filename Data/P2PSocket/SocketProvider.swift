@@ -17,7 +17,7 @@ public protocol SocketProvidable {
 	func connectedPeers() -> [SocketPeer]
 	
 	/// 유저를 초대합니다.
-	func invite(peer id: String)
+	func invite(peer id: String, timeout: Double)
 	
 	func acceptInvitation()
 	func rejectInvitation()
@@ -41,7 +41,6 @@ public final class SocketProvider: NSObject, SocketProvidable {
 	public let updatedPeer = PassthroughSubject<SocketPeer, Never>()
 	public let invitationReceived = PassthroughSubject<SocketPeer, Never>()
 
-	private var invitationTimer: Timer?
 	private var isAllowedInvitation: Bool = true
 	private var invitationHandler: ((Bool, MCSession?) -> Void)?
 
@@ -112,14 +111,14 @@ public extension SocketProvider {
 			}
 	}
 	
-	func invite(peer id: String) {
+	func invite(peer id: String, timeout: Double) {
 		guard let peer = MCPeerIDStorage.shared.peerIDByIdentifier[id] else { return }
 
 		browser.invitePeer(
 			peer.id,
 			to: session,
 			withContext: nil,
-			timeout: Constant.invitationTimeOut
+			timeout: .init(timeout)
 		)
 	}
 	
@@ -135,14 +134,12 @@ public extension SocketProvider {
 		invitationHandler?(true, session)
 		
 		invitationHandler = nil
-		stopInvitationTimer()
 	}
 	
 	func rejectInvitation() {
 		invitationHandler?(false, session)
 		
 		invitationHandler = nil
-		stopInvitationTimer()
 	}
 }
 
@@ -255,25 +252,5 @@ private extension SocketProvider {
 		let id = peer.key
 		
 		return .init(id: id, name: name, state: state)
-	}
-	
-	func startInvitationTimer() {
-		invitationTimer?.invalidate()
-		invitationTimer = Timer.scheduledTimer(
-			timeInterval: Constant.invitationTimeOut,
-			target: self,
-			selector: #selector(invitationTimerDidFired),
-			userInfo: nil,
-			repeats: false
-		)
-	}
-	
-	func stopInvitationTimer() {
-		invitationTimer?.invalidate()
-		invitationTimer = nil
-	}
-	
-	@objc func invitationTimerDidFired() {
-		// TODO: - Send to Stream
 	}
 }

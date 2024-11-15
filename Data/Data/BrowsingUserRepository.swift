@@ -6,8 +6,8 @@
 //
 
 import Combine
-import Interfaces
 import Entity
+import Interfaces
 import P2PSocket
 
 public final class BrowsingUserRepository: BrowsingUserRepositoryInterface {
@@ -31,8 +31,8 @@ public extension BrowsingUserRepository {
 			.compactMap { mappingToBrowsingUser($0) }
 	}
 	
-	func inviteUser(with id: String) {
-		socketProvider.invite(peer: id)
+	func inviteUser(with id: String, timeout: Double) {
+		socketProvider.invite(peer: id, timeout: timeout)
 	}
 	
 	func acceptInvitation(from id: String) {

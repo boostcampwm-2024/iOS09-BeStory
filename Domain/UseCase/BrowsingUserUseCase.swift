@@ -6,10 +6,16 @@
 //
 
 import Combine
-import Interfaces
 import Entity
+import Foundation
+import Interfaces
 
 public final class BrowsingUserUseCase: BrowsingUserUseCaseInterface {
+	fileprivate enum Constants {
+		static let invitationTimeout: Double = 30
+	}
+	
+	private var invitationTimer: Timer?
 	private var cancellables: Set<AnyCancellable> = []
 	private var isInviting: Bool = false {
 		didSet {
@@ -22,6 +28,7 @@ public final class BrowsingUserUseCase: BrowsingUserUseCaseInterface {
 	public let browsedUser = PassthroughSubject<BrowsedUser, Never>()
 	public let invitationResult = PassthroughSubject<InvitedUser, Never>()
 	public let invitationReceived = PassthroughSubject<BrowsedUser, Never>()
+	public let invitationDidFired = PassthroughSubject<Void, Never>()
 	
 	public init(repository: BrowsingUserRepositoryInterface) {
 		self.repository = repository
@@ -36,17 +43,17 @@ public extension BrowsingUserUseCase {
 	}
 	
 	func inviteUser(with id: String) {
-		isInviting = true
-		repository.inviteUser(with: id)
+		repository.stopReceiveInvitation()
+		repository.inviteUser(with: id, timeout: Constants.invitationTimeout)
 	}
 	
 	func acceptInvitation(from id: String) {
-		isInviting = false
+		repository.startReceiveInvitation()
 		repository.acceptInvitation(from: id)
 	}
 	
 	func rejectInvitation(from id: String) {
-		isInviting = false
+		repository.startReceiveInvitation()
 		repository.rejectInvitation(from: id)
 	}
 }
@@ -58,12 +65,54 @@ private extension BrowsingUserUseCase {
 			.subscribe(browsedUser)
 			.store(in: &cancellables)
 		
-		repository.updatedInvitedUser
-			.subscribe(invitationResult)
-			.store(in: &cancellables)
-		
 		repository.invitationReceived
 			.subscribe(invitationReceived)
 			.store(in: &cancellables)
+		
+		repository.updatedInvitedUser
+			.sink { [weak self] invitedUser in
+				self?.invitationResultDidReceive(with: invitedUser)
+			}
+			.store(in: &cancellables)
+		
+		repository.invitationReceived
+			.sink { [weak self] _ in
+				guard let self else { return }
+				
+				self.isInviting = true
+			}
+			.store(in: &cancellables)
+	}
+	
+	func invitationResultDidReceive(with invitedUser: InvitedUser) {
+		repository.startReceiveInvitation()
+		invitationResult.send(invitedUser)
+	}
+	
+	func invitationDidReceive() {
+		repository.stopReceiveInvitation()
+		startInvitationTimer()
+	}
+	
+	func startInvitationTimer() {
+		invitationTimer?.invalidate()
+		invitationTimer = Timer.scheduledTimer(
+			timeInterval: Constants.invitationTimeout,
+			target: self,
+			selector: #selector(invitationTimerDidFired),
+			userInfo: nil,
+			repeats: false
+		)
+	}
+	
+	func stopInvitationTimer() {
+		invitationTimer?.invalidate()
+		invitationTimer = nil
+	}
+		
+	@objc func invitationTimerDidFired() {
+		invitationDidFired.send(())
+		stopInvitationTimer()
+		repository.startReceiveInvitation()
 	}
 }
