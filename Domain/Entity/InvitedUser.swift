@@ -11,8 +11,6 @@ public struct InvitedUser: Identifiable {
 		case accept
 		/// 초대를 거절한 경우
 		case reject
-		/// 이미 다른 초대를 받는 중이거나, 보낸 경우
-		case alreadyInvited
 	}
 	
 	public let id: String
