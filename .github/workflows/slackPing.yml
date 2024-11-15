@@ -16,8 +16,8 @@ jobs:
       - name: Install jq
         run: sudo apt-get update && sudo apt-get install -y jq
 
-      - name: Debug PR event data
-        run: echo '${{ toJson(github.event.pull_request) }}'
+      - name: Debug requested reviewers
+        run: echo '${{ toJson(github.event.pull_request.requested_reviewers) }}'
     
       - name: PR message
         env:
