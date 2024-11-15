@@ -7,16 +7,33 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FEC7C1C72CE7450A002D5C0F /* P2PSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEC7C1BF2CE74438002D5C0F /* P2PSocket.framework */; };
+		FEC7C1CA2CE755C5002D5C0F /* P2PSocket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FEC7C1BF2CE74438002D5C0F /* P2PSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FEC7C1CC2CE755CF002D5C0F /* libData.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FEC7C1CB2CE755CF002D5C0F /* libData.a */; };
 		FEF779852CDCB44E00FFE089 /* libUseCase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FE6EF3C72CD8B5CA005DC39D /* libUseCase.a */; platformFilter = ios; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		E4E39B952CDBBE30001E08D0 /* PBXContainerItemProxy */ = {
+		FEC7C1792CE73495002D5C0F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FEF7793F2CDC936900FFE089;
+			remoteInfo = Entity;
+		};
+		FEC7C1C32CE7449C002D5C0F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FEF7793F2CDC936900FFE089;
+			remoteInfo = Entity;
+		};
+		FEC7C1C52CE7449C002D5C0F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = FEF778DB2CDB21B500FFE089;
-			remoteInfo = DomainInterface;
+			remoteInfo = Interfaces;
 		};
 		FEF778E82CDB21CF00FFE089 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -26,13 +43,6 @@
 			remoteInfo = DomainInterface;
 		};
 		FEF7796B2CDCB32800FFE089 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FEF7793F2CDC936900FFE089;
-			remoteInfo = Entity;
-		};
-		FEF7796D2CDCB32B00FFE089 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
 			proxyType = 1;
@@ -49,13 +59,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		E4E39B972CDBBE30001E08D0 /* Embed Frameworks */ = {
+		FE6110372CE72DA20045C8D5 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E4E39B942CDBBE30001E08D0 /* DomainInterface.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -69,10 +78,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FEC7C1C92CE7450A002D5C0F /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				FEC7C1CA2CE755C5002D5C0F /* P2PSocket.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		FE6EF3C72CD8B5CA005DC39D /* libUseCase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUseCase.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		FEC7C1BF2CE74438002D5C0F /* P2PSocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = P2PSocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FEC7C1CB2CE755CF002D5C0F /* libData.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libData.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF778DC2CDB21B500FFE089 /* Interfaces.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Interfaces.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF779402CDC936900FFE089 /* Entity.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Entity.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF779812CDCB44E00FFE089 /* UseCaseTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UseCaseTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -83,6 +105,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				BrowsingUserUseCase.swift,
+				ConnectedUserUseCase.swift,
 			);
 			target = FE6EF3C62CD8B5CA005DC39D /* UseCase */;
 		};
@@ -119,7 +142,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4E39B932CDBBE30001E08D0 /* DomainInterface.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,20 +163,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FEC7C1C72CE7450A002D5C0F /* P2PSocket.framework in Frameworks */,
 				FEF779852CDCB44E00FFE089 /* libUseCase.a in Frameworks */,
+				FEC7C1CC2CE755CF002D5C0F /* libData.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		E4E39B922CDBBE30001E08D0 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		FE6EF3022CD8B015005DC39D = {
 			isa = PBXGroup;
 			children = (
@@ -181,6 +198,8 @@
 		FEF779602CDCA9F700FFE089 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FEC7C1CB2CE755CF002D5C0F /* libData.a */,
+				FEC7C1BF2CE74438002D5C0F /* P2PSocket.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -213,14 +232,12 @@
 				FE6EF3C32CD8B5CA005DC39D /* Sources */,
 				FE6EF3C42CD8B5CA005DC39D /* Frameworks */,
 				FE6EF3C52CD8B5CA005DC39D /* CopyFiles */,
-				E4E39B972CDBBE30001E08D0 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				FEF7796E2CDCB32B00FFE089 /* PBXTargetDependency */,
+				FEC7C17A2CE73495002D5C0F /* PBXTargetDependency */,
 				FEF778E92CDB21CF00FFE089 /* PBXTargetDependency */,
-				E4E39B962CDBBE30001E08D0 /* PBXTargetDependency */,
 			);
 			name = UseCase;
 			packageProductDependencies = (
@@ -238,6 +255,7 @@
 				FEF778D82CDB21B500FFE089 /* Sources */,
 				FEF778D92CDB21B500FFE089 /* Frameworks */,
 				FEF778DA2CDB21B500FFE089 /* Resources */,
+				FE6110372CE72DA20045C8D5 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -284,10 +302,13 @@
 				FEF7797D2CDCB44E00FFE089 /* Sources */,
 				FEF7797E2CDCB44E00FFE089 /* Frameworks */,
 				FEF7797F2CDCB44E00FFE089 /* Resources */,
+				FEC7C1C92CE7450A002D5C0F /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				FEC7C1C42CE7449C002D5C0F /* PBXTargetDependency */,
+				FEC7C1C62CE7449C002D5C0F /* PBXTargetDependency */,
 				FEF779872CDCB44E00FFE089 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
@@ -312,11 +333,10 @@
 				TargetAttributes = {
 					FE6EF3C62CD8B5CA005DC39D = {
 						CreatedOnToolsVersion = 16.0;
-						LastSwiftMigration = 1610;
 					};
 					FEF778DB2CDB21B500FFE089 = {
 						CreatedOnToolsVersion = 16.0;
-						LastSwiftMigration = 1610;
+						LastSwiftMigration = 1600;
 					};
 					FEF7793F2CDC936900FFE089 = {
 						CreatedOnToolsVersion = 16.0;
@@ -444,10 +464,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		E4E39B962CDBBE30001E08D0 /* PBXTargetDependency */ = {
+		FEC7C17A2CE73495002D5C0F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = FEF778DB2CDB21B500FFE089 /* DomainInterface */;
-			targetProxy = E4E39B952CDBBE30001E08D0 /* PBXContainerItemProxy */;
+			target = FEF7793F2CDC936900FFE089 /* Entity */;
+			targetProxy = FEC7C1792CE73495002D5C0F /* PBXContainerItemProxy */;
+		};
+		FEC7C1C42CE7449C002D5C0F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FEF7793F2CDC936900FFE089 /* Entity */;
+			targetProxy = FEC7C1C32CE7449C002D5C0F /* PBXContainerItemProxy */;
+		};
+		FEC7C1C62CE7449C002D5C0F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FEF778DB2CDB21B500FFE089 /* Interfaces */;
+			targetProxy = FEC7C1C52CE7449C002D5C0F /* PBXContainerItemProxy */;
 		};
 		FEF778E92CDB21CF00FFE089 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -458,11 +488,6 @@
 			isa = PBXTargetDependency;
 			target = FEF7793F2CDC936900FFE089 /* Entity */;
 			targetProxy = FEF7796B2CDCB32800FFE089 /* PBXContainerItemProxy */;
-		};
-		FEF7796E2CDCB32B00FFE089 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FEF7793F2CDC936900FFE089 /* Entity */;
-			targetProxy = FEF7796D2CDCB32B00FFE089 /* PBXContainerItemProxy */;
 		};
 		FEF779872CDCB44E00FFE089 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -595,7 +620,6 @@
 		FE6EF3CC2CD8B5CA005DC39D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9L2J37V6PK;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -607,7 +631,6 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -616,7 +639,6 @@
 		FE6EF3CD2CD8B5CA005DC39D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9L2J37V6PK;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -640,8 +662,8 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 9L2J37V6PK;
+				DEFINES_MODULE = NO;
+				DEVELOPMENT_TEAM = B3PWYBKFUK;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -650,6 +672,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -658,9 +681,13 @@
 				MARKETING_VERSION = 1.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
-				PRODUCT_BUNDLE_IDENTIFIER = jung.DomainInterface;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.bestory.interfaces;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -678,8 +705,8 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 9L2J37V6PK;
+				DEFINES_MODULE = NO;
+				DEVELOPMENT_TEAM = B3PWYBKFUK;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -688,6 +715,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -696,9 +724,13 @@
 				MARKETING_VERSION = 1.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
-				PRODUCT_BUNDLE_IDENTIFIER = jung.DomainInterface;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.bestory.interfaces;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
@@ -716,7 +748,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = NO;
-				DEVELOPMENT_TEAM = 9L2J37V6PK;
+				DEVELOPMENT_TEAM = B3PWYBKFUK;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -724,6 +756,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -732,9 +765,13 @@
 				MARKETING_VERSION = 1.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
-				PRODUCT_BUNDLE_IDENTIFIER = jung.Entity;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.bestory.entity;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -753,7 +790,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = NO;
-				DEVELOPMENT_TEAM = 9L2J37V6PK;
+				DEVELOPMENT_TEAM = B3PWYBKFUK;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -761,6 +798,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -769,9 +807,13 @@
 				MARKETING_VERSION = 1.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
-				PRODUCT_BUNDLE_IDENTIFIER = jung.Entity;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.bestory.entity;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
@@ -786,11 +828,15 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9L2J37V6PK;
+				DEVELOPMENT_TEAM = B3PWYBKFUK;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = jung.UseCaseTest;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.bestory.usecasetest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -802,11 +848,15 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9L2J37V6PK;
+				DEVELOPMENT_TEAM = B3PWYBKFUK;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = jung.UseCaseTest;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.bestory.usecasetest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
