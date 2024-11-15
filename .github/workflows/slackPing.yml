@@ -13,6 +13,9 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+    
       - name: PR message
         env:
           SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
@@ -62,7 +65,9 @@ jobs:
 
           elif [[ "${{ github.event_name }}" == "pull_request" ]] && [[ "${{ github.event.action }}" == "synchronize" ]]; then
             MESSAGE="커밋 추가: PR에 새로운 커밋이 추가되었어요. 리뷰 요청 사항이 반영되었는지 확인해보세요.\n :arrow_right: <${{ github.event.pull_request.html_url }}|PR 링크>"
-            
+
+            echo '${{ toJson(github.event.pull_request.requested_reviewers) }}'
+            echo '${{ toJson(github.event.pull_request.requested_reviewers) }}' | jq
             for GITHUB_USER in $(echo '${{ toJson(github.event.pull_request.requested_reviewers) }}' | jq -r '.[].login'); do
               SLACK_USER_ID="${USER_SLACK_IDS[$GITHUB_USER]}"
               if [[ -n "$SLACK_USER_ID" ]]; then
