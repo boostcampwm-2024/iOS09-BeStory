@@ -18,7 +18,7 @@ public protocol BrowsingUserUseCaseInterface {
 	/// 초대를 받은 유저가, 초대 시간이 만료되었을 때 stream을 통해 이벤트가 방출됩니다.
 	var invitationDidFired: PassthroughSubject<Void, Never> { get }
 	
-	init(repository: BrowsingUserRepositoryInterface)
+	init(repository: BrowsingUserRepositoryInterface, invitationTimeout: Double)
 	
 	func fetchBrowsedUsers() -> [BrowsedUser]
 	func inviteUser(with id: String)

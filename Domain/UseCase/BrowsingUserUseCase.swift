@@ -11,23 +11,21 @@ import Foundation
 import Interfaces
 
 public final class BrowsingUserUseCase: BrowsingUserUseCaseInterface {
-	fileprivate enum Constants {
-		static let invitationTimeout: Double = 30
-	}
-	
 	private var isInvitating: Bool { invitationTimer != nil }
 	private var invitationTimer: Timer?
 	private var cancellables: Set<AnyCancellable> = []
 	
 	private let repository: BrowsingUserRepositoryInterface
+	private let invitationTimeout: Double
 	
 	public let browsedUser = PassthroughSubject<BrowsedUser, Never>()
 	public let invitationResult = PassthroughSubject<InvitedUser, Never>()
 	public let invitationReceived = PassthroughSubject<BrowsedUser, Never>()
 	public let invitationDidFired = PassthroughSubject<Void, Never>()
 	
-	public init(repository: BrowsingUserRepositoryInterface) {
+	public init(repository: BrowsingUserRepositoryInterface, invitationTimeout: Double = 30.0) {
 		self.repository = repository
+		self.invitationTimeout = invitationTimeout
 		bind()
 	}
 }
@@ -40,17 +38,19 @@ public extension BrowsingUserUseCase {
 	
 	func inviteUser(with id: String) {
 		repository.stopReceiveInvitation()
-		repository.inviteUser(with: id, timeout: Constants.invitationTimeout)
+		repository.inviteUser(with: id, timeout: invitationTimeout)
 	}
 	
 	func acceptInvitation(from id: String) {
 		repository.startReceiveInvitation()
 		repository.acceptInvitation(from: id)
+		stopInvitationTimer()
 	}
 	
 	func rejectInvitation(from id: String) {
 		repository.startReceiveInvitation()
 		repository.rejectInvitation(from: id)
+		stopInvitationTimer()
 	}
 }
 
@@ -79,11 +79,6 @@ private extension BrowsingUserUseCase {
 	}
 	
 	func invitationResultDidReceive(with invitedUser: InvitedUser) {
-		guard !isInvitating else {
-			let convertStateInvitedUser = invitedUser.convertState(to: .alreadyInvited)
-			return invitationResult.send(convertStateInvitedUser)
-		}
-		
 		repository.startReceiveInvitation()
 		invitationResult.send(invitedUser)
 	}
@@ -96,7 +91,7 @@ private extension BrowsingUserUseCase {
 	func startInvitationTimer() {
 		invitationTimer?.invalidate()
 		invitationTimer = Timer.scheduledTimer(
-			timeInterval: Constants.invitationTimeout,
+			timeInterval: invitationTimeout,
 			target: self,
 			selector: #selector(invitationTimerDidFired),
 			userInfo: nil,
