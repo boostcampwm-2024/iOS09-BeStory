@@ -1,0 +1,83 @@
+name: Slack Ping
+
+on:
+  pull_request:
+    types:
+      - review_requested
+      - synchronize
+  pull_request_review:
+    types:
+      - submitted
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Debug requested reviewers
+        run: echo '${{ toJson(github.event.pull_request.requested_reviewers) }}'
+    
+      - name: PR message
+        env:
+          SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
+        run: |
+          declare -A USER_SLACK_IDS
+          USER_SLACK_IDS["LURKS02"]="${{ secrets.SLACK_LURKS02 }}"
+          USER_SLACK_IDS["051198Hz"]="${{ secrets.SLACK_051198HZ }}"
+          USER_SLACK_IDS["around-forest"]="${{ secrets.SLACK_AROUNDFOREST }}"
+          USER_SLACK_IDS["jungseokyoung-cloud"]="${{ secrets.SLACK_JUNGSEOKYOUNGCLOUD }}"
+        
+          MESSAGE=""
+
+          if [[ "${{ github.event_name }}" == "pull_request" ]] && [[ "${{ github.event.action }}" == "review_requested" ]]; then
+            MESSAGE="리뷰 요청: 나를 리뷰어로 지정한 PR이 생성되었어요.\n :arrow_right: <${{ github.event.pull_request.html_url }}|PR 링크>"
+
+            for GITHUB_USER in $(echo '>>>${{ toJson(github.event.pull_request.requested_reviewers) }}' | jq -r '.[] | .login'); do
+              SLACK_USER_ID="${USER_SLACK_IDS[$GITHUB_USER]}"
+              if [[ -n "$SLACK_USER_ID" ]]; then
+                curl -X POST -H "Authorization: Bearer $SLACK_TOKEN" -H "Content-Type: application/json" \
+                -d "{\"channel\":\"$SLACK_USER_ID\", \"text\":\"$MESSAGE\"}" \
+                https://slack.com/api/chat.postMessage
+              else
+                echo "'$GITHUB_USER'에 해당하는 슬랙 ID를 찾지 못했습니다."
+              fi
+            done
+
+          elif [[ "${{ github.event_name }}" == "pull_request_review" ]] && [[ "${{ github.event.action }}" == "submitted" ]]; then
+            GITHUB_USER="${{ github.event.pull_request.user.login }}"
+            SLACK_USER_ID="${USER_SLACK_IDS[$GITHUB_USER]}"
+            REVIEW_STATE="${{ github.event.review.state }}"
+
+            if [[ "$REVIEW_STATE" == "approved" ]]; then
+              STATE_MESSAGE="리뷰 완료 :white_check_mark:: PR이 승인되었어요! :partying_face:"
+            elif [[ "$REVIEW_STATE" == "changes_requested" ]]; then
+              STATE_MESSAGE="리뷰 완료 :warning:: PR에 변경 요청이 있어요."
+            else
+              STATE_MESSAGE="리뷰 완료 :speech_balloon:: PR에 코멘트가 추가되었어요."
+            fi
+              
+            MESSAGE="${STATE_MESSAGE}\n :arrow_right: <${{ github.event.pull_request.html_url }}|PR 링크>"
+
+            if [[ -n "$SLACK_USER_ID" ]]; then
+              curl -X POST -H "Authorization: Bearer $SLACK_TOKEN" -H "Content-Type: application/json" \
+              -d "{\"channel\":\"$SLACK_USER_ID\", \"text\":\"$MESSAGE\"}" \
+              https://slack.com/api/chat.postMessage
+            else
+              echo "'$GITHUB_USER'에 해당하는 슬랙 ID를 찾지 못했습니다."
+            fi
+
+          elif [[ "${{ github.event_name }}" == "pull_request" ]] && [[ "${{ github.event.action }}" == "synchronize" ]]; then
+            MESSAGE="커밋 추가: PR에 새로운 커밋이 추가되었어요. 리뷰 요청 사항이 반영되었는지 확인해보세요.\n :arrow_right: <${{ github.event.pull_request.html_url }}|PR 링크>"
+            for GITHUB_USER in $(echo '${{ toJson(github.event.pull_request.requested_reviewers) }}' | jq -r '.[] | .login'); do
+              SLACK_USER_ID="${USER_SLACK_IDS[$GITHUB_USER]}"
+              if [[ -n "$SLACK_USER_ID" ]]; then
+                curl -X POST -H "Authorization: Bearer $SLACK_TOKEN" -H "Content-Type: application/json" \
+                -d "{\"channel\":\"$SLACK_USER_ID\", \"text\":\"$MESSAGE\"}" \
+                https://slack.com/api/chat.postMessage
+              else
+                echo "'$GITHUB_USER'에 해당하는 슬랙 ID를 찾지 못했습니다."
+              fi
+            done
+          fi
