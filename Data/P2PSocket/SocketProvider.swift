@@ -227,7 +227,7 @@ extension SocketProvider: MCNearbyServiceAdvertiserDelegate {
 		guard
 			isAllowedInvitation,
 			let invitationPeer = mapToSocketPeer(peerID)
-		else { return }
+		else { return invitationHandler(false, session) }
 		
 		invitationReceived.send(invitationPeer)
 		self.invitationHandler = invitationHandler
