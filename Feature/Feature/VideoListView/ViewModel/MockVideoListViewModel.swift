@@ -1,38 +1,63 @@
 //
-//  VideoListViewModel.swift
+//  MockVideoListViewModel.swift
 //  Feature
 //
-//  Created by 디해 on 11/7/24.
+//  Created by 디해 on 11/13/24.
 //
 
-import Combine
 import UIKit
+import Combine
 
 /// 비디오 리스트를 테스트하기 위한 Mock View Model
-final public class MockVideoListViewModel: VideoListViewModel {
-    public var videos: ReadOnlyPublisher<[VideoListItem]>
-    
-    private func load() {
-        videos.send(
-            [VideoListItem(
-                title: "건우님이_차은우.avi",
-                authorTitle: "from 지혜",
-                thumbnailImage: Data.imageData() ?? Data(),
-                duration: "2:30",
-                date: "2024.07.15"
-            ),
-             VideoListItem(
-                title: "지혜님이_장원영.avi",
-                authorTitle: "from 건우",
-                thumbnailImage: Data.imageData() ?? Data(),
-                duration: "2:30",
-                date: "2024.07.15"
-             )]
+public final class MockVideoListViewModel {
+    private var videos: [VideoListItem] = [
+        VideoListItem(
+            title: "건우님이_차은우.avi",
+            authorTitle: "from 지혜",
+            thumbnailImage: Data.imageData() ?? Data(),
+            duration: "2:30",
+            date: "2024.07.15"
+        ),
+        VideoListItem(
+            title: "지혜님이_장원영.avi",
+            authorTitle: "from 건우",
+            thumbnailImage: Data.imageData() ?? Data(),
+            duration: "2:30",
+            date: "2024.07.15"
         )
-    }
+    ]
     
+    var output = PassthroughSubject<Output, Never>()
+    var cancellables: Set<AnyCancellable> = []
+    
+    public init() { }
+}
+
+extension MockVideoListViewModel: VideoListViewModel {
+    public func transform(
+        _ input: AnyPublisher<VideoListViewInput, Never>
+    ) -> AnyPublisher<VideoListViewOutput, Never> {
+        input.sink { [weak self] input in
+            switch input {
+            case .viewDidLoad:
+                guard let self else { return }
+                output.send(.videoListDidChanged(videos: self.videos))
+                
+            case .appendVideo:
+                self?.appendDummyVideo()
+                guard let self else { return }
+                output.send(.videoListDidChanged(videos: self.videos))
+            }
+        }
+        .store(in: &cancellables)
+        
+        return output.eraseToAnyPublisher()
+    }
+}
+
+private extension MockVideoListViewModel {
     /// 테스트를 위해 Dummy Video를 추가합니다.
-    private func appendDummyVideo() {
+    func appendDummyVideo() {
         let dummyVideo = VideoListItem(
             title: "테스트_비디오.avi",
             authorTitle: "from 지혜",
@@ -40,24 +65,7 @@ final public class MockVideoListViewModel: VideoListViewModel {
             duration: "1:30",
             date: "2024.01.03"
         )
-        var currentVideos = videos.value
-        currentVideos.append(dummyVideo)
-        videos.send(currentVideos)
-    }
-    
-    public init() {
-        self.videos = ReadOnlyPublisher([])
-    }
-}
-
-// MARK: - ViewModelInput
-extension MockVideoListViewModel {
-    public func viewDidLoad() {
-        load()
-    }
-    
-    public func appendVideo() {
-        appendDummyVideo()
+        videos.append(dummyVideo)
     }
 }
 
@@ -70,10 +78,10 @@ private extension Data {
         color.setFill()
         let rect = CGRect(origin: .zero, size: size)
         UIRectFill(rect)
-        
+
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        
+
         let imageData = image?.pngData()
         return imageData
     }

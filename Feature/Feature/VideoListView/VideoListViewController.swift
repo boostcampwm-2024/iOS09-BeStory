@@ -9,7 +9,8 @@ import Combine
 import UIKit
 
 public final class VideoListViewController: UIViewController {
-    private let viewModel: VideoListViewModel
+    private let viewModel: any VideoListViewModel
+    private let input = PassthroughSubject<VideoListViewInput, Never>()
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - UI Components
@@ -18,8 +19,14 @@ public final class VideoListViewController: UIViewController {
     private var dataSource: VideoListDataSource!
     private let spacing: CGFloat = 20
     
+    private var items: [VideoListItem] = [] {
+        didSet {
+            reload(with: items)
+        }
+    }
+    
     // MARK: - Initializers
-    public init(viewModel: VideoListViewModel) {
+    public init(viewModel: any VideoListViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         
@@ -38,12 +45,8 @@ public final class VideoListViewController: UIViewController {
         setupViewHierarchies()
         setupViewConstraints()
         setupViewBinding()
-        viewModel.viewDidLoad()
-    }
-    
-    public override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        reload()
+        
+        input.send(.viewDidLoad)
     }
 }
 
@@ -75,19 +78,22 @@ private extension VideoListViewController {
     }
     
     func setupViewBinding() {
-        viewModel.videos.publisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.reload()
+        let output = viewModel.transform(input.eraseToAnyPublisher())
+        
+        output.sink { [weak self] output in
+            switch output {
+            case .videoListDidChanged(let videos):
+                self?.items = videos
             }
-            .store(in: &cancellables)
+        }
+        .store(in: &cancellables)
         
         headerView.addVideoButton.publisher(for: .touchUpInside)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.addVideo()
-            }
-            .store(in: &cancellables)
+        }
+        .store(in: &cancellables)
     }
     
     func setupCollectionView() {
@@ -134,13 +140,13 @@ private extension VideoListViewController {
         dataSource.apply(snapshot, animatingDifferences: true)
     }
     
-    func reload() {
-        applySnapshot(with: viewModel.videos.value)
-        headerView.configure(with: viewModel.videos.value.count)
+    func reload(with videos: [VideoListItem]) {
+        applySnapshot(with: videos)
+        headerView.configure(with: videos.count)
     }
     
     func addVideo() {
-        viewModel.appendVideo()
+        input.send(.appendVideo)
     }
 }
 
@@ -151,7 +157,7 @@ extension VideoListViewController: UICollectionViewDelegate {
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        let selectedVideo = viewModel.videos.value[indexPath.row]
+        let selectedVideo = items[indexPath.row]
         present(VideoDetailViewController(video: selectedVideo), animated: true)
     }
 }
@@ -164,7 +170,7 @@ extension VideoListViewController: UICollectionViewDelegateFlowLayout {
     ) -> CGSize {
         let cell = VideoListCollectionViewCell()
         
-        cell.configure(with: viewModel.videos.value[indexPath.row])
+        cell.configure(with: items[indexPath.row])
         
         let width = (collectionView.bounds.width - (spacing + 0.1)) / 2
         let targetSize = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
