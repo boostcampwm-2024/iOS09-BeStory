@@ -9,5 +9,5 @@ import Foundation
 
 public enum VideoListViewInput {
     case viewDidLoad
-    case appendVideo
+    case appendVideo(url: URL)
 }

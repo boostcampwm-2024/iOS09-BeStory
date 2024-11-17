@@ -7,11 +7,13 @@
 
 import Combine
 import UIKit
+import PhotosUI
 
 public final class VideoListViewController: UIViewController {
     private let viewModel: any VideoListViewModel
     private let input = PassthroughSubject<VideoListViewInput, Never>()
     private var cancellables = Set<AnyCancellable>()
+    private let videoManager = VideoManager.shared
     
     // MARK: - UI Components
     private let headerView = VideoListHeaderView()
@@ -80,20 +82,22 @@ private extension VideoListViewController {
     func setupViewBinding() {
         let output = viewModel.transform(input.eraseToAnyPublisher())
         
-        output.sink { [weak self] output in
-            switch output {
-            case .videoListDidChanged(let videos):
-                self?.items = videos
+        output
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] output in
+                switch output {
+                case .videoListDidChanged(let videos):
+                    self?.items = videos
+                }
             }
-        }
-        .store(in: &cancellables)
+            .store(in: &cancellables)
         
         headerView.addVideoButton.publisher(for: .touchUpInside)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                self?.addVideo()
-        }
-        .store(in: &cancellables)
+                self?.openVideoPicker()
+            }
+            .store(in: &cancellables)
     }
     
     func setupCollectionView() {
@@ -119,13 +123,13 @@ private extension VideoListViewController {
     
     func makeDataSource() -> VideoListDataSource {
         let dataSource = VideoListDataSource(collectionView: collectionView,
-                                              cellProvider: { collectionView, indexPath, item in
+                                             cellProvider: { collectionView, indexPath, item in
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: VideoListCollectionViewCell.identifier,
                 for: indexPath
             )
             guard let cell = cell as? VideoListCollectionViewCell
-                else { return UICollectionViewCell() }
+            else { return UICollectionViewCell() }
             cell.configure(with: item)
             return cell
         })
@@ -145,13 +149,19 @@ private extension VideoListViewController {
         headerView.configure(with: videos.count)
     }
     
-    func addVideo() {
-        input.send(.appendVideo)
+    func openVideoPicker() {
+        var configuration = PHPickerConfiguration()
+        configuration.filter = .videos
+        configuration.selectionLimit = 1
+        configuration.preferredAssetRepresentationMode = .current
+        
+        let picker = PHPickerViewController(configuration: configuration)
+        picker.delegate = self
+        present(picker, animated: true, completion: nil)
     }
 }
 
 // MARK: - Collection View
-
 extension VideoListViewController: UICollectionViewDelegate {
     public func collectionView(
         _ collectionView: UICollectionView,
@@ -179,5 +189,21 @@ extension VideoListViewController: UICollectionViewDelegateFlowLayout {
             withHorizontalFittingPriority: .required,
             verticalFittingPriority: .fittingSizeLevel
         )
+    }
+}
+
+// MARK: - PHPicker
+extension VideoListViewController: PHPickerViewControllerDelegate {
+    public func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+        
+        guard let itemProvider = results.first?.itemProvider,
+              itemProvider.hasItemConformingToTypeIdentifier(UTType.movie.identifier) else { return }
+        
+        itemProvider.loadFileRepresentation(forTypeIdentifier: UTType.movie.identifier) { [weak self] tempURL, error in
+            guard let tempURL, error == nil,
+                  let url = self?.videoManager.copyVideoToFileSystem(tempURL: tempURL) else { return }
+            self?.input.send(.appendVideo(url: url))
+        }
     }
 }
