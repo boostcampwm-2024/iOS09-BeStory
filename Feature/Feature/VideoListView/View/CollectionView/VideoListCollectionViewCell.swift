@@ -71,6 +71,7 @@ private extension VideoListCollectionViewCell {
         thumbnailImageView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.horizontalEdges.equalToSuperview()
+            make.height.equalTo(100)
         }
         
         durationLabel.snp.makeConstraints { make in
@@ -106,6 +107,7 @@ private extension VideoListCollectionViewCell {
     func setupThumbnailImageView() {
         thumbnailImageView.layer.cornerRadius = 20
         thumbnailImageView.clipsToBounds = true
+        thumbnailImageView.contentMode = .scaleAspectFit
     }
     
     func setupTitleLabel() {
