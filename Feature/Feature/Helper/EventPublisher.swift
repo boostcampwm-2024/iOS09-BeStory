@@ -14,7 +14,7 @@ extension UIControl {
     }
     
     struct EventPublisher: Publisher {
-        typealias Output = Void
+        typealias Output = UIControl
         typealias Failure = Never
         
         private let control: UIControl
@@ -25,14 +25,14 @@ extension UIControl {
             self.event = event
         }
         
-        func receive<S>(subscriber: S) where S: Subscriber, Never == S.Failure, Void == S.Input {
+        func receive<S>(subscriber: S) where S: Subscriber, Never == S.Failure, UIControl == S.Input {
             let subscription = EventSubscription(control: control, event: event, subscriber: subscriber)
             subscriber.receive(subscription: subscription)
         }
     }
     
     fileprivate class EventSubscription<EventSubscriber: Subscriber>:
-        Subscription where EventSubscriber.Input == Void, EventSubscriber.Failure == Never {
+        Subscription where EventSubscriber.Input == UIControl, EventSubscriber.Failure == Never {
         let control: UIControl
         let event: UIControl.Event
         var subscriber: EventSubscriber?
@@ -53,7 +53,7 @@ extension UIControl {
         }
         
         @objc func eventDidOccur() {
-            _ = subscriber?.receive(())
+            _ = subscriber?.receive(control)
         }
     }
 }
