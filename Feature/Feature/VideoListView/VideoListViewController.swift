@@ -6,8 +6,8 @@
 //
 
 import Combine
-import UIKit
 import PhotosUI
+import UIKit
 
 public final class VideoListViewController: UIViewController {
     private let viewModel: any VideoListViewModel

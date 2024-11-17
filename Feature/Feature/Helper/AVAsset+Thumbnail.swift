@@ -5,8 +5,8 @@
 //  Created by 디해 on 11/15/24.
 //
 
-import UIKit
 import AVFoundation
+import UIKit
 
 extension AVAsset {
     func generateThumbnail() async -> UIImage? {

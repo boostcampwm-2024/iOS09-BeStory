@@ -5,8 +5,8 @@
 //  Created by 디해 on 11/13/24.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 public protocol VideoListViewModel where Input == VideoListViewInput, Output == VideoListViewOutput {
     associatedtype Input

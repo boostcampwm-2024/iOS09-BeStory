@@ -5,8 +5,8 @@
 //  Created by 디해 on 11/7/24.
 //
 
-import UIKit
 import SnapKit
+import UIKit
 
 final class VideoListCollectionViewCell: UICollectionViewCell {
     static let identifier: String = "VideoListCollectionViewCell"
@@ -107,7 +107,7 @@ private extension VideoListCollectionViewCell {
     func setupThumbnailImageView() {
         thumbnailImageView.layer.cornerRadius = 20
         thumbnailImageView.clipsToBounds = true
-        thumbnailImageView.contentMode = .scaleAspectFit
+        thumbnailImageView.contentMode = .scaleAspectFill
     }
     
     func setupTitleLabel() {
