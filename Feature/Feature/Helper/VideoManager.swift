@@ -34,4 +34,14 @@ final class VideoManager {
         }
         return destinationURL
     }
+    
+    func deleteAllFiles() {
+        guard let fileURLs = try? fileManager.contentsOfDirectory(
+            at: folder,
+            includingPropertiesForKeys: nil
+        ) else { return }
+        fileURLs.forEach { url in
+            try? fileManager.removeItem(at: url)
+        }
+    }
 }
