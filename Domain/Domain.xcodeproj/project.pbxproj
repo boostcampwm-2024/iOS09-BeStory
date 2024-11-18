@@ -10,8 +10,6 @@
 		FEC7C1C72CE7450A002D5C0F /* P2PSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEC7C1BF2CE74438002D5C0F /* P2PSocket.framework */; };
 		FEC7C1CA2CE755C5002D5C0F /* P2PSocket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FEC7C1BF2CE74438002D5C0F /* P2PSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FEC7C1CC2CE755CF002D5C0F /* libData.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FEC7C1CB2CE755CF002D5C0F /* libData.a */; };
-		FEC7C1E42CE7A7F6002D5C0F /* P2PSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEC7C1E32CE7A7F6002D5C0F /* P2PSocket.framework */; };
-		FEC7C1E52CE7A7F6002D5C0F /* P2PSocket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FEC7C1E32CE7A7F6002D5C0F /* P2PSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FEF779852CDCB44E00FFE089 /* libUseCase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FE6EF3C72CD8B5CA005DC39D /* libUseCase.a */; platformFilter = ios; };
 /* End PBXBuildFile section */
 
@@ -61,17 +59,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		FE6110372CE72DA20045C8D5 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				FEC7C1E52CE7A7F6002D5C0F /* P2PSocket.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		FE6EF3C52CD8B5CA005DC39D /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 12;
@@ -153,7 +140,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FEC7C1E42CE7A7F6002D5C0F /* P2PSocket.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,7 +247,6 @@
 				FEF778D82CDB21B500FFE089 /* Sources */,
 				FEF778D92CDB21B500FFE089 /* Frameworks */,
 				FEF778DA2CDB21B500FFE089 /* Resources */,
-				FE6110372CE72DA20045C8D5 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
