@@ -178,6 +178,7 @@ public extension SocketProvider {
                                                                 name: resourceName,
                                                                 uuid: uuid,
                                                                 sender: peer.displayName)
+                            self?.sharedResources.append(sharedResource)
                             self?.resourceShared.send(sharedResource)
                             return resourceUrlContinuation.resume(returning: sharedResource)
                         }
@@ -254,6 +255,7 @@ extension SocketProvider: MCSessionDelegate {
                                                 name: resourceName,
                                                 uuid: uuid,
                                                 sender: peerID.displayName)
+            sharedResources.append(resource)
             resourceShared.send(resource)
         }
     }
