@@ -7,13 +7,16 @@
 
 import Combine
 import Entity
-import P2PSocket
 
 public protocol BrowsingUserRepositoryInterface {
 	var updatedBrowsingUser: PassthroughSubject<BrowsedUser, Never> { get }
-	
-	init(socketProvider: SocketProvidable)
+	var updatedInvitedUser: PassthroughSubject<InvitedUser, Never> { get }
+	var invitationReceived: PassthroughSubject<BrowsedUser, Never> { get }
 	
 	func fetchBrowsingUsers() -> [BrowsedUser]
-	func inviteUser(with id: String)
+	func inviteUser(with id: String, timeout: Double)
+	func acceptInvitation(from id: String)
+	func rejectInvitation(from id: String)
+	func startReceiveInvitation()
+	func stopReceiveInvitation()
 }

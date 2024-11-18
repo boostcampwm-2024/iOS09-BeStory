@@ -5,21 +5,29 @@
 //  Created by jung on 11/7/24.
 //
 
+@testable import UseCase
+
 import XCTest
-@testable import Interfaces
+import Data
 import Entity
+import Interfaces
 import P2PSocket
 
 final class BrowsingUserUseCaseTest: XCTestCase {
-	private var sut: MockBrowinsgUseCase!
+	private var sut: BrowsingUserUseCaseInterface!
+	private var secondarySut: BrowsingUserUseCaseInterface!
 	private var mockSocketProvider: MockSocketProvider!
-	private var mockRepository: MockBrowsingUserRepository!
+	private var secondaryMockSocketProvider: MockSocketProvider!
 	
 	override func setUp() {
 		super.setUp()
 		self.mockSocketProvider = MockSocketProvider()
-		self.mockRepository = MockBrowsingUserRepository(socketProvider: mockSocketProvider)
-		sut = MockBrowinsgUseCase(repository: mockRepository)
+		self.secondaryMockSocketProvider = MockSocketProvider()
+		let repository = BrowsingUserRepository(socketProvider: mockSocketProvider)
+		let secondaryRepository = BrowsingUserRepository(socketProvider: secondaryMockSocketProvider)
+		
+		sut = BrowsingUserUseCase(repository: repository, invitationTimeout: 1.0)
+		secondarySut = BrowsingUserUseCase(repository: secondaryRepository, invitationTimeout: 1.0)
 	}
 	
 	override func tearDown() {
@@ -28,7 +36,7 @@ final class BrowsingUserUseCaseTest: XCTestCase {
 	}
 }
 
-// MARK: - Test
+// MARK: - Browsing Test
 extension BrowsingUserUseCaseTest {
 	func test_이미_있는_유저가_잘_감지되는지() {
 		// given
@@ -66,21 +74,40 @@ extension BrowsingUserUseCaseTest {
 	
 	func test_유저의_lost가_잘_감지되는지() {
 		// given
-		let expectation = XCTestExpectation(description: "새로운 유저 테스트")
 		let mockBrowsingUser = SocketPeer(id: "4", name: "JK", state: .lost)
 		let publisher = sut.browsedUser
 		var receivedPeer: BrowsedUser?
 		let cancellable = publisher.sink { peer in
 			receivedPeer = peer
-			expectation.fulfill()
 		}
 		
 		// when
 		mockSocketProvider.updatedPeer.send(mockBrowsingUser)
 		
 		// then
-		wait(for: [expectation], timeout: 0.2)
 		XCTAssertEqual(receivedPeer?.state, .lost)
+		cancellable.cancel()
+	}
+}
+
+// MARK: - Invitation Test
+extension BrowsingUserUseCaseTest {
+	func test_초대시_timeout될시_reject이벤트가_잘오는지() {
+		// given
+		let expectation = XCTestExpectation(description: "timeout테스트")
+		mockSocketProvider.invitationResultState = .timeout
+		let publisher = sut.invitationResult
+		var invitationUser: InvitedUser?
+		let cancellable = publisher.sink { peer in
+			invitationUser = peer
+			expectation.fulfill()
+		}
+		// when
+		sut.inviteUser(with: "1")
+		
+		// then
+		wait(for: [expectation], timeout: .init(1))
+		XCTAssertEqual(invitationUser?.state, .reject)
 		cancellable.cancel()
 	}
 }

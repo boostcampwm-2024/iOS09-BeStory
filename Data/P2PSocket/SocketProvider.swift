@@ -10,11 +10,20 @@ import MultipeerConnectivity
 
 public protocol SocketProvidable {
 	var updatedPeer: PassthroughSubject<SocketPeer, Never> { get }
-	
+	var invitationReceived: PassthroughSubject<SocketPeer, Never> { get }
 	/// Browsing된 Peer를 리턴합니다.
 	func browsingPeers() -> [SocketPeer]
 	/// Session에 연결된 Peer를 리턴합니다.
 	func connectedPeers() -> [SocketPeer]
+	
+	/// 유저를 초대합니다.
+	func invite(peer id: String, timeout: Double)
+	
+	func acceptInvitation()
+	func rejectInvitation()
+	
+	func startReceiveInvitation()
+	func stopReceiveInvitation()
 	
 	func startAdvertising()
 	func stopAdvertising()
@@ -23,10 +32,17 @@ public protocol SocketProvidable {
 }
 
 public final class SocketProvider: NSObject, SocketProvidable {
+	fileprivate enum Constant {
+		static let serviceType = "beStory"
+	}
+	
 	// MARK: - Properties
 	public let updatedPeer = PassthroughSubject<SocketPeer, Never>()
-	
-	private let serviceType = "beStory"
+	public let invitationReceived = PassthroughSubject<SocketPeer, Never>()
+
+	private var isAllowedInvitation: Bool = true
+	private var invitationHandler: ((Bool, MCSession?) -> Void)?
+
 	private let peerID = MCPeerID(displayName: UIDevice.current.name)
 	private let browser: MCNearbyServiceBrowser
 	private let advertiser: MCNearbyServiceAdvertiser
@@ -34,11 +50,11 @@ public final class SocketProvider: NSObject, SocketProvidable {
 	
 	// MARK: - Initializers
 	public override init() {
-		self.browser = .init(peer: peerID, serviceType: serviceType)
+		self.browser = .init(peer: peerID, serviceType: Constant.serviceType)
 		self.advertiser = .init(
 			peer: peerID,
 			discoveryInfo: nil,
-			serviceType: serviceType
+			serviceType: Constant.serviceType
 		)
 		self.session = .init(peer: peerID)
 		super.init()
@@ -93,6 +109,37 @@ public extension SocketProvider {
 				return SocketPeer(id: id, name: name, state: .connected)
 			}
 	}
+	
+	func invite(peer id: String, timeout: Double) {
+		guard let peer = MCPeerIDStorage.shared.peerIDByIdentifier[id] else { return }
+
+		browser.invitePeer(
+			peer.id,
+			to: session,
+			withContext: nil,
+			timeout: .init(timeout)
+		)
+	}
+	
+	func startReceiveInvitation() {
+		isAllowedInvitation = true
+	}
+	
+	func stopReceiveInvitation() {
+		isAllowedInvitation = false
+	}
+	
+	func acceptInvitation() {
+		invitationHandler?(true, session)
+		
+		invitationHandler = nil
+	}
+	
+	func rejectInvitation() {
+		invitationHandler?(false, session)
+		
+		invitationHandler = nil
+	}
 }
 
 // MARK: - MCSessionDelegate
@@ -105,7 +152,7 @@ extension SocketProvider: MCSessionDelegate {
 		defer {
 			if let socketPeer = mapToSocketPeer(peerID) { updatedPeer.send(socketPeer)
 			}
-		}
+		} 
 		
 		switch state {
 			case .connected:
@@ -177,7 +224,13 @@ extension SocketProvider: MCNearbyServiceAdvertiserDelegate {
 		withContext context: Data?,
 		invitationHandler: @escaping (Bool, MCSession?) -> Void
 	) {
-		invitationHandler(true, session)
+		guard
+			isAllowedInvitation,
+			let invitationPeer = mapToSocketPeer(peerID)
+		else { return invitationHandler(false, session) }
+		
+		invitationReceived.send(invitationPeer)
+		self.invitationHandler = invitationHandler
 	}
 }
 
