@@ -43,7 +43,7 @@ extension MultipeerVideoListViewModel: VideoListViewModel {
 
 private extension MultipeerVideoListViewModel {
     func makeVideoListItem(with url: URL, asset: AVAsset) async -> VideoListItem {
-        let thumbnailImage = await asset.generateThumbnail()
+        let thumbnailImage = asset.generateThumbnail()
         let thumbnailData = thumbnailImage?.jpegData(compressionQuality: 0.8)
         let durationString = convertToDurationString(with: await asset.totalSeconds)
         let formattedDate = convertToFormattedDate(with: await asset.creationDate)

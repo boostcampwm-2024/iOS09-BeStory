@@ -9,7 +9,7 @@ import AVFoundation
 import UIKit
 
 extension AVAsset {
-    func generateThumbnail() async -> UIImage? {
+    func generateThumbnail() -> UIImage? {
         let imageGenerator = AVAssetImageGenerator(asset: self)
         imageGenerator.appliesPreferredTrackTransform = true
         
