@@ -157,7 +157,7 @@ public extension SocketProvider {
     func shareResource(url localUrl: URL, resourceName: String) async throws -> SharedResource {
         return try await withCheckedThrowingContinuation { resourceUrlContinuation in
             let uuid = UUID()
-            let resourceName = [resourceName, uuid.uuidString].joined(separator: "/")
+            let nameWithUUID = [resourceName, uuid.uuidString].joined(separator: "/")
             
             let recievers = session.connectedPeers
             let recieverCount = recievers.count
@@ -165,7 +165,7 @@ public extension SocketProvider {
             
             recievers.forEach { peer in
                 let progress = session.sendResource(at: localUrl,
-                                                    withName: resourceName,
+                                                    withName: nameWithUUID,
                                                     toPeer: peer,
                                                     withCompletionHandler: { [weak self] error in
                     let task = Task {
