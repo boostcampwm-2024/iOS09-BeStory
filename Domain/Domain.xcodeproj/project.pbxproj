@@ -16,13 +16,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		FEC7C1792CE73495002D5C0F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FEF7793F2CDC936900FFE089;
-			remoteInfo = Entity;
-		};
 		FEC7C1C32CE7449C002D5C0F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
@@ -43,13 +36,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = FEF778DB2CDB21B500FFE089;
 			remoteInfo = DomainInterface;
-		};
-		FEF7796B2CDCB32800FFE089 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FEF7793F2CDC936900FFE089;
-			remoteInfo = Entity;
 		};
 		FEF779862CDCB44E00FFE089 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -234,7 +220,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FE6EF3CB2CD8B5CA005DC39D /* Build configuration list for PBXNativeTarget "UseCase" */;
 			buildPhases = (
-				FEEBA0902CD9D572007AAAA0 /* ShellScript */,
+				FEEBA0902CD9D572007AAAA0 /* Run Script */,
 				FE6EF3C32CD8B5CA005DC39D /* Sources */,
 				FE6EF3C42CD8B5CA005DC39D /* Frameworks */,
 				FE6EF3C52CD8B5CA005DC39D /* CopyFiles */,
@@ -242,7 +228,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				FEC7C17A2CE73495002D5C0F /* PBXTargetDependency */,
 				FEF778E92CDB21CF00FFE089 /* PBXTargetDependency */,
 			);
 			name = UseCase;
@@ -266,7 +251,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				FEF7796C2CDCB32800FFE089 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				FEF778DD2CDB21B500FFE089 /* Interfaces */,
@@ -400,7 +384,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		FEEBA0902CD9D572007AAAA0 /* ShellScript */ = {
+		FEEBA0902CD9D572007AAAA0 /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -410,6 +394,7 @@
 			);
 			inputPaths = (
 			);
+			name = "Run Script";
 			outputFileListPaths = (
 			);
 			outputPaths = (
@@ -470,11 +455,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		FEC7C17A2CE73495002D5C0F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FEF7793F2CDC936900FFE089 /* Entity */;
-			targetProxy = FEC7C1792CE73495002D5C0F /* PBXContainerItemProxy */;
-		};
 		FEC7C1C42CE7449C002D5C0F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FEF7793F2CDC936900FFE089 /* Entity */;
@@ -489,11 +469,6 @@
 			isa = PBXTargetDependency;
 			target = FEF778DB2CDB21B500FFE089 /* Interfaces */;
 			targetProxy = FEF778E82CDB21CF00FFE089 /* PBXContainerItemProxy */;
-		};
-		FEF7796C2CDCB32800FFE089 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FEF7793F2CDC936900FFE089 /* Entity */;
-			targetProxy = FEF7796B2CDCB32800FFE089 /* PBXContainerItemProxy */;
 		};
 		FEF779872CDCB44E00FFE089 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
