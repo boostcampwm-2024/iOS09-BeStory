@@ -21,8 +21,7 @@ final class VideoManager {
     
     private func initializeDirectory() {
         if !fileManager.fileExists(atPath: folder.path) {
-            try? fileManager.createDirectory(at: folder,
-                                             withIntermediateDirectories: true)
+            try? fileManager.createDirectory(at: folder, withIntermediateDirectories: true)
         }
     }
     
