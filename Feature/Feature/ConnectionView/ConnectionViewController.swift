@@ -23,6 +23,7 @@ final public class ConnectionViewController: UIViewController {
     private var innerGrayCircleView = UIView()
     private var outerGrayCircleView = UIView()
     private var userContainerView = UIView()
+    private var currentAlert: UIAlertController?
 
     // MARK: - Initializer
 
@@ -63,14 +64,25 @@ extension ConnectionViewController {
         let output = viewModel.transform(input.eraseToAnyPublisher())
         output.sink { [weak self] result in
             switch result {
+            // Connection Output
+
             case .found(let user, let position, let emoji):
                 let position = CGPoint(x: position.0, y: position.1)
                 self?.addUserCircleView(user: user, position: position, emoji: emoji)
             case .lost(let user, let position):
                 let position = CGPoint(x: position.0, y: position.1)
                 self?.removeUserCircleView(user: user, position: position)
-            case .none:
-                break
+
+            // Invitation Output
+
+            case .invited(let user):
+                
+            case .accepted(let userName):
+
+            case .rejected(let userName):
+
+            case .timeout:
+
             }
         }
         .store(in: &cancellables)
@@ -83,10 +95,11 @@ extension ConnectionViewController {
 private extension ConnectionViewController {
     func userDidTapped(_ sender: UITapGestureRecognizer) {
         guard let id = sender.view?.accessibilityLabel else { return }
-        showAlert(
+        showAlertWithActions(
             title: "Invite",
             message: "초대하시겠습니까?",
-            onConfirm: { self.input.send(.invite(id: id)) }
+            onConfirm: { self.input.send(.invite(id: id)) },
+            onCancel: { }
         )
     }
 }
@@ -124,7 +137,12 @@ private extension ConnectionViewController {
         userContainerView.layoutIfNeeded()
     }
 
-    func showAlert(title: String, message: String, onConfirm: @escaping () -> Void) {
+    func showAlertWithActions(
+        title: String,
+        message: String,
+        onConfirm: @escaping () -> Void,
+        onCancel: @escaping () -> Void
+    ) {
         let alert = UIAlertController(
             title: title,
             message: message,
@@ -134,12 +152,26 @@ private extension ConnectionViewController {
         let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
             onConfirm()
         }
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel)
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel) { _ in
+            onCancel()
+        }
 
         alert.addAction(confirmAction)
         alert.addAction(cancelAction)
 
         present(alert, animated: true)
+        currentAlert = alert
+    }
+
+    func showAlertWithoutActions(title: String, message: String) {
+        let alert = UIAlertController(
+            title: title,
+            message: message,
+            preferredStyle: .alert
+        )
+        
+        present(alert, animated: true)
+        currentAlert = alert
     }
 }
 
