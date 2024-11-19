@@ -6,12 +6,6 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		853CEDDC2CECDDD000936AD3 /* libData.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 853CEDDB2CECDDD000936AD3 /* libData.a */; };
-		853CEDDE2CECDDD000936AD3 /* libUseCase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 853CEDDD2CECDDD000936AD3 /* libUseCase.a */; };
-		853CEDE02CECDDD000936AD3 /* libFeature.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 853CEDDF2CECDDD000936AD3 /* libFeature.a */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXFileReference section */
 		853CEB632CECA73E00936AD3 /* Core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		853CEDDB2CECDDD000936AD3 /* libData.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libData.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -50,9 +44,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				853CEDDC2CECDDD000936AD3 /* libData.a in Frameworks */,
-				853CEDDE2CECDDD000936AD3 /* libUseCase.a in Frameworks */,
-				853CEDE02CECDDD000936AD3 /* libFeature.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -353,6 +344,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.aroundforest.Utilities;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
@@ -390,6 +385,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.aroundforest.Utilities;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
