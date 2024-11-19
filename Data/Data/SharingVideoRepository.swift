@@ -41,7 +41,7 @@ public extension SharingVideoRepository {
         try await socketProvider.shareResource(url: url, resourceName: resourceName)
     }
     
-    func fetchVideos() -> [Entity.SharedVideo] {
+    func fetchVideos() -> [SharedVideo] {
         socketProvider.sharedAllResources()
             .compactMap { [weak self] resource in
                 self?.mappingToSharedVideo(resource)
