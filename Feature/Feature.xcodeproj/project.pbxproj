@@ -47,7 +47,6 @@
 		D9CF2EF62CEC2E3B00B1A92D /* Exceptions for "Feature" folder in "Feature" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"ConnectionView/CGPoint+Extension.swift",
 				ConnectionView/ConnectionViewController.swift,
 				ConnectionView/View/CustomCircleView.swift,
 				ConnectionView/ViewModel/ConnectionViewInputOutput.swift,
