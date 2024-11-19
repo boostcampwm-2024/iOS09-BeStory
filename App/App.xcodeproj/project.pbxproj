@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		853CEC0B2CECB62A00936AD3 /* P2PSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853CEC0A2CECB62A00936AD3 /* P2PSocket.framework */; };
+		853CEC0D2CECB9D200936AD3 /* libExtensions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 853CEC0C2CECB9D200936AD3 /* libExtensions.a */; };
 		FEF778B92CDB00F000FFE089 /* libData.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF778B72CDB00F000FFE089 /* libData.a */; };
 		FEF778BA2CDB00F000FFE089 /* libFeature.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF778B82CDB00F000FFE089 /* libFeature.a */; };
 		FEF779742CDCB35800FFE089 /* libUseCase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF779732CDCB35800FFE089 /* libUseCase.a */; };
@@ -38,6 +38,7 @@
 
 /* Begin PBXFileReference section */
 		853CEC0A2CECB62A00936AD3 /* P2PSocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = P2PSocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		853CEC0C2CECB9D200936AD3 /* libExtensions.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libExtensions.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE6EF2EA2CD8B005005DC39D /* App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = App.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF778B72CDB00F000FFE089 /* libData.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libData.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF778B82CDB00F000FFE089 /* libFeature.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libFeature.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -70,7 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				853CEC0B2CECB62A00936AD3 /* P2PSocket.framework in Frameworks */,
+				853CEC0D2CECB9D200936AD3 /* libExtensions.a in Frameworks */,
 				FEF778B92CDB00F000FFE089 /* libData.a in Frameworks */,
 				FEF778BA2CDB00F000FFE089 /* libFeature.a in Frameworks */,
 				FEF779742CDCB35800FFE089 /* libUseCase.a in Frameworks */,
@@ -100,6 +101,7 @@
 		FE6EF3E12CD8B6A2005DC39D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				853CEC0C2CECB9D200936AD3 /* libExtensions.a */,
 				853CEC0A2CECB62A00936AD3 /* P2PSocket.framework */,
 				FEF779732CDCB35800FFE089 /* libUseCase.a */,
 				FEF778B72CDB00F000FFE089 /* libData.a */,
