@@ -13,7 +13,12 @@ public struct SharedResource {
     public let uuid: UUID
     public let sender: String
     
-    public init(localUrl: URL, name: String, uuid: UUID, sender: String) {
+    public init(
+        localUrl: URL,
+        name: String,
+        uuid: UUID,
+        sender: String
+    ) {
         self.localUrl = localUrl
         self.name = name
         self.uuid = uuid
