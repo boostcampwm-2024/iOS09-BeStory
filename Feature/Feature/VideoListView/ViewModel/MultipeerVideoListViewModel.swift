@@ -20,18 +20,13 @@ public final class MultipeerVideoListViewModel {
 extension MultipeerVideoListViewModel: VideoListViewModel {
     public func transform(_ input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
+            guard let self else { return }
             switch input {
             case .viewDidLoad:
-                guard let self else { return }
                 output.send(.videoListDidChanged(videos: self.videoItems))
             case .appendVideo(let url):
                 Task {
-                    guard let self else { return }
-                    let asset = AVAsset(url: url)
-                    // TODO: - 동영상 컨테이너에 업로드
-                    let item = await self.makeVideoListItem(with: url, asset: asset)
-                    self.videoItems.append(item)
-                    self.output.send(.videoListDidChanged(videos: self.videoItems))
+                    await self.appendItem(with: url)
                 }
             }
         }
@@ -42,6 +37,14 @@ extension MultipeerVideoListViewModel: VideoListViewModel {
 }
 
 private extension MultipeerVideoListViewModel {
+    func appendItem(with url: URL) async {
+        let asset = AVAsset(url: url)
+        // TODO: - 동영상 컨테이너에 업로드
+        let item = await makeVideoListItem(with: url, asset: asset)
+        videoItems.append(item)
+        output.send(.videoListDidChanged(videos: videoItems))
+    }
+    
     func makeVideoListItem(with url: URL, asset: AVAsset) async -> VideoListItem {
         let thumbnailImage = asset.generateThumbnail()
         let thumbnailData = thumbnailImage?.jpegData(compressionQuality: 0.8)

@@ -23,17 +23,14 @@ extension MockVideoListViewModel: VideoListViewModel {
         _ input: AnyPublisher<VideoListViewInput, Never>
     ) -> AnyPublisher<VideoListViewOutput, Never> {
         input.sink { [weak self] input in
+            guard let self else { return }
             switch input {
             case .viewDidLoad:
-                guard let self else { return }
                 output.send(.videoListDidChanged(videos: self.videoItems))
                 
             case .appendVideo(let url):
                 Task {
-                    guard let self else { return }
-                    let item = await self.makeVideoListItem(url: url)
-                    self.videoItems.append(item)
-                    self.output.send(.videoListDidChanged(videos: self.videoItems))
+                    await self.appendItem(with: url)
                 }
             }
         }
@@ -44,6 +41,12 @@ extension MockVideoListViewModel: VideoListViewModel {
 }
 
 private extension MockVideoListViewModel {
+    func appendItem(with url: URL) async {
+        let item = await makeVideoListItem(url: url)
+        videoItems.append(item)
+        output.send(.videoListDidChanged(videos: videoItems))
+    }
+    
     /// 비디오에 해당하는 VideoListItem을 생성합니다. 실제 데이터가 아닌 Mock 값을 넣어줍니다.
     func makeVideoListItem(url: URL) async -> VideoListItem {
         return VideoListItem(
