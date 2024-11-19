@@ -8,7 +8,7 @@
 import Foundation
 import RegexBuilder
 
-struct ResourceValidator {
+enum ResourceValidator {
     static func extractInformation(name: String) -> (String, UUID)? {
         let regex = Regex {
             Capture {
