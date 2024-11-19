@@ -98,6 +98,8 @@ private extension ConnectionViewController {
         let userCircleView = CircleView(style: .small)
         userCircleView.configure(emoji: emoji, name: user.name)
 
+        userContainerView.addSubview(userCircleView)
+
         userCircleView.snp.makeConstraints { make in
             make.center.equalTo(position)
             make.size.equalTo(Constants.userCircleViewSize)
@@ -110,7 +112,6 @@ private extension ConnectionViewController {
         userCircleView.addGestureRecognizer(tapGesture)
         userCircleView.accessibilityLabel = user.id
 
-        userContainerView.addSubview(userCircleView)
         userContainerView.layoutIfNeeded()
     }
 
