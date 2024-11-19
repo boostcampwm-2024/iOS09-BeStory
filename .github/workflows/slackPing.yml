@@ -70,7 +70,7 @@ jobs:
             fi
 
           elif [[ "${{ github.event_name }}" == "pull_request" ]] && [[ "${{ github.event.action }}" == "synchronize" ]]; then
-            HAS_REVIEWER_CHANGES=$(echo '${{ toJson(github.event.changes) }]' | jq '.requested_reviewers | length')
+            HAS_REVIEWER_CHANGES=$(echo '${{ toJson(github.event.changes) }}' | jq '.requested_reviewers | length')
 
             if [[ "$HAS_REVIEWER_CHANGES" -gt 0 ]]; then
               echo "리뷰어 추가와 관련된 synchronize 이벤트입니다."
