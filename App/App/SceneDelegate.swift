@@ -15,9 +15,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		guard let windowScene = (scene as? UIWindowScene) else { return }
 		
 		let window = UIWindow(windowScene: windowScene)
-        let viewModel = MultipeerVideoListViewModel()
-        let rootViewController = VideoListViewController(viewModel: viewModel)
-        window.rootViewController = rootViewController
+        window.rootViewController = RootViewController()
 		self.window = window
 		window.makeKeyAndVisible()
 	}
