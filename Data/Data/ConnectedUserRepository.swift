@@ -6,8 +6,8 @@
 //
 
 import Combine
-import Interfaces
 import Entity
+import Interfaces
 import P2PSocket
 
 public final class ConnectedUserRepository: ConnectedUserRepositoryInterface {

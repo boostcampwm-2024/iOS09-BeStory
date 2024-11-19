@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Feature
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	var window: UIWindow?
@@ -14,7 +15,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		guard let windowScene = (scene as? UIWindowScene) else { return }
 		
 		let window = UIWindow(windowScene: windowScene)
-		window.rootViewController = RootViewController()
+        let viewModel = MultipeerVideoListViewModel()
+        let rootViewController = VideoListViewController(viewModel: viewModel)
+        window.rootViewController = rootViewController
 		self.window = window
 		window.makeKeyAndVisible()
 	}

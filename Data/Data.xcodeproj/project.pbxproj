@@ -299,9 +299,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D971E5812CE8FA140006900E /* MCPeerIDStorage.swift in Sources */,
-				D971E5822CE8FA140006900E /* SocketPeer.swift in Sources */,
-				D971E5832CE8FA140006900E /* SocketProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
