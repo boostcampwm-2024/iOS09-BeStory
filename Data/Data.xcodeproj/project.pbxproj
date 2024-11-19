@@ -70,11 +70,11 @@
 			membershipExceptions = (
 				BrowsingUserRepository.swift,
 				ConnectedUserRepository.swift,
+				SharingVideoRepository.swift,
 			);
 			target = FED968292CD9094300CD445C /* Data */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FE6EF32E2CD8B020005DC39D /* Data */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;

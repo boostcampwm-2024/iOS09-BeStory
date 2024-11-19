@@ -35,19 +35,19 @@
 			remoteGlobalIDString = FEF778DB2CDB21B500FFE089;
 			remoteInfo = Interfaces;
 		};
+		FEC7C1C52CE7449C002D5C0F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FEF778DB2CDB21B500FFE089;
+			remoteInfo = Interfaces;
+		};
 		FEF778E82CDB21CF00FFE089 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = FEF778DB2CDB21B500FFE089;
 			remoteInfo = DomainInterface;
-		};
-		FEF7796B2CDCB32800FFE089 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FEF7793F2CDC936900FFE089;
-			remoteInfo = Entity;
 		};
 		FEF779862CDCB44E00FFE089 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -66,6 +66,17 @@
 			dstSubfolderSpec = 16;
 			files = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FEC7C1C92CE7450A002D5C0F /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				FEC7C1CA2CE755C5002D5C0F /* P2PSocket.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FEC7C1C92CE7450A002D5C0F /* Embed Frameworks */ = {
@@ -140,6 +151,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FEC7C1E42CE7A7F6002D5C0F /* P2PSocket.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -220,7 +232,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FE6EF3CB2CD8B5CA005DC39D /* Build configuration list for PBXNativeTarget "UseCase" */;
 			buildPhases = (
-				FEEBA0902CD9D572007AAAA0 /* ShellScript */,
+				FEEBA0902CD9D572007AAAA0 /* Run Script */,
 				FE6EF3C32CD8B5CA005DC39D /* Sources */,
 				FE6EF3C42CD8B5CA005DC39D /* Frameworks */,
 				FE6EF3C52CD8B5CA005DC39D /* CopyFiles */,
@@ -247,11 +259,11 @@
 				FEF778D82CDB21B500FFE089 /* Sources */,
 				FEF778D92CDB21B500FFE089 /* Frameworks */,
 				FEF778DA2CDB21B500FFE089 /* Resources */,
+				FE6110372CE72DA20045C8D5 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				FEF7796C2CDCB32800FFE089 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				FEF778DD2CDB21B500FFE089 /* Interfaces */,
@@ -385,7 +397,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		FEEBA0902CD9D572007AAAA0 /* ShellScript */ = {
+		FEEBA0902CD9D572007AAAA0 /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -395,6 +407,7 @@
 			);
 			inputPaths = (
 			);
+			name = "Run Script";
 			outputFileListPaths = (
 			);
 			outputPaths = (
