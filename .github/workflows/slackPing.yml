@@ -33,7 +33,8 @@ jobs:
 
           if [[ "${{ github.event_name }}" == "pull_request" ]] && [[ "${{ github.event.action }}" == "review_requested" ]]; then
             MESSAGE="리뷰 요청: 나를 리뷰어로 지정한 PR이 생성되었어요.\n :arrow_right: <${{ github.event.pull_request.html_url }}|PR 링크>"
-
+            NEW_REVIEWER="${{ github.event.requested_reviewer.login }}"
+            echo "'$NEW_REVIEWER'"
             for GITHUB_USER in $(echo '${{ toJson(github.event.pull_request.requested_reviewers) }}' | jq -r '.[] | .login'); do
               SLACK_USER_ID="${USER_SLACK_IDS[$GITHUB_USER]}"
               if [[ -n "$SLACK_USER_ID" ]]; then
