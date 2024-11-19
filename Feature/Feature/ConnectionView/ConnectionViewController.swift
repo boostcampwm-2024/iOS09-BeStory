@@ -62,30 +62,67 @@ final public class ConnectionViewController: UIViewController {
 extension ConnectionViewController {
     func setupBind() {
         let output = viewModel.transform(input.eraseToAnyPublisher())
-        output.sink { [weak self] result in
-            switch result {
-            // Connection Output
+        output
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] result in
+                guard let self else { return }
+                switch result {
+                    // Connection Output
 
-            case .found(let user, let position, let emoji):
-                let position = CGPoint(x: position.0, y: position.1)
-                self?.addUserCircleView(user: user, position: position, emoji: emoji)
-            case .lost(let user, let position):
-                let position = CGPoint(x: position.0, y: position.1)
-                self?.removeUserCircleView(user: user, position: position)
+                case .found(let user, let position, let emoji):
+                    let position = CGPoint(x: position.0, y: position.1)
+                    addUserCircleView(user: user, position: position, emoji: emoji)
+                case .lost(let user, let position):
+                    let position = CGPoint(x: position.0, y: position.1)
+                    removeUserCircleView(user: user, position: position)
 
-            // Invitation Output
+                    // Invitation Output
 
-            case .invited(let user):
-                
-            case .accepted(let userName):
+                case .invited(let invitingUser):
+                    showAlertWithActions(
+                        title: invitingUser.name,
+                        message: "초대를 수락하시겠습니까?",
+                        onConfirm: {
+                            self.input.send(.accept(id: invitingUser.id))
+                            self.closeCurrentAlert()
+                        },
+                        onCancel: {
+                            self.input.send(.reject(id: invitingUser.id))
+                            self.closeCurrentAlert()
+                        }
+                    )
+                case .accepted(let userName):
+                    self.closeCurrentAlert()
 
-            case .rejected(let userName):
+                    showAlertWithActions(
+                        title: "Accepted",
+                        message: "상대방이 초대를 수락했습니다.",
+                        onConfirm: { self.closeCurrentAlert() },
+                        onCancel: { self.closeCurrentAlert() }
+                    )
+                case .rejected(let userName):
+                    self.closeCurrentAlert()
 
-            case .timeout:
+                    showAlertWithActions(
+                        title: "Rejected",
+                        message: "상대방이 초대를 거절했습니다.",
+                        onConfirm: { self.closeCurrentAlert() },
+                        onCancel: { self.closeCurrentAlert() }
+                    )
+                case .timeout:
+                    guard let alert = currentAlert else { return }
+                    alert.dismiss(animated: true)
+                    self.currentAlert = nil
 
+                    showAlertWithActions(
+                        title: "Timeout",
+                        message: "응답 시간이 초과되었습니다.",
+                        onConfirm: { self.closeCurrentAlert() },
+                        onCancel: { self.closeCurrentAlert() }
+                    )
+                }
             }
-        }
-        .store(in: &cancellables)
+            .store(in: &cancellables)
     }
 }
 
@@ -98,8 +135,16 @@ private extension ConnectionViewController {
         showAlertWithActions(
             title: "Invite",
             message: "초대하시겠습니까?",
-            onConfirm: { self.input.send(.invite(id: id)) },
-            onCancel: { }
+            onConfirm: {
+                self.input.send(.invite(id: id))
+                self.closeCurrentAlert()
+
+                self.showAlertWithoutActions(
+                    title: "Waiting",
+                    message: "상대방의 응답을 기다리는 중입니다."
+                )
+            },
+            onCancel: { self.closeCurrentAlert() }
         )
     }
 }
@@ -172,6 +217,12 @@ private extension ConnectionViewController {
         
         present(alert, animated: true)
         currentAlert = alert
+    }
+
+    func closeCurrentAlert() {
+        guard let alert = currentAlert else { return }
+        alert.dismiss(animated: true)
+        currentAlert = nil
     }
 }
 

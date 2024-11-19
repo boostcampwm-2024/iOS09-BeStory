@@ -37,4 +37,3 @@ enum ConnectionViewOutput {
     case rejected(name: String)
     case timeout
 }
-
