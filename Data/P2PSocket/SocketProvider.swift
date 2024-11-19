@@ -8,29 +8,6 @@
 import Combine
 import MultipeerConnectivity
 
-public protocol SocketProvidable {
-	var updatedPeer: PassthroughSubject<SocketPeer, Never> { get }
-	var invitationReceived: PassthroughSubject<SocketPeer, Never> { get }
-	/// Browsing된 Peer를 리턴합니다.
-	func browsingPeers() -> [SocketPeer]
-	/// Session에 연결된 Peer를 리턴합니다.
-	func connectedPeers() -> [SocketPeer]
-	
-	/// 유저를 초대합니다.
-	func invite(peer id: String, timeout: Double)
-	
-	func acceptInvitation()
-	func rejectInvitation()
-	
-	func startReceiveInvitation()
-	func stopReceiveInvitation()
-	
-	func startAdvertising()
-	func stopAdvertising()
-	func startBrowsing()
-	func stopBrowsing()
-}
-
 public final class SocketProvider: NSObject, SocketProvidable {
 	fileprivate enum Constant {
 		static let serviceType = "beStory"
