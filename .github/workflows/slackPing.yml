@@ -68,9 +68,10 @@ jobs:
 
           elif [[ "${{ github.event_name }}" == "pull_request" ]] && [[ "${{ github.event.action }}" == "synchronize" ]]; then
             HAS_REVIEWER_CHANGES=$(echo '${{ toJson(github.event.changes) }}' | jq '.requested_reviewers | length')
+            HAS_REVIEW_STATE_CHANGES=$(echo '${{ toJson(github.event.changes) }}' | jq '.review_state | length')
 
-            if [[ "$HAS_REVIEWER_CHANGES" -gt 0 ]]; then
-              echo "리뷰어 추가와 관련된 synchronize 이벤트입니다."
+            if [[ "$HAS_REVIEWER_CHANGES" -gt 0 || "$HAS_REVIEW_STATE_CHANGES" -gt 0 ]]; then
+              echo "리뷰어 관련 변경 또는 리뷰 상태 변경과 관련된 synchronize 이벤트입니다."
             else
               MESSAGE="커밋 추가: PR에 새로운 커밋이 추가되었어요. 리뷰 요청 사항이 반영되었는지 확인해보세요.\n :arrow_right: <${{ github.event.pull_request.html_url }}|PR 링크>"
               for GITHUB_USER in $(echo '${{ toJson(github.event.pull_request.requested_reviewers) }}' | jq -r '.[] | .login'); do
