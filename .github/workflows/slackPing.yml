@@ -34,17 +34,25 @@ jobs:
           if [[ "${{ github.event_name }}" == "pull_request" ]] && [[ "${{ github.event.action }}" == "review_requested" ]]; then
             MESSAGE="리뷰 요청: 나를 리뷰어로 지정한 PR이 생성되었어요.\n :arrow_right: <${{ github.event.pull_request.html_url }}|PR 링크>"
             NEW_REVIEWER="${{ github.event.requested_reviewer.login }}"
-            echo "'$NEW_REVIEWER'"
-            for GITHUB_USER in $(echo '${{ toJson(github.event.pull_request.requested_reviewers) }}' | jq -r '.[] | .login'); do
-              SLACK_USER_ID="${USER_SLACK_IDS[$GITHUB_USER]}"
-              if [[ -n "$SLACK_USER_ID" ]]; then
-                curl -X POST -H "Authorization: Bearer $SLACK_TOKEN" -H "Content-Type: application/json" \
-                -d "{\"channel\":\"$SLACK_USER_ID\", \"text\":\"$MESSAGE\"}" \
-                https://slack.com/api/chat.postMessage
-              else
-                echo "'$GITHUB_USER'에 해당하는 슬랙 ID를 찾지 못했습니다."
-              fi
-            done
+            SLACK_USER_ID="${USER_SLACK_IDS[$NEW_REVIEWER]}"
+            if [[ -n "$SLACK_USER_ID" ]]; then
+              curl -X POST -H "Authorization: Bearer $SLACK_TOKEN" -H "Content-Type: application/json" \
+              -d "{\"channel\":\"$SLACK_USER_ID\", \"text\":\"$MESSAGE\"}" \
+              https://slack.com/api/chat.postMessage
+            else
+              echo "'$GITHUB_USER'에 해당하는 슬랙 ID를 찾지 못했습니다."
+            fi
+              
+            # for GITHUB_USER in $(echo '${{ toJson(github.event.pull_request.requested_reviewers) }}' | jq -r '.[] | .login'); do
+            #   SLACK_USER_ID="${USER_SLACK_IDS[$GITHUB_USER]}"
+            #   if [[ -n "$SLACK_USER_ID" ]]; then
+            #     curl -X POST -H "Authorization: Bearer $SLACK_TOKEN" -H "Content-Type: application/json" \
+            #     -d "{\"channel\":\"$SLACK_USER_ID\", \"text\":\"$MESSAGE\"}" \
+            #     https://slack.com/api/chat.postMessage
+            #   else
+            #     echo "'$GITHUB_USER'에 해당하는 슬랙 ID를 찾지 못했습니다."
+            #   fi
+            # done
 
           elif [[ "${{ github.event_name }}" == "pull_request_review" ]] && [[ "${{ github.event.action }}" == "submitted" ]]; then
             GITHUB_USER="${{ github.event.pull_request.user.login }}"
