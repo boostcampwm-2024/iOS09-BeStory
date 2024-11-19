@@ -138,14 +138,10 @@ extension SocketProvider: MCSessionDelegate {
 			case .connected:
 				MCPeerIDStorage.shared.update(state: .connected, id: peerID)
 			case .notConnected: 
-				
 				MCPeerIDStorage.shared.update(state: .disconnected, id: peerID)
-				
-				
 			default: break
 		}
 		updatedPeer.send(socketPeer)
-		
 	}
 	
 	public func session(
