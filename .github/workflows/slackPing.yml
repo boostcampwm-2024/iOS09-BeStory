@@ -70,15 +70,21 @@ jobs:
             fi
 
           elif [[ "${{ github.event_name }}" == "pull_request" ]] && [[ "${{ github.event.action }}" == "synchronize" ]]; then
-            MESSAGE="커밋 추가: PR에 새로운 커밋이 추가되었어요. 리뷰 요청 사항이 반영되었는지 확인해보세요.\n :arrow_right: <${{ github.event.pull_request.html_url }}|PR 링크>"
-            for GITHUB_USER in $(echo '${{ toJson(github.event.pull_request.requested_reviewers) }}' | jq -r '.[] | .login'); do
-              SLACK_USER_ID="${USER_SLACK_IDS[$GITHUB_USER]}"
-              if [[ -n "$SLACK_USER_ID" ]]; then
-                curl -X POST -H "Authorization: Bearer $SLACK_TOKEN" -H "Content-Type: application/json" \
-                -d "{\"channel\":\"$SLACK_USER_ID\", \"text\":\"$MESSAGE\"}" \
-                https://slack.com/api/chat.postMessage
-              else
-                echo "'$GITHUB_USER'에 해당하는 슬랙 ID를 찾지 못했습니다."
-              fi
-            done
+            BEFORE_COMMIT="${{ github.event.before }}"
+            AFTER_COMMIT="${{ github.event.after }}"
+            COMMIT_DIFF=$(git log --oneline "$BEFORE_COMMIT..$AFTER_COMMIT")
+
+            if [[ -n "$COMMIT_DIFF" ]]; then
+              MESSAGE="커밋 추가: PR에 새로운 커밋이 추가되었어요. 리뷰 요청 사항이 반영되었는지 확인해보세요.\n :arrow_right: <${{ github.event.pull_request.html_url }}|PR 링크>"
+              for GITHUB_USER in $(echo '${{ toJson(github.event.pull_request.requested_reviewers) }}' | jq -r '.[] | .login'); do
+                SLACK_USER_ID="${USER_SLACK_IDS[$GITHUB_USER]}"
+                if [[ -n "$SLACK_USER_ID" ]]; then
+                  curl -X POST -H "Authorization: Bearer $SLACK_TOKEN" -H "Content-Type: application/json" \
+                  -d "{\"channel\":\"$SLACK_USER_ID\", \"text\":\"$MESSAGE\"}" \
+                  https://slack.com/api/chat.postMessage
+                else
+                  echo "'$GITHUB_USER'에 해당하는 슬랙 ID를 찾지 못했습니다."
+                fi
+              done
+            fi
           fi
