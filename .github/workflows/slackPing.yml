@@ -25,12 +25,9 @@ jobs:
         run: |
           declare -A USER_SLACK_IDS
           USER_SLACK_IDS["LURKS02"]="${{ secrets.SLACK_LURKS02 }}"
-          # USER_SLACK_IDS["051198Hz"]="${{ secrets.SLACK_051198HZ }}"
-          USER_SLACK_IDS["051198Hz"]="${{ secrets.SLACK_LURKS02 }}"
-          # USER_SLACK_IDS["around-forest"]="${{ secrets.SLACK_AROUNDFOREST }}"
-          USER_SLACK_IDS["around-forest"]="${{ secrets.SLACK_LURKS02 }}"
-          # USER_SLACK_IDS["jungseokyoung-cloud"]="${{ secrets.SLACK_JUNGSEOKYOUNGCLOUD }}"
-          USER_SLACK_IDS["jungseokyoung-cloud"]="${{ secrets.SLACK_LURKS02 }}"
+          USER_SLACK_IDS["051198Hz"]="${{ secrets.SLACK_051198HZ }}"
+          USER_SLACK_IDS["around-forest"]="${{ secrets.SLACK_AROUNDFOREST }}"
+          USER_SLACK_IDS["jungseokyoung-cloud"]="${{ secrets.SLACK_JUNGSEOKYOUNGCLOUD }}"
         
           MESSAGE=""
 
