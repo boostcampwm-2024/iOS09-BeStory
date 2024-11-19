@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D971E5892CE8FAD10006900E /* Interfaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D971E5882CE8FAD10006900E /* Interfaces.framework */; };
+		D971E58A2CE8FAD10006900E /* Interfaces.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D971E5882CE8FAD10006900E /* Interfaces.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FE0334DA2CD9DA1100AA58C9 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = FE0334D92CD9DA1100AA58C9 /* SnapKit */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +29,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				D971E58A2CE8FAD10006900E /* Interfaces.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -34,13 +37,56 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D971E5882CE8FAD10006900E /* Interfaces.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Interfaces.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4E39BAD2CDBCA04001E08D0 /* libDomain.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libDomain.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE0334EE2CD9DE4600AA58C9 /* libDomain.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libDomain.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FED968172CD908B000CD445C /* libFeature.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libFeature.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		D9CF2EF62CEC2E3B00B1A92D /* Exceptions for "Feature" folder in "Feature" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"ConnectionView/CGPoint+Extension.swift",
+				ConnectionView/ConnectionViewController.swift,
+				ConnectionView/View/CustomCircleView.swift,
+				ConnectionView/ViewModel/ConnectionViewInputOutput.swift,
+				ConnectionView/ViewModel/ConnectionViewModel.swift,
+				GroupInfoView/GroupInfoViewController.swift,
+				GroupInfoView/InvitedUser.swift,
+				GroupInfoView/View/ParticipantCountView.swift,
+				GroupInfoView/View/ParticipantInfoView.swift,
+				GroupInfoView/ViewModel/GroupInfoViewModel.swift,
+				"Helper/AVAsset+Metadata.swift",
+				"Helper/AVAsset+Thumbnail.swift",
+				Helper/EventPublisher.swift,
+				Helper/ReadOnlyPublisher.swift,
+				"Helper/UIColor+HexInitialization.swift",
+				Helper/VideoManager.swift,
+				VideoDetailView/VideoDetailViewController.swift,
+				VideoListView/VideoListViewController.swift,
+				VideoListView/View/CollectionView/VideoListCollectionViewCell.swift,
+				VideoListView/View/CollectionView/VideoListDataSource.swift,
+				VideoListView/View/CollectionView/VideoListItem.swift,
+				VideoListView/View/CollectionView/VideoListSection.swift,
+				VideoListView/View/IconButton.swift,
+				VideoListView/View/VideoListHeaderView.swift,
+				VideoListView/ViewModel/MockVideoListViewModel.swift,
+				VideoListView/ViewModel/MultipeerVideoListViewModel.swift,
+				VideoListView/ViewModel/VideoListViewInput.swift,
+				VideoListView/ViewModel/VideoListViewModel.swift,
+				VideoListView/ViewModel/VideoListViewOutput.swift,
+			);
+			target = FED968162CD908B000CD445C /* Feature */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FE6EF3F12CD8B71E005DC39D /* Feature */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D9CF2EF62CEC2E3B00B1A92D /* Exceptions for "Feature" folder in "Feature" target */,
+			);
 			path = Feature;
 			sourceTree = "<group>";
 		};
@@ -51,6 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D971E5892CE8FAD10006900E /* Interfaces.framework in Frameworks */,
 				FE0334DA2CD9DA1100AA58C9 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -78,6 +125,8 @@
 		FE6EF4272CD8B843005DC39D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D971E5882CE8FAD10006900E /* Interfaces.framework */,
+				E4E39BAD2CDBCA04001E08D0 /* libDomain.a */,
 				FE0334EE2CD9DE4600AA58C9 /* libDomain.a */,
 			);
 			name = Frameworks;
