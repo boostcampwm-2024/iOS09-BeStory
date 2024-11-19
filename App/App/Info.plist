@@ -6,7 +6,7 @@
 	<string>BeStory</string>
 	<key>NSBonjourServices</key>
 	<array>
-		<string>_beStory._tcp</string>
+		<string>_bestory._tcp</string>
 	</array>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>

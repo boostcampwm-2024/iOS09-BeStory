@@ -6,36 +6,26 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXContainerItemProxy section */
-		853CEB7B2CECAB2000936AD3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 853CEB132CECA30100936AD3 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 853CEB622CECA73E00936AD3;
-			remoteInfo = Utilities;
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		853CEB192CECA30100936AD3 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "include/$(PRODUCT_NAME)";
-			dstSubfolderSpec = 16;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-		853CEB1B2CECA30100936AD3 /* libExtensions.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libExtensions.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		853CEB632CECA73E00936AD3 /* Utilities.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Utilities.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		853CEB632CECA73E00936AD3 /* Core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		853CEDD72CECDCC200936AD3 /* Exceptions for "Extentions" folder in "Core" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"AVAsset+Metadata.swift",
+			);
+			target = 853CEB622CECA73E00936AD3 /* Core */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		853CEB1D2CECA30100936AD3 /* Extentions */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				853CEDD72CECDCC200936AD3 /* Exceptions for "Extentions" folder in "Core" target */,
+			);
 			path = Extentions;
 			sourceTree = "<group>";
 		};
@@ -47,13 +37,6 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		853CEB182CECA30100936AD3 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		853CEB602CECA73E00936AD3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -76,8 +59,7 @@
 		853CEB1C2CECA30100936AD3 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				853CEB1B2CECA30100936AD3 /* libExtensions.a */,
-				853CEB632CECA73E00936AD3 /* Utilities.framework */,
+				853CEB632CECA73E00936AD3 /* Core.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,33 +77,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		853CEB1A2CECA30100936AD3 /* Extensions */ = {
+		853CEB622CECA73E00936AD3 /* Core */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 853CEB222CECA30100936AD3 /* Build configuration list for PBXNativeTarget "Extensions" */;
-			buildPhases = (
-				853CEB6D2CECA92200936AD3 /* ShellScript */,
-				853CEB172CECA30100936AD3 /* Sources */,
-				853CEB182CECA30100936AD3 /* Frameworks */,
-				853CEB192CECA30100936AD3 /* CopyFiles */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				853CEB7C2CECAB2000936AD3 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				853CEB1D2CECA30100936AD3 /* Extentions */,
-			);
-			name = Extensions;
-			packageProductDependencies = (
-			);
-			productName = Core;
-			productReference = 853CEB1B2CECA30100936AD3 /* libExtensions.a */;
-			productType = "com.apple.product-type.library.static";
-		};
-		853CEB622CECA73E00936AD3 /* Utilities */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 853CEB682CECA73E00936AD3 /* Build configuration list for PBXNativeTarget "Utilities" */;
+			buildConfigurationList = 853CEB682CECA73E00936AD3 /* Build configuration list for PBXNativeTarget "Core" */;
 			buildPhases = (
 				853CEB5E2CECA73E00936AD3 /* Headers */,
 				853CEB6E2CECA93B00936AD3 /* ShellScript */,
@@ -136,11 +94,11 @@
 			fileSystemSynchronizedGroups = (
 				853CEB642CECA73E00936AD3 /* Utilities */,
 			);
-			name = Utilities;
+			name = Core;
 			packageProductDependencies = (
 			);
 			productName = Utilities;
-			productReference = 853CEB632CECA73E00936AD3 /* Utilities.framework */;
+			productReference = 853CEB632CECA73E00936AD3 /* Core.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -153,10 +111,6 @@
 				LastSwiftUpdateCheck = 1610;
 				LastUpgradeCheck = 1610;
 				TargetAttributes = {
-					853CEB1A2CECA30100936AD3 = {
-						CreatedOnToolsVersion = 16.1;
-						LastSwiftMigration = 1610;
-					};
 					853CEB622CECA73E00936AD3 = {
 						CreatedOnToolsVersion = 16.1;
 					};
@@ -176,8 +130,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				853CEB1A2CECA30100936AD3 /* Extensions */,
-				853CEB622CECA73E00936AD3 /* Utilities */,
+				853CEB622CECA73E00936AD3 /* Core */,
 			);
 		};
 /* End PBXProject section */
@@ -193,24 +146,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		853CEB6D2CECA92200936AD3 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "ROOT_DIR=\"${PROJECT_DIR}/../\"\nCONFIGPATH=\"/Users/jeongseog-yeong/Github/BeStory/.swiftlint.yml\"\n\n\"${ROOT_DIR}swiftlint\" --config \"${ROOT_DIR}.swiftlint.yml\"\n";
-		};
 		853CEB6E2CECA93B00936AD3 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -232,13 +167,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		853CEB172CECA30100936AD3 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		853CEB5F2CECA73E00936AD3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -247,14 +175,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		853CEB7C2CECAB2000936AD3 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 853CEB622CECA73E00936AD3 /* Utilities */;
-			targetProxy = 853CEB7B2CECAB2000936AD3 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		853CEB202CECA30100936AD3 /* Debug */ = {
@@ -382,47 +302,6 @@
 			};
 			name = Release;
 		};
-		853CEB232CECA30100936AD3 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = H3XT4B3TXU;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 16;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		853CEB242CECA30100936AD3 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = H3XT4B3TXU;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 16;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 		853CEB692CECA73E00936AD3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -509,16 +388,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		853CEB222CECA30100936AD3 /* Build configuration list for PBXNativeTarget "Extensions" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				853CEB232CECA30100936AD3 /* Debug */,
-				853CEB242CECA30100936AD3 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		853CEB682CECA73E00936AD3 /* Build configuration list for PBXNativeTarget "Utilities" */ = {
+		853CEB682CECA73E00936AD3 /* Build configuration list for PBXNativeTarget "Core" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				853CEB692CECA73E00936AD3 /* Debug */,
