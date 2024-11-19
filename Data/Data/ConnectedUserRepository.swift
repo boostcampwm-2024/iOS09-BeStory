@@ -45,8 +45,8 @@ private extension ConnectedUserRepository {
             return .init(id: peer.id, state: .connected, name: peer.name)
         case .disconnected:
             return .init(id: peer.id, state: .disconnected, name: peer.name)
-        case .connecting:
-            return .init(id: peer.id, state: .connecting, name: peer.name)
+		case .pending:
+			return .init(id: peer.id, state: .pending, name: peer.name)
         default:
             return nil
         }
