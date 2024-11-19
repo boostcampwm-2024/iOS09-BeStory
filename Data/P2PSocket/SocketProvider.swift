@@ -16,10 +16,10 @@ public final class SocketProvider: NSObject, SocketProvidable {
 	// MARK: - Properties
 	public let updatedPeer = PassthroughSubject<SocketPeer, Never>()
 	public let invitationReceived = PassthroughSubject<SocketPeer, Never>()
-
+	
 	private var isAllowedInvitation: Bool = true
 	private var invitationHandler: ((Bool, MCSession?) -> Void)?
-
+	
 	private let peerID = MCPeerID(displayName: UIDevice.current.name)
 	private let browser: MCNearbyServiceBrowser
 	private let advertiser: MCNearbyServiceAdvertiser
@@ -89,7 +89,7 @@ public extension SocketProvider {
 	
 	func invite(peer id: String, timeout: Double) {
 		guard let peer = MCPeerIDStorage.shared.peerIDByIdentifier[id] else { return }
-
+		
 		browser.invitePeer(
 			peer.id,
 			to: session,
@@ -127,19 +127,25 @@ extension SocketProvider: MCSessionDelegate {
 		didChange state: MCSessionState
 	) {
 		defer {
-			if let socketPeer = mapToSocketPeer(peerID) { updatedPeer.send(socketPeer)
+			if state == .notConnected {
+				MCPeerIDStorage.shared.remove(id: peerID)
 			}
-		} 
+		}
+		
+		guard let socketPeer = mapToSocketPeer(peerID) else { return }
 		
 		switch state {
 			case .connected:
 				MCPeerIDStorage.shared.update(state: .connected, id: peerID)
-			case .notConnected:
+			case .notConnected: 
+				
 				MCPeerIDStorage.shared.update(state: .disconnected, id: peerID)
-			case .connecting:
-				MCPeerIDStorage.shared.update(state: .connecting, id: peerID)
-			@unknown default: break
+				
+				
+			default: break
 		}
+		updatedPeer.send(socketPeer)
+		
 	}
 	
 	public func session(
@@ -178,18 +184,30 @@ extension SocketProvider: MCNearbyServiceBrowserDelegate {
 		foundPeer peerID: MCPeerID,
 		withDiscoveryInfo info: [String: String]?
 	) {
-		MCPeerIDStorage.shared.append(id: peerID, state: .found)
+		if let peer = MCPeerIDStorage.shared.findPeer(for: peerID), peer.value.state == .pending  {
+			MCPeerIDStorage.shared.update(state: .connected, id: peerID)
+		} else {
+			MCPeerIDStorage.shared.append(id: peerID, state: .found)
+		}
 		
 		guard let peer = mapToSocketPeer(peerID) else { return }
 		updatedPeer.send(peer)
 	}
 	
 	public func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
-		defer { MCPeerIDStorage.shared.remove(id: peerID) }
-		
 		guard var peer = mapToSocketPeer(peerID) else { return }
-		peer.state = .lost
+		
+		if peer.state == .connected {
+			MCPeerIDStorage.shared.update(state: .pending, id: peerID)
+		} else if peer.state == .found {
+			peer.state = .lost
+		}
+		
 		updatedPeer.send(peer)
+		
+		if peer.state == .found {
+			MCPeerIDStorage.shared.remove(id: peerID)
+		}
 	}
 }
 
