@@ -13,5 +13,5 @@ public protocol ConnectedUserUseCaseInterface {
 
     init(repository: ConnectedUserRepositoryInterface)
 
-    func fetchConnectedUser() -> [ConnectedUser]
+    func fetchConnectedUsers() -> [ConnectedUser]
 }

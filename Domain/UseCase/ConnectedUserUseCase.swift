@@ -24,7 +24,7 @@ public final class ConnectedUserUseCase: ConnectedUserUseCaseInterface {
 
 // MARK: - Public Methods
 public extension ConnectedUserUseCase {
-	func fetchConnectedUser() -> [ConnectedUser] {
+	func fetchConnectedUsers() -> [ConnectedUser] {
 		let connectedUsers = repository.fetchConnectedUsers()
 		connectedUsersID = connectedUsers.map { $0.id }
 		return connectedUsers

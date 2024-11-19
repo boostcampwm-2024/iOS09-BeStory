@@ -12,6 +12,7 @@ public struct VideoListItem: Hashable {
     let title: String
     let authorTitle: String
     let thumbnailImage: Data
+    let videoURL: URL
     let duration: String
     let date: String
     

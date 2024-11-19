@@ -6,8 +6,9 @@
 //
 
 import Combine
+import Foundation
 
-public protocol SocketProvidable: SocketInvitable, SocketBwrosable, SocketAdvertiseable { }
+public protocol SocketProvidable: SocketInvitable, SocketBwrosable, SocketAdvertiseable, SocketResourceSendable { }
 
 public protocol SocketAdvertiseable {
 	func startAdvertising()
@@ -37,4 +38,14 @@ public protocol SocketInvitable {
 	
 	func startReceiveInvitation()
 	func stopReceiveInvitation()
+}
+
+public protocol SocketResourceSendable {
+	var resourceShared: PassthroughSubject<SharedResource, Never> { get }
+	
+	/// 연결된 모든 Peer들에게 리소스를 전송합니다.
+	@discardableResult
+	func shareResource(url: URL, resourceName: String) async throws -> SharedResource
+	/// Peer들과 공유한 모든 리소스를 리턴합니다.
+	func sharedAllResources() -> [SharedResource]
 }
