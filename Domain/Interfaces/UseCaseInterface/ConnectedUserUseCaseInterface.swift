@@ -9,7 +9,7 @@ import Combine
 import Entity
 
 public protocol ConnectedUserUseCaseInterface {
-    var connectedUser: PassthroughSubject<ConnectedUser, Never> { get }
+    var updatedConnectedUser: PassthroughSubject<ConnectedUser, Never> { get }
 
     init(repository: ConnectedUserRepositoryInterface)
 
