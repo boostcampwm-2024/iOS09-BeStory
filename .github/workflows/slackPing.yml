@@ -70,11 +70,11 @@ jobs:
             fi
 
           elif [[ "${{ github.event_name }}" == "pull_request" ]] && [[ "${{ github.event.action }}" == "synchronize" ]]; then
-            BEFORE_COMMIT="${{ github.event.before }}"
-            AFTER_COMMIT="${{ github.event.after }}"
-            COMMIT_DIFF=$(git log --oneline "$BEFORE_COMMIT..$AFTER_COMMIT")
+            HAS_REVIEWER_CHANGES=$(echo '${{ toJson(github.event.changes) }]' | jq '.requested_reviewers | length')
 
-            if [[ -n "$COMMIT_DIFF" ]]; then
+            if [[ "$HAS_REVIEWER_CHANGES" -gt 0 ]]; then
+              echo "리뷰어 추가와 관련된 synchronize 이벤트입니다."
+            else
               MESSAGE="커밋 추가: PR에 새로운 커밋이 추가되었어요. 리뷰 요청 사항이 반영되었는지 확인해보세요.\n :arrow_right: <${{ github.event.pull_request.html_url }}|PR 링크>"
               for GITHUB_USER in $(echo '${{ toJson(github.event.pull_request.requested_reviewers) }}' | jq -r '.[] | .login'); do
                 SLACK_USER_ID="${USER_SLACK_IDS[$GITHUB_USER]}"
