@@ -23,4 +23,7 @@ actor Counter: NSObject {
         guard currentNumber == targetNumber else { return }
         completPublisher.send(completion: .finished)
     }
+    func didReachedTargetNumber() -> Bool {
+        return currentNumber == targetNumber
+    }
 }

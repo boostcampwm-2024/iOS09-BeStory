@@ -163,38 +163,31 @@ public extension SocketProvider {
             let recieverCount = recievers.count
             let counter = Counter(targetCount: recieverCount)
             
+            let sharedResource = SharedResource(
+                localUrl: localUrl,
+                name: resourceName,
+                uuid: uuid,
+                sender: session.myPeerID.displayName
+            )
+            
+            let handler = continuedCountableResouceHandler(
+                counter: counter,
+                sharedResource: sharedResource,
+                continuation: resourceUrlContinuation
+            )
+            
             recievers.forEach { peer in
                 let progress = session.sendResource(
                     at: localUrl,
                     withName: nameWithUUID,
                     toPeer: peer,
-                    withCompletionHandler:
-                        {
-                            [weak self] error in
-                            let task = Task {
-                                if let error {
-                                    return resourceUrlContinuation.resume(throwing: error)
-                                }
-                                await counter.increaseNumber()
-                                if await counter.currentNumber == recieverCount {
-                                    let sharedResource = SharedResource(
-                                        localUrl: localUrl,
-                                        name: resourceName,
-                                        uuid: uuid,
-                                        sender: peer.displayName
-                                    )
-                                    self?.sharedResources.append(sharedResource)
-                                    self?.resourceShared.send(sharedResource)
-                                    return resourceUrlContinuation.resume(returning: sharedResource)
-                                }
-                            }
-                            self?.sharingTasks.append(task)
-                        })
+                    withCompletionHandler: handler
+                )
                 
-                if progress == nil {
-                    let error = ShareResourceError.peerFailedDownload(id: peerID.displayName)
-                    resourceUrlContinuation.resume(throwing: error)
-                }
+                guard progress == nil else { return }
+                
+                let error = ShareResourceError.peerFailedDownload(id: peerID.displayName)
+                resourceUrlContinuation.resume(throwing: error)
             }
         }
     }
@@ -324,4 +317,27 @@ private extension SocketProvider {
 		
 		return .init(id: id, name: name, state: state)
 	}
+    
+    func continuedCountableResouceHandler(
+        counter: Counter,
+        sharedResource resource: SharedResource,
+        continuation: CheckedContinuation<SharedResource, any Error>
+    ) -> ((any Error)?) -> Void {
+        return {
+            [weak self] error in
+            let task = Task {
+                if let error {
+                    return continuation.resume(throwing: error)
+                }
+                await counter.increaseNumber()
+                if await counter.didReachedTargetNumber() {
+                    self?.sharedResources.append(resource)
+                    self?.resourceShared.send(resource)
+                    
+                    return continuation.resume(returning: resource)
+                }
+            }
+            self?.sharingTasks.append(task)
+        }
+    }
 }
