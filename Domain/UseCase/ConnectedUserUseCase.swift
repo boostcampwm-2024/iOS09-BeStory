@@ -11,7 +11,7 @@ import Entity
 
 public final class ConnectedUserUseCase: ConnectedUserUseCaseInterface {
 	private var cancellables: Set<AnyCancellable> = []
-	private var connectedUsers: [ConnectedUser] = []
+	private var connectedUsersID: [String] = []
 	private let repository: ConnectedUserRepositoryInterface
 	
 	public let updatedConnectedUser = PassthroughSubject<ConnectedUser, Never>()
@@ -25,7 +25,8 @@ public final class ConnectedUserUseCase: ConnectedUserUseCaseInterface {
 // MARK: - Public Methods
 public extension ConnectedUserUseCase {
 	func fetchConnectedUser() -> [ConnectedUser] {
-		self.connectedUsers = repository.fetchConnectedUsers()
+		let connectedUsers = repository.fetchConnectedUsers()
+		connectedUsersID = connectedUsers.map { $0.id }
 		return connectedUsers
 	}
 }
@@ -41,13 +42,13 @@ private extension ConnectedUserUseCase {
 	func receivedUpdatedState(user: ConnectedUser) {
 		switch user.state {
 			case .connected:
-				connectedUsers.append(user)
+				connectedUsersID.append(user.id)
 				updatedConnectedUser.send(user)
 			case .pending:
 				updatedConnectedUser.send(user)
 			case .disconnected:
-				guard let index = connectedUsers.firstIndex(of: user) else { return }
-				connectedUsers.remove(at: index)
+				guard let index = connectedUsersID.firstIndex(where: { $0 == user.id }) else { return }
+				connectedUsersID.remove(at: index)
 				updatedConnectedUser.send(user)
 			default: break
 		}
