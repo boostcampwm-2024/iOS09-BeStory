@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		853CEC052CECB14900936AD3 /* libExtensions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 853CEC042CECB14900936AD3 /* libExtensions.a */; };
+		853CEC072CECB14900936AD3 /* Utilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853CEC062CECB14900936AD3 /* Utilities.framework */; };
 		D971E5892CE8FAD10006900E /* Interfaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D971E5882CE8FAD10006900E /* Interfaces.framework */; };
 		D971E58A2CE8FAD10006900E /* Interfaces.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D971E5882CE8FAD10006900E /* Interfaces.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FE0334DA2CD9DA1100AA58C9 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = FE0334D92CD9DA1100AA58C9 /* SnapKit */; };
@@ -37,6 +39,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		853CEC042CECB14900936AD3 /* libExtensions.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libExtensions.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		853CEC062CECB14900936AD3 /* Utilities.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Utilities.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D971E5882CE8FAD10006900E /* Interfaces.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Interfaces.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4E39BAD2CDBCA04001E08D0 /* libDomain.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libDomain.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE0334EE2CD9DE4600AA58C9 /* libDomain.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libDomain.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -56,12 +60,9 @@
 				GroupInfoView/View/ParticipantCountView.swift,
 				GroupInfoView/View/ParticipantInfoView.swift,
 				GroupInfoView/ViewModel/GroupInfoViewModel.swift,
-				"Helper/AVAsset+Metadata.swift",
 				"Helper/AVAsset+Thumbnail.swift",
 				Helper/EventPublisher.swift,
-				Helper/ReadOnlyPublisher.swift,
 				"Helper/UIColor+HexInitialization.swift",
-				Helper/VideoManager.swift,
 				VideoDetailView/VideoDetailViewController.swift,
 				VideoListView/VideoListViewController.swift,
 				VideoListView/View/CollectionView/VideoListCollectionViewCell.swift,
@@ -96,6 +97,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				853CEC052CECB14900936AD3 /* libExtensions.a in Frameworks */,
+				853CEC072CECB14900936AD3 /* Utilities.framework in Frameworks */,
 				D971E5892CE8FAD10006900E /* Interfaces.framework in Frameworks */,
 				FE0334DA2CD9DA1100AA58C9 /* SnapKit in Frameworks */,
 			);
@@ -124,6 +127,8 @@
 		FE6EF4272CD8B843005DC39D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				853CEC042CECB14900936AD3 /* libExtensions.a */,
+				853CEC062CECB14900936AD3 /* Utilities.framework */,
 				D971E5882CE8FAD10006900E /* Interfaces.framework */,
 				E4E39BAD2CDBCA04001E08D0 /* libDomain.a */,
 				FE0334EE2CD9DE4600AA58C9 /* libDomain.a */,

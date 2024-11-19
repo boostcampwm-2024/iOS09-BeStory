@@ -7,7 +7,7 @@
 
 import AVFoundation
 
-extension AVAsset {
+public extension AVAsset {
     var metadata: [AVMetadataItem] {
         get async {
             (try? await self.load(.commonMetadata)) ?? []

@@ -7,6 +7,7 @@
 
 import AVFoundation
 import Combine
+import Extensions
 
 public final class MultipeerVideoListViewModel {
     private var videoItems: [VideoListItem] = []
