@@ -35,11 +35,11 @@ public extension BrowsingUserRepository {
 		socketProvider.invite(peer: id, timeout: timeout)
 	}
 	
-	func acceptInvitation(from id: String) {
+	func acceptInvitation() {
 		socketProvider.acceptInvitation()
 	}
 	
-	func rejectInvitation(from id: String) {
+	func rejectInvitation() {
 		socketProvider.rejectInvitation()
 	}
 	

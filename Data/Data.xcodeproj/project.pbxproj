@@ -70,7 +70,6 @@
 			membershipExceptions = (
 				BrowsingUserRepository.swift,
 				ConnectedUserRepository.swift,
-				SharingVideoRepository.swift,
 			);
 			target = FED968292CD9094300CD445C /* Data */;
 		};
@@ -498,7 +497,7 @@
 				MARKETING_VERSION = 1.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
-				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.bestory.SocketProvider;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.bestory.p2psocket;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -542,7 +541,7 @@
 				MARKETING_VERSION = 1.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
-				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.bestory.SocketProvider;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.bestory.p2psocket;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

@@ -10,31 +10,47 @@ import Interfaces
 import Entity
 
 public final class ConnectedUserUseCase: ConnectedUserUseCaseInterface {
-    private var cancellables: Set<AnyCancellable> = []
-    private let repository: ConnectedUserRepositoryInterface
-
-    public let connectedUser = PassthroughSubject<ConnectedUser, Never>()
-
-    public init(repository: ConnectedUserRepositoryInterface) {
-        self.repository = repository
-        bind()
-    }
+	private var cancellables: Set<AnyCancellable> = []
+	private var connectedUsersID: [String] = []
+	private let repository: ConnectedUserRepositoryInterface
+	
+	public let updatedConnectedUser = PassthroughSubject<ConnectedUser, Never>()
+	
+	public init(repository: ConnectedUserRepositoryInterface) {
+		self.repository = repository
+		bind()
+	}
 }
 
 // MARK: - Public Methods
-
 public extension ConnectedUserUseCase {
-    func fetchConnectedUsers() -> [ConnectedUser] {
-        return repository.fetchConnectedUsers()
-    }
+	func fetchConnectedUsers() -> [ConnectedUser] {
+		let connectedUsers = repository.fetchConnectedUsers()
+		connectedUsersID = connectedUsers.map { $0.id }
+		return connectedUsers
+	}
 }
 
 // MARK: - Private Methods
-
 private extension ConnectedUserUseCase {
-    func bind() {
-        repository.updatedConnectedUser
-            .subscribe(connectedUser)
-            .store(in: &cancellables)
-    }
+	func bind() {
+		repository.updatedConnectedUser
+			.subscribe(updatedConnectedUser)
+			.store(in: &cancellables)
+	}
+	
+	func receivedUpdatedState(user: ConnectedUser) {
+		switch user.state {
+			case .connected:
+				connectedUsersID.append(user.id)
+				updatedConnectedUser.send(user)
+			case .pending:
+				updatedConnectedUser.send(user)
+			case .disconnected:
+				guard let index = connectedUsersID.firstIndex(where: { $0 == user.id }) else { return }
+				connectedUsersID.remove(at: index)
+				updatedConnectedUser.send(user)
+			default: break
+		}
+	}
 }

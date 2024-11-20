@@ -21,10 +21,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         registerDependency()
 
 		let window = UIWindow(windowScene: windowScene)
-        let connectionViewController = ConnectionViewController(
-            viewModel: DIContainer.shared.resolve(type: ConnectionViewModel.self)
-        )
-        window.rootViewController = connectionViewController
+
+    let connectionViewController = ConnectionViewController(
+        viewModel: DIContainer.shared.resolve(type: ConnectionViewModel.self)
+    )
+    window.rootViewController = connectionViewController
+
 		self.window = window
 		window.makeKeyAndVisible()
 	}

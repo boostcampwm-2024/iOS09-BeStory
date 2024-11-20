@@ -50,7 +50,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		D9CF2EF62CEC2E3B00B1A92D /* Exceptions for "Feature" folder in "Feature" target */ = {
+		FE8208012CED782500307694 /* Exceptions for "Feature" folder in "Feature" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				ConnectionView/ConnectionViewController.swift,
@@ -87,7 +87,7 @@
 		FE6EF3F12CD8B71E005DC39D /* Feature */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				D9CF2EF62CEC2E3B00B1A92D /* Exceptions for "Feature" folder in "Feature" target */,
+				FE8208012CED782500307694 /* Exceptions for "Feature" folder in "Feature" target */,
 			);
 			path = Feature;
 			sourceTree = "<group>";

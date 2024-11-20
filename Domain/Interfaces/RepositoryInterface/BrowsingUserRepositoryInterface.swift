@@ -15,8 +15,8 @@ public protocol BrowsingUserRepositoryInterface {
 	
 	func fetchBrowsingUsers() -> [BrowsedUser]
 	func inviteUser(with id: String, timeout: Double)
-	func acceptInvitation(from id: String)
-	func rejectInvitation(from id: String)
+	func acceptInvitation()
+	func rejectInvitation()
 	func startReceiveInvitation()
 	func stopReceiveInvitation()
 }
