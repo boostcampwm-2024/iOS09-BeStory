@@ -22,6 +22,6 @@ public protocol BrowsingUserUseCaseInterface {
 	
 	func fetchBrowsedUsers() -> [BrowsedUser]
 	func inviteUser(with id: String)
-	func acceptInvitation(from id: String)
-	func rejectInvitation(from id: String)
+	func acceptInvitation()
+	func rejectInvitation()
 }

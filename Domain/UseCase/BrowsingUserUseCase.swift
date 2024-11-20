@@ -43,15 +43,15 @@ public extension BrowsingUserUseCase {
 		repository.inviteUser(with: id, timeout: invitationTimeout)
 	}
 	
-	func acceptInvitation(from id: String) {
+	func acceptInvitation() {
 		repository.startReceiveInvitation()
-		repository.acceptInvitation(from: id)
+		repository.acceptInvitation()
 		stopInvitationTimer()
 	}
 	
-	func rejectInvitation(from id: String) {
+	func rejectInvitation() {
 		repository.startReceiveInvitation()
-		repository.rejectInvitation(from: id)
+		repository.rejectInvitation()
 		stopInvitationTimer()
 	}
 }
