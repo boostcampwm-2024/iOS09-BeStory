@@ -238,8 +238,10 @@ extension SocketProvider: MCNearbyServiceBrowserDelegate {
 		foundPeer peerID: MCPeerID,
 		withDiscoveryInfo info: [String: String]?
 	) {
-		if let peer = MCPeerIDStorage.shared.findPeer(for: peerID), peer.value.state == .pending {
-			MCPeerIDStorage.shared.update(state: .connected, id: peerID)
+		if let peer = MCPeerIDStorage.shared.findPeer(for: peerID)?.value {
+			if peer.state == .pending {
+				MCPeerIDStorage.shared.update(state: .connected, id: peerID)
+			}
 		} else {
 			MCPeerIDStorage.shared.append(id: peerID, state: .found)
 		}

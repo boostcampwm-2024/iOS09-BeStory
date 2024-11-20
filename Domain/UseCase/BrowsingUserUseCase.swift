@@ -15,6 +15,7 @@ public final class BrowsingUserUseCase: BrowsingUserUseCaseInterface {
 	private var invitationTimer: Timer?
 	private var cancellables: Set<AnyCancellable> = []
 	private var invitationPeerID: String?
+	private var browsedUsersID: [String] = []
 	
 	private let repository: BrowsingUserRepositoryInterface
 	private let invitationTimeout: Double
@@ -34,7 +35,9 @@ public final class BrowsingUserUseCase: BrowsingUserUseCaseInterface {
 // MARK: - Public Methods
 public extension BrowsingUserUseCase {
 	func fetchBrowsedUsers() -> [BrowsedUser] {
-		return repository.fetchBrowsingUsers()
+		let browsedUsers = repository.fetchBrowsingUsers()
+		self.browsedUsersID = browsedUsers.map { $0.id }
+		return browsedUsers
 	}
 	
 	func inviteUser(with id: String) {
@@ -60,7 +63,9 @@ public extension BrowsingUserUseCase {
 private extension BrowsingUserUseCase {
 	func bind() {
 		repository.updatedBrowsingUser
-			.subscribe(browsedUser)
+			.sink { [weak self] user in
+				self?.receivedBrowsedUser(user)
+			}
 			.store(in: &cancellables)
 		
 		repository.invitationReceived
@@ -80,9 +85,21 @@ private extension BrowsingUserUseCase {
 			.store(in: &cancellables)
 	}
 	
+	func receivedBrowsedUser(_ user: BrowsedUser) {
+		switch user.state {
+			case .found:
+				guard !browsedUsersID.contains(user.id) else { return }
+				browsedUsersID.append(user.id)
+			case .lost:
+				guard let index = browsedUsersID.firstIndex(where: { $0 == user.id }) else { return }
+				browsedUsersID.remove(at: index)
+		}
+		self.browsedUser.send(user)
+	}
+	
 	func invitationResultDidReceive(with invitedUser: InvitedUser) {
 		guard invitedUser.id == invitationPeerID else { return }
-		
+		invitationPeerID = nil
 		repository.startReceiveInvitation()
 		invitationResult.send(invitedUser)
 	}
