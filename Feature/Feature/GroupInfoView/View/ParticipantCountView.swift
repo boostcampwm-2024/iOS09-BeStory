@@ -57,7 +57,12 @@ private extension ParticipantCountView {
     }
     
     func setupViewAttributes() {
-        let tintColor = UIColor(red: 134/255, green: 141/255, blue: 154/255, alpha: 1)
+        let tintColor = UIColor(
+            red: 134/255,
+            green: 141/255,
+            blue: 154/255,
+            alpha: 1
+        )
         groupImageView.image = UIImage(systemName: "person.2.wave.2.fill")?
             .withTintColor(tintColor, renderingMode: .alwaysOriginal)
         countLabel.text = "\(userCount)"
