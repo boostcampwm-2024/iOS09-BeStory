@@ -5,16 +5,14 @@
 //  Created by 이숲 on 11/11/24.
 //
 
-public struct ConnectedUser: Identifiable {
+public struct ConnectedUser: Identifiable, Equatable {
     public enum State {
-		/// 초대를 수락한 경우
+		/// 연결된 경우
         case connected
-		
-		/// 초대를 거절한 경우
+		/// 연결이 끊긴 경우
         case disconnected
-		
-		/// 초대를 수락을 누른 경우
-        case connecting
+		/// 연결 보류 중인 경우(ex 백그라운드 이동하여 lost상태에서 `disConnected`되기 전 단계)
+        case pending
     }
 
     public let id: String
