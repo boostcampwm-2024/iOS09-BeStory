@@ -13,12 +13,3 @@ enum GroupInfoViewInput {
     case viewDidLoad
     case exitGroupButtonDidTab
 }
-
-// MARK: - Output
-
-enum GroupInfoViewOutput {
-    case userStateDidChanged(user: InvitedUser)
-    case userDidInvited(user: InvitedUser)
-    case groupCountDidChanged(count: Int)
-    case titleDidChanged(title: String)
-}
