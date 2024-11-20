@@ -115,8 +115,6 @@ private extension ConnectionViewModel {
                     found(user: updatedUser)
                 case .lost:
                     lost(user: updatedUser)
-                default:
-                    break
                 }
             }
             .store(in: &cancellables)
