@@ -4,7 +4,7 @@
 <dict>
 	<key>NSBonjourServices</key>
 	<array>
-		<string>_beStory._tcp</string>
+		<string>_bestory._tcp</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
