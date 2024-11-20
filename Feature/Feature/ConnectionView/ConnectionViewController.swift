@@ -83,11 +83,11 @@ extension ConnectionViewController {
                         title: invitingUser.name,
                         message: "초대를 수락하시겠습니까?",
                         onConfirm: {
-                            self.input.send(.accept(id: invitingUser.id))
+                            self.input.send(.accept)
                             self.closeCurrentAlert()
                         },
                         onCancel: {
-                            self.input.send(.reject(id: invitingUser.id))
+                            self.input.send(.reject)
                             self.closeCurrentAlert()
                         }
                     )
@@ -96,7 +96,7 @@ extension ConnectionViewController {
 
                     showAlertWithActions(
                         title: "Accepted",
-                        message: "상대방이 초대를 수락했습니다.",
+                        message: "상대방(\(userName))이 초대를 수락했습니다.",
                         onConfirm: { self.closeCurrentAlert() },
                         onCancel: { self.closeCurrentAlert() }
                     )
@@ -105,7 +105,7 @@ extension ConnectionViewController {
 
                     showAlertWithActions(
                         title: "Rejected",
-                        message: "상대방이 초대를 거절했습니다.",
+                        message: "상대방(\(userName))이 초대를 거절했습니다.",
                         onConfirm: { self.closeCurrentAlert() },
                         onCancel: { self.closeCurrentAlert() }
                     )

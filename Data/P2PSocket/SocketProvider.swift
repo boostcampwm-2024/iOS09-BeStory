@@ -239,7 +239,7 @@ extension SocketProvider: MCNearbyServiceBrowserDelegate {
 		foundPeer peerID: MCPeerID,
 		withDiscoveryInfo info: [String: String]?
 	) {
-		if let peer = MCPeerIDStorage.shared.findPeer(for: peerID), peer.value.state == .pending  {
+		if let peer = MCPeerIDStorage.shared.findPeer(for: peerID), peer.value.state == .pending {
 			MCPeerIDStorage.shared.update(state: .connected, id: peerID)
 		} else {
 			MCPeerIDStorage.shared.append(id: peerID, state: .found)
@@ -306,8 +306,7 @@ private extension SocketProvider {
         sharedResource resource: SharedResource,
         continuation: CheckedContinuation<SharedResource, any Error>
     ) -> ((any Error)?) -> Void {
-        return {
-            [weak self] error in
+        return { [weak self] error in
             let task = Task {
                 if let error {
                     return continuation.resume(throwing: error)

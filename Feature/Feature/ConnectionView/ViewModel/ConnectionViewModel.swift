@@ -64,10 +64,10 @@ extension ConnectionViewModel {
 
             // Invitation Input
 
-            case .accept(let id):
-                acceptInvitation(from: id)
-            case .reject(let id):
-                rejectInvitation(from: id)
+            case .accept:
+                acceptInvitation()
+            case .reject:
+                rejectInvitation()
             }
         }
         .store(in: &cancellables)
@@ -91,12 +91,12 @@ private extension ConnectionViewModel {
 
     // Invitation Methods
 
-    func acceptInvitation(from id: String) {
-        usecase.acceptInvitation(from: id)
+    func acceptInvitation() {
+        usecase.acceptInvitation()
     }
 
-    func rejectInvitation(from id: String) {
-        usecase.rejectInvitation(from: id)
+    func rejectInvitation() {
+        usecase.rejectInvitation()
     }
 }
 

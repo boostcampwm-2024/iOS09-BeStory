@@ -18,8 +18,8 @@ enum ConnectionViewInput {
 
     // Invitation Input
 
-    case accept(id: String)
-    case reject(id: String)
+    case accept
+    case reject
 }
 
 // MARK: - Output
