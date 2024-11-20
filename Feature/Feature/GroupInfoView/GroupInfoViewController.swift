@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Entity
 import SnapKit
 import UIKit
 
@@ -23,10 +24,6 @@ final public class GroupInfoViewController: UIViewController {
     public init(viewModel: GroupInfoViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-    }
-    
-    public convenience init() {
-        self.init(viewModel: GroupInfoViewModel())
     }
     
     public override func viewDidLoad() {
@@ -49,7 +46,8 @@ final public class GroupInfoViewController: UIViewController {
     
     func setupBind() {
         let output = viewModel.transform(input: input.eraseToAnyPublisher())
-        output.sink { [weak self] outputResult in
+        output.receive(on: DispatchQueue.main)
+            .sink { [weak self] outputResult in
             switch outputResult {
             case .userStateDidChanged(let user):
                 self?.updateInvitedUserState(user: user)
@@ -59,6 +57,9 @@ final public class GroupInfoViewController: UIViewController {
                 self?.updateGroupCount(to: count)
             case .titleDidChanged(title: let title):
                 self?.updateTitle(to: title)
+            case .userDidExit(user: let user):
+                self?.updateInvitedUserState(user: user)
+                self?.removeUserInfo(user: user)
             }
         }
         .store(in: &cancellables)
@@ -128,15 +129,28 @@ private extension GroupInfoViewController {
         participantStackView.spacing = 14
     }
     
-    func addInvitedUser(user: InvitedUser) {
+    func addInvitedUser(user: ConnectedUser) {
         participantStackView.addArrangedSubview(ParticipantInfoView(user: user))
     }
     
-    func updateInvitedUserState(user: InvitedUser) {
+    func updateInvitedUserState(user: ConnectedUser) {
+        participantStackView.arrangedSubviews
+            .compactMap { $0 as? ParticipantInfoView }
+            .first(where: { (view: ParticipantInfoView) in
+                view.user.id == user.id
+            })?
+            .updateState(user.state)
+    }
+    
+    func removeUserInfo(user: ConnectedUser) {
         Task {
-            participantStackView.arrangedSubviews.forEach {
-                ($0 as? ParticipantInfoView)?.updateState(user: user)
-            }
+            try await Task.sleep(for: .seconds(1))
+            participantStackView.arrangedSubviews
+                .compactMap { $0 as? ParticipantInfoView }
+                .first(where: {
+                    $0.user.id == user.id
+                })?
+                .removeFromSuperview()
         }
     }
     
