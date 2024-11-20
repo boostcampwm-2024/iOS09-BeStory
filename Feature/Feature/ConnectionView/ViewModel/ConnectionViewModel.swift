@@ -214,8 +214,8 @@ extension ConnectionViewModel {
             let angle = Float.random(in: 0...(2 * .pi))
 
             position = (
-                centerPosition.0 + Double(randomRadius * cos(angle)),
-                centerPosition.1 + Double(randomRadius * sin(angle))
+                (centerPosition.0 + Double(randomRadius * cos(angle))).rounded(),
+                (centerPosition.1 + Double(randomRadius * sin(angle))).rounded()
             )
         } while usedPositions.contains(where: {
             $0.value.0.distance(to: position.0) < 50 ||
