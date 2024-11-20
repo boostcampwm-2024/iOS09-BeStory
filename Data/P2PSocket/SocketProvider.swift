@@ -178,16 +178,15 @@ extension SocketProvider: MCSessionDelegate {
 				MCPeerIDStorage.shared.remove(id: peerID)
 			}
 		}
-		
-		guard let socketPeer = mapToSocketPeer(peerID) else { return }
-		
+
 		switch state {
 			case .connected:
-				MCPeerIDStorage.shared.update(state: .connected, id: peerID)
-			case .notConnected: 
+				MCPeerIDStorage.shared.update(state: .connected, id: peerID) 
+			case .notConnected:
 				MCPeerIDStorage.shared.update(state: .disconnected, id: peerID)
 			default: break
 		}
+		guard let socketPeer = mapToSocketPeer(peerID) else { return }
 		updatedPeer.send(socketPeer)
 	}
 	
@@ -239,8 +238,10 @@ extension SocketProvider: MCNearbyServiceBrowserDelegate {
 		foundPeer peerID: MCPeerID,
 		withDiscoveryInfo info: [String: String]?
 	) {
-		if let peer = MCPeerIDStorage.shared.findPeer(for: peerID), peer.value.state == .pending  {
-			MCPeerIDStorage.shared.update(state: .connected, id: peerID)
+		if let peer = MCPeerIDStorage.shared.findPeer(for: peerID)?.value {
+			if peer.state == .pending {
+				MCPeerIDStorage.shared.update(state: .connected, id: peerID)
+			}
 		} else {
 			MCPeerIDStorage.shared.append(id: peerID, state: .found)
 		}
@@ -306,8 +307,7 @@ private extension SocketProvider {
         sharedResource resource: SharedResource,
         continuation: CheckedContinuation<SharedResource, any Error>
     ) -> ((any Error)?) -> Void {
-        return {
-            [weak self] error in
+        return { [weak self] error in
             let task = Task {
                 if let error {
                     return continuation.resume(throwing: error)

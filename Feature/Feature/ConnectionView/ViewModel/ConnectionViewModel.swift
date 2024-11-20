@@ -55,10 +55,19 @@ extension ConnectionViewModel {
             guard let self else { return }
 
             switch result {
+            // Connection Input
+
             case .fetchUsers:
                 fetchUsers().forEach({ self.found(user: $0) })
             case .invite(let id):
                 invite(id: id)
+
+            // Invitation Input
+
+            case .accept:
+                acceptInvitation()
+            case .reject:
+                rejectInvitation()
             }
         }
         .store(in: &cancellables)
@@ -70,6 +79,8 @@ extension ConnectionViewModel {
 // MARK: - UseCase Methods
 
 private extension ConnectionViewModel {
+    // Connection Methods
+
     func fetchUsers() -> [BrowsedUser] {
         return usecase.fetchBrowsedUsers()
     }
@@ -77,12 +88,24 @@ private extension ConnectionViewModel {
     func invite(id: String) {
         usecase.inviteUser(with: id)
     }
+
+    // Invitation Methods
+
+    func acceptInvitation() {
+        usecase.acceptInvitation()
+    }
+
+    func rejectInvitation() {
+        usecase.rejectInvitation()
+    }
 }
 
 // MARK: - Binding
 
 private extension ConnectionViewModel {
     func setupBind() {
+        // Broswed User (found, lost)
+
         usecase.browsedUser
             .sink { [weak self] updatedUser in
                 guard let self else { return }
@@ -92,9 +115,42 @@ private extension ConnectionViewModel {
                     found(user: updatedUser)
                 case .lost:
                     lost(user: updatedUser)
-                default:
-                    break
                 }
+            }
+            .store(in: &cancellables)
+
+        // Invitation Received (From Who)
+
+        usecase.invitationReceived
+            .sink { [weak self] invitingUser in
+                guard let self else { return }
+
+                output.send(.invited(from: invitingUser))
+            }
+            .store(in: &cancellables)
+
+        // Invitation Result (when I invite other users)
+
+        usecase.invitationResult
+            .sink { [weak self] invitedUser in
+                guard let self else { return }
+
+                switch invitedUser.state {
+                case .accept:
+                    output.send(.accepted(name: invitedUser.name))
+                case .reject:
+                    output.send(.rejected(name: invitedUser.name))
+                }
+            }
+            .store(in: &cancellables)
+
+        // Invitaion Fired Due to Timeout (invited user receive)
+
+        usecase.invitationDidFired
+            .sink { [weak self] in
+                guard let self else { return }
+
+                output.send(.timeout)
             }
             .store(in: &cancellables)
     }
@@ -156,8 +212,8 @@ extension ConnectionViewModel {
             let angle = Float.random(in: 0...(2 * .pi))
 
             position = (
-                centerPosition.0 + Double(randomRadius * cos(angle)),
-                centerPosition.1 + Double(randomRadius * sin(angle))
+                (centerPosition.0 + Double(randomRadius * cos(angle))).rounded(),
+                (centerPosition.1 + Double(randomRadius * sin(angle))).rounded()
             )
         } while usedPositions.contains(where: {
             $0.value.0.distance(to: position.0) < 50 ||
