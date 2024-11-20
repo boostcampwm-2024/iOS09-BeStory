@@ -10,6 +10,8 @@ public final class DIContainer {
 
     private var services: [String: Any] = [:]
 
+    private init() { }
+
     public func register<T>(type: T.Type, instance: T) {
         let key = String(describing: type)
         services[key] = instance
