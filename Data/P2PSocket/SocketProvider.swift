@@ -178,16 +178,15 @@ extension SocketProvider: MCSessionDelegate {
 				MCPeerIDStorage.shared.remove(id: peerID)
 			}
 		}
-		
-		guard let socketPeer = mapToSocketPeer(peerID) else { return }
-		
+
 		switch state {
 			case .connected:
-				MCPeerIDStorage.shared.update(state: .connected, id: peerID)
-			case .notConnected: 
+				MCPeerIDStorage.shared.update(state: .connected, id: peerID) 
+			case .notConnected:
 				MCPeerIDStorage.shared.update(state: .disconnected, id: peerID)
 			default: break
 		}
+		guard let socketPeer = mapToSocketPeer(peerID) else { return }
 		updatedPeer.send(socketPeer)
 	}
 	
