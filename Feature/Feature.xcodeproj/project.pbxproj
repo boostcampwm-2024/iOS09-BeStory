@@ -38,9 +38,50 @@
 		FED968172CD908B000CD445C /* libFeature.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libFeature.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		FE8208012CED782500307694 /* Exceptions for "Feature" folder in "Feature" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"ConnectionView/CGPoint+Extension.swift",
+				ConnectionView/ConnectionViewController.swift,
+				ConnectionView/View/CustomCircleView.swift,
+				ConnectionView/ViewModel/ConnectionViewInputOutput.swift,
+				ConnectionView/ViewModel/ConnectionViewModel.swift,
+				GroupInfoView/GroupInfoViewController.swift,
+				GroupInfoView/InvitedUser.swift,
+				GroupInfoView/View/ParticipantCountView.swift,
+				GroupInfoView/View/ParticipantInfoView.swift,
+				GroupInfoView/ViewModel/GroupInfoViewModel.swift,
+				"Helper/AVAsset+Metadata.swift",
+				"Helper/AVAsset+Thumbnail.swift",
+				Helper/EventPublisher.swift,
+				Helper/ReadOnlyPublisher.swift,
+				"Helper/UIColor+HexInitialization.swift",
+				Helper/VideoManager.swift,
+				VideoDetailView/VideoDetailViewController.swift,
+				VideoListView/VideoListViewController.swift,
+				VideoListView/View/CollectionView/VideoListCollectionViewCell.swift,
+				VideoListView/View/CollectionView/VideoListDataSource.swift,
+				VideoListView/View/CollectionView/VideoListItem.swift,
+				VideoListView/View/CollectionView/VideoListSection.swift,
+				VideoListView/View/IconButton.swift,
+				VideoListView/View/VideoListHeaderView.swift,
+				VideoListView/ViewModel/MockVideoListViewModel.swift,
+				VideoListView/ViewModel/MultipeerVideoListViewModel.swift,
+				VideoListView/ViewModel/VideoListViewInput.swift,
+				VideoListView/ViewModel/VideoListViewModel.swift,
+				VideoListView/ViewModel/VideoListViewOutput.swift,
+			);
+			target = FED968162CD908B000CD445C /* Feature */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FE6EF3F12CD8B71E005DC39D /* Feature */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				FE8208012CED782500307694 /* Exceptions for "Feature" folder in "Feature" target */,
+			);
 			path = Feature;
 			sourceTree = "<group>";
 		};

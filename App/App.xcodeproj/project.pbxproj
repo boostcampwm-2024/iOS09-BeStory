@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FE8207DE2CED780200307694 /* P2PSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE8207DB2CED780200307694 /* P2PSocket.framework */; };
+		FE8207DF2CED780200307694 /* P2PSocket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FE8207DB2CED780200307694 /* P2PSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FE8207E02CED780200307694 /* Entity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE8207DC2CED780200307694 /* Entity.framework */; };
+		FE8207E12CED780200307694 /* Entity.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FE8207DC2CED780200307694 /* Entity.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FE8207E22CED780200307694 /* Interfaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE8207DD2CED780200307694 /* Interfaces.framework */; };
+		FE8207E32CED780200307694 /* Interfaces.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FE8207DD2CED780200307694 /* Interfaces.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FEF778B92CDB00F000FFE089 /* libData.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF778B72CDB00F000FFE089 /* libData.a */; };
 		FEF778BA2CDB00F000FFE089 /* libFeature.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF778B82CDB00F000FFE089 /* libFeature.a */; };
 		FEF779742CDCB35800FFE089 /* libUseCase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF779732CDCB35800FFE089 /* libUseCase.a */; };
@@ -29,6 +35,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				FE8207DF2CED780200307694 /* P2PSocket.framework in Embed Frameworks */,
+				FE8207E32CED780200307694 /* Interfaces.framework in Embed Frameworks */,
+				FE8207E12CED780200307694 /* Entity.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -37,6 +46,9 @@
 
 /* Begin PBXFileReference section */
 		FE6EF2EA2CD8B005005DC39D /* App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = App.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE8207DB2CED780200307694 /* P2PSocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = P2PSocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE8207DC2CED780200307694 /* Entity.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Entity.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE8207DD2CED780200307694 /* Interfaces.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Interfaces.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF778B72CDB00F000FFE089 /* libData.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libData.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF778B82CDB00F000FFE089 /* libFeature.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libFeature.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF779732CDCB35800FFE089 /* libUseCase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libUseCase.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -70,6 +82,9 @@
 			files = (
 				FEF778B92CDB00F000FFE089 /* libData.a in Frameworks */,
 				FEF778BA2CDB00F000FFE089 /* libFeature.a in Frameworks */,
+				FE8207E02CED780200307694 /* Entity.framework in Frameworks */,
+				FE8207DE2CED780200307694 /* P2PSocket.framework in Frameworks */,
+				FE8207E22CED780200307694 /* Interfaces.framework in Frameworks */,
 				FEF779742CDCB35800FFE089 /* libUseCase.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -97,6 +112,9 @@
 		FE6EF3E12CD8B6A2005DC39D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FE8207DB2CED780200307694 /* P2PSocket.framework */,
+				FE8207DC2CED780200307694 /* Entity.framework */,
+				FE8207DD2CED780200307694 /* Interfaces.framework */,
 				FEF779732CDCB35800FFE089 /* libUseCase.a */,
 				FEF778B72CDB00F000FFE089 /* libData.a */,
 				FEF778B82CDB00F000FFE089 /* libFeature.a */,
@@ -220,6 +238,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = App/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BeStory;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -231,7 +250,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "";
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = jung.App;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.bestory;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -254,6 +273,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = App/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BeStory;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -265,7 +285,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "";
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = jung.App;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.bestory;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
