@@ -21,7 +21,12 @@ final class ParticipantInfoView: UIView {
         setupViewHierarchies()
         setupViewConstraints()
         setupViewAttributes()
-        backgroundColor = UIColor(red: 31/255, green: 41/255, blue: 55/255, alpha: 1)
+        backgroundColor = UIColor(
+            red: 31/255,
+            green: 41/255,
+            blue: 55/255,
+            alpha: 1
+        )
     }
     
     @available(*, unavailable)
