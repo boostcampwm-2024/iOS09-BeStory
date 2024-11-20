@@ -7,15 +7,16 @@
 
 import SnapKit
 import UIKit
+import Entity
 
 final class ParticipantInfoView: UIView {
     private let profileImageView = UIImageView()
     private let nameLabel = UILabel()
     private let stateIndicatorView = UIView()
     
-    private var user: InvitedUser
+    let user: ConnectedUser
     
-    init(user: InvitedUser) {
+    init(user: ConnectedUser) {
         self.user = user
         super.init(frame: .zero)
         setupViewHierarchies()
@@ -35,15 +36,11 @@ final class ParticipantInfoView: UIView {
     }
     
     public override var intrinsicContentSize: CGSize {
-        return CGSize(width: 86, height: 35)
+        return CGSize(width: profileImageView.frame.width + nameLabel.frame.width, height: 35)
     }
     
-    @discardableResult
-    func updateState(user: InvitedUser) -> Bool {
-        guard self.user.id == user.id else { return false }
-        self.user = user
-        setupStateIndicator(to: user.state)
-        return true
+    func updateState(_ state: ConnectedUser.State) {
+        setupStateIndicator(to: state)
     }
 }
 
@@ -86,11 +83,14 @@ private extension ParticipantInfoView {
         nameLabel.text = name
     }
     
-    func setupStateIndicator(to state: InvitedUser.ConnectState) {
+    func setupStateIndicator(to state: ConnectedUser.State) {
         switch state {
-        case .connected: stateIndicatorView.backgroundColor = .systemGreen
-        case .connecting: stateIndicatorView.backgroundColor = .systemGray6
-        default: stateIndicatorView.backgroundColor = .systemRed
+        case .connected:
+            stateIndicatorView.backgroundColor = .systemGreen
+        case .disconnected:
+            stateIndicatorView.backgroundColor = .systemGray6
+        case .pending:
+            stateIndicatorView.backgroundColor = .systemRed
         }
     }
 }
