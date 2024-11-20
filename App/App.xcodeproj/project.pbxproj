@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		853CF5CF2CEDE80800936AD3 /* Core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853CF5CE2CEDE80800936AD3 /* Core.framework */; };
+		853CF5D02CEDE80B00936AD3 /* Core.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 853CF5CE2CEDE80800936AD3 /* Core.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FE8207DE2CED780200307694 /* P2PSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE8207DB2CED780200307694 /* P2PSocket.framework */; };
 		FE8207DF2CED780200307694 /* P2PSocket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FE8207DB2CED780200307694 /* P2PSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FE8207E02CED780200307694 /* Entity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE8207DC2CED780200307694 /* Entity.framework */; };
@@ -35,6 +37,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				853CF5D02CEDE80B00936AD3 /* Core.framework in Embed Frameworks */,
 				FE8207DF2CED780200307694 /* P2PSocket.framework in Embed Frameworks */,
 				FE8207E32CED780200307694 /* Interfaces.framework in Embed Frameworks */,
 				FE8207E12CED780200307694 /* Entity.framework in Embed Frameworks */,
@@ -45,6 +48,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		853CF5CE2CEDE80800936AD3 /* Core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE6EF2EA2CD8B005005DC39D /* App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = App.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE8207DB2CED780200307694 /* P2PSocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = P2PSocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE8207DC2CED780200307694 /* Entity.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Entity.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -80,6 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				853CF5CF2CEDE80800936AD3 /* Core.framework in Frameworks */,
 				FEF778B92CDB00F000FFE089 /* libData.a in Frameworks */,
 				FEF778BA2CDB00F000FFE089 /* libFeature.a in Frameworks */,
 				FE8207E02CED780200307694 /* Entity.framework in Frameworks */,
@@ -112,6 +117,7 @@
 		FE6EF3E12CD8B6A2005DC39D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				853CF5CE2CEDE80800936AD3 /* Core.framework */,
 				FE8207DB2CED780200307694 /* P2PSocket.framework */,
 				FE8207DC2CED780200307694 /* Entity.framework */,
 				FE8207DD2CED780200307694 /* Interfaces.framework */,
