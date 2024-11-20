@@ -8,7 +8,6 @@
 import Combine
 import Entity
 import Foundation
-import P2PSocket
 
 public protocol SharingVideoRepositoryInterface {
     var updatedSharedVideo: PassthroughSubject<SharedVideo, Never> { get }

@@ -13,9 +13,22 @@
 		853CEDDF2CECDDD000936AD3 /* libFeature.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libFeature.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		853CEDD72CECDCC200936AD3 /* Exceptions for "Extentions" folder in "Core" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"AVAsset+Metadata.swift",
+			);
+			target = 853CEB622CECA73E00936AD3 /* Core */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		853CEB1D2CECA30100936AD3 /* Extentions */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				853CEDD72CECDCC200936AD3 /* Exceptions for "Extentions" folder in "Core" target */,
+			);
 			path = Extentions;
 			sourceTree = "<group>";
 		};

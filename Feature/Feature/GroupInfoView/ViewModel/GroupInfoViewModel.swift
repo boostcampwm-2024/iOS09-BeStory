@@ -16,7 +16,9 @@ public class GroupInfoViewModel {
     
     var output = PassthroughSubject<GroupInfoViewOutput, Never>()
     var cancellables: Set<AnyCancellable> = []
-    
+
+    public init() { }
+
     func transform(input: AnyPublisher<GroupInfoViewInput, Never>) -> AnyPublisher<GroupInfoViewOutput, Never> {
         input.sink { [weak self] inputResult in
             switch inputResult {

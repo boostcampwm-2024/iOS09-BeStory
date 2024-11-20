@@ -7,9 +7,9 @@
 
 import Foundation
 
-final class VideoManager {
-    static let shared = VideoManager()
-    
+public final class VideoManager {
+    public static let shared = VideoManager()
+
     private let fileManager = FileManager.default
     private let folder: URL
     private let folderName: String = "videos"
@@ -25,7 +25,7 @@ final class VideoManager {
         }
     }
     
-    func copyVideoToFileSystem(tempURL: URL) -> URL? {
+    public func copyVideoToFileSystem(tempURL: URL) -> URL? {
         let originalFileName = tempURL.lastPathComponent
         let destinationURL = folder.appending(path: originalFileName)
         if !fileManager.fileExists(atPath: destinationURL.path) {
@@ -34,7 +34,7 @@ final class VideoManager {
         return destinationURL
     }
     
-    func deleteAllFiles() {
+    public func deleteAllFiles() {
         guard let fileURLs = try? fileManager.contentsOfDirectory(
             at: folder,
             includingPropertiesForKeys: nil

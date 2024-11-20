@@ -31,7 +31,7 @@ final public class ConnectionViewModel {
 
     // MARK: - Initializer
 
-    init(usecase: BrowsingUserUseCaseInterface) {
+    public init(usecase: BrowsingUserUseCaseInterface) {
         self.usecase = usecase
         setupBind()
     }
