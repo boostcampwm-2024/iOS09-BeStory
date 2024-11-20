@@ -6,7 +6,7 @@
 //
 
 public struct ConnectedUser: Identifiable, Equatable {
-    public enum State {
+	@frozen public enum State {
 		/// 연결된 경우
         case connected
 		/// 연결이 끊긴 경우

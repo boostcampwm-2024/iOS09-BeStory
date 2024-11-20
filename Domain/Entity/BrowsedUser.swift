@@ -6,7 +6,7 @@
 //
 
 public struct BrowsedUser: Identifiable {
-	public enum State {
+	@frozen public enum State {
 		case lost
 		case found
 	}

@@ -6,7 +6,7 @@
 //
 
 public struct InvitedUser: Identifiable {
-	public enum State {
+	@frozen public enum State {
 		/// 초대를 수락한 경우
 		case accept
 		/// 초대를 거절한 경우
