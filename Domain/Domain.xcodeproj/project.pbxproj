@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		FEC7C1C72CE7450A002D5C0F /* P2PSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEC7C1BF2CE74438002D5C0F /* P2PSocket.framework */; };
 		FEC7C1CA2CE755C5002D5C0F /* P2PSocket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FEC7C1BF2CE74438002D5C0F /* P2PSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		FEC7C1CC2CE755CF002D5C0F /* libData.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FEC7C1CB2CE755CF002D5C0F /* libData.a */; };
 		FEF779852CDCB44E00FFE089 /* libUseCase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FE6EF3C72CD8B5CA005DC39D /* libUseCase.a */; platformFilter = ios; };
 /* End PBXBuildFile section */
 
@@ -84,7 +83,6 @@
 /* Begin PBXFileReference section */
 		FE6EF3C72CD8B5CA005DC39D /* libUseCase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUseCase.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEC7C1BF2CE74438002D5C0F /* P2PSocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = P2PSocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		FEC7C1CB2CE755CF002D5C0F /* libData.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libData.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEC7C1E32CE7A7F6002D5C0F /* P2PSocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = P2PSocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF778DC2CDB21B500FFE089 /* Interfaces.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Interfaces.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF779402CDC936900FFE089 /* Entity.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Entity.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -156,7 +154,6 @@
 			files = (
 				FEC7C1C72CE7450A002D5C0F /* P2PSocket.framework in Frameworks */,
 				FEF779852CDCB44E00FFE089 /* libUseCase.a in Frameworks */,
-				FEC7C1CC2CE755CF002D5C0F /* libData.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -190,7 +187,6 @@
 			isa = PBXGroup;
 			children = (
 				FEC7C1E32CE7A7F6002D5C0F /* P2PSocket.framework */,
-				FEC7C1CB2CE755CF002D5C0F /* libData.a */,
 				FEC7C1BF2CE74438002D5C0F /* P2PSocket.framework */,
 			);
 			name = Frameworks;
