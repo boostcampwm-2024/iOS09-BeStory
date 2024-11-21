@@ -59,7 +59,6 @@
 				ConnectionView/ViewModel/ConnectionViewInputOutput.swift,
 				ConnectionView/ViewModel/ConnectionViewModel.swift,
 				GroupInfoView/GroupInfoViewController.swift,
-				GroupInfoView/InvitedUser.swift,
 				GroupInfoView/View/ParticipantCountView.swift,
 				GroupInfoView/View/ParticipantInfoView.swift,
 				GroupInfoView/ViewModel/GroupInfoViewInput.swift,
