@@ -14,6 +14,7 @@ extension UIAlertController {
         case invitationAcceptedBy(userName: String)
         case invitationRejectedBy(userName: String)
         case invitationTimeout
+        case invitationLostFrom(userName: String)
         case custom(title: String, message: String)
     }
 
@@ -57,7 +58,13 @@ extension UIAlertController {
         case .invitationTimeout:
             self.init(
                 title: "Invitation Timeout",
-                message: "상대방의 응답시간이 초과되었습니다.",
+                message: "응답시간이 초과되었습니다.",
+                preferredStyle: .alert
+            )
+        case .invitationLostFrom(let userName):
+            self.init(
+                title: "Invitation Lost",
+                message: "\(userName)의 연결이 끊겼습니다.",
                 preferredStyle: .alert
             )
         case .custom(let title, let message):

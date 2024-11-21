@@ -26,6 +26,7 @@ final public class ConnectionViewController: UIViewController {
     private var userContainerView = UIView()
     private var nextButton = UIButton(type: .system)
     private var currentAlert: UIAlertController?
+    private var currentUserId: String?
 
     // MARK: - Initializer
 
@@ -80,27 +81,35 @@ extension ConnectionViewController {
                     addUserCircleView(user: user, position: position, emoji: emoji)
                 case .lostUser(let user):
                     removeUserCircleView(user: user)
-                    closeCurrentAlert()
+                    resetCurrentAlert()
+                    if user.id == self.currentUserId {
+                        resetCurrentUserId()
+                        input.send(.rejectInvitation)
+                    }
 
                     // Invitation Output
 
                 case .invitationReceivedBy(let user):
-                    present(UIAlertController(
+                    let alert = UIAlertController(
                         type: .invitationReceivedBy(userName: user.name),
                         actions: [
                             .confirm(handler: {
                                 self.input.send(.acceptInvitation(user: user))
-                                self.closeCurrentAlert()
+                                self.resetCurrentAlert()
+                                self.resetCurrentUserId()
                                 self.removeUserCircleView(user: user)
                             }),
                             .cancel(handler: {
                                 self.input.send(.rejectInvitation)
-                                self.closeCurrentAlert()
+                                self.resetCurrentAlert()
+                                self.resetCurrentUserId()
                             })
                         ]
-                    ), animated: true)
+                    )
+                    setCurrentAlertAndUserId(alert: alert, userId: user.id)
+                    present(alert, animated: true)
                 case .invitationAcceptedBy(let user):
-                    self.closeCurrentAlert()
+                    self.resetCurrentAlert()
 
                     present(UIAlertController(
                         type: .invitationAcceptedBy(userName: user.name),
@@ -109,14 +118,14 @@ extension ConnectionViewController {
 
                     self.removeUserCircleView(user: user)
                 case .invitationRejectedBy(let userName):
-                    self.closeCurrentAlert()
+                    self.resetCurrentAlert()
 
                     present(UIAlertController(
                         type: .invitationRejectedBy(userName: userName),
                         actions: [.confirm(), .cancel()]
                     ), animated: true)
                 case .invitationTimeout:
-                    self.closeCurrentAlert()
+                    self.resetCurrentAlert()
 
                     present(UIAlertController(
                         type: .invitationTimeout,
@@ -137,12 +146,13 @@ private extension ConnectionViewController {
         present(UIAlertController(type: .requestInvitation, actions: [
             .confirm(handler: {
                 self.input.send(.inviteUser(id: id))
-                self.currentAlert = UIAlertController(
+                let alert = UIAlertController(
                     title: "Waiting",
                     message: "상대방의 응답을 기다리는 중입니다.",
                     preferredStyle: .alert
                 )
-                self.present(self.currentAlert!, animated: true)
+                self.setCurrentAlertAndUserId(alert: alert)
+                self.present(alert, animated: true)
             }),
             .cancel()]
         ), animated: true)
@@ -189,10 +199,19 @@ private extension ConnectionViewController {
         userContainerView.layoutIfNeeded()
     }
 
-    func closeCurrentAlert() {
+    func setCurrentAlertAndUserId(alert: UIAlertController, userId: String? = nil) {
+        currentAlert = alert
+        currentUserId = userId
+    }
+
+    func resetCurrentAlert() {
         guard let alert = currentAlert else { return }
         alert.dismiss(animated: true)
         currentAlert = nil
+    }
+
+    func resetCurrentUserId() {
+        currentUserId = nil
     }
 }
 
