@@ -67,8 +67,9 @@ extension ConnectionViewModel {
 
             // Invitation Input
 
-            case .accept:
+            case .accept(let user):
                 acceptInvitation()
+                self.removeCurrentPosition(id: user.id)
             case .reject:
                 rejectInvitation()
             }
@@ -128,7 +129,7 @@ private extension ConnectionViewModel {
             .sink { [weak self] invitingUser in
                 guard let self else { return }
                 guard let position =  self.getCurrentPosition(id: invitingUser.id) else { return }
-                self.removeCurrentPosition(id: invitingUser.id)
+
                 output.send(.invited(from: invitingUser, position: position))
             }
             .store(in: &cancellables)

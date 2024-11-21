@@ -18,7 +18,7 @@ enum ConnectionViewInput {
 
     // Invitation Input
 
-    case accept
+    case accept(user: BrowsedUser)
     case reject
 }
 

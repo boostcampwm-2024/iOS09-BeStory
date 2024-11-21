@@ -90,7 +90,7 @@ extension ConnectionViewController {
                         title: invitingUser.name,
                         message: "초대를 수락하시겠습니까?",
                         onConfirm: {
-                            self.input.send(.accept)
+                            self.input.send(.accept(user: invitingUser))
                             self.closeCurrentAlert()
                             self.removeUserCircleView(user: invitingUser, position: position)
                         },
