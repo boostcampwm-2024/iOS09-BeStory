@@ -50,13 +50,18 @@ final public class ConnectionViewController: UIViewController {
         setupViewConstraints()
         setupBind()
 
+        input.send(.fetchUsers)
+    }
+
+    public override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        guard !viewModel.compareCenter(currentCenter: view.center) else { return }
         viewModel.configure(
             centerPosition: view.center,
             innerRadius: Constants.centralCircleViewRadius,
             outerRadius: Constants.outerGrayCircleViewRadius
         )
-
-        input.send(.fetchUsers)
     }
 }
 

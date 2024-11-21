@@ -43,6 +43,11 @@ final public class ConnectionViewModel {
         self.innerRadius = innerRadius
         self.outerRadius = outerRadius
     }
+
+    func compareCenter(currentCenter: CGPoint) -> Bool {
+        guard self.centerPosition == currentCenter else { return false }
+        return true
+    }
 }
 
 // MARK: - Transform
