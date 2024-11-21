@@ -26,7 +26,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let connectionViewController = ConnectionViewController(viewModel: DIContainer.shared.resolve(type: ConnectionViewModel.self))
 
         connectionViewController.onNextButton = {
-            let videoListViewController = VideoListViewController(viewModel: MockVideoListViewModel())
+            let videoListViewController = VideoListViewController(viewModel: MultipeerVideoListViewModel())
             connectionViewController.navigationController?.pushViewController(videoListViewController, animated: true)
         }
 
@@ -110,7 +110,7 @@ extension SceneDelegate {
         )
 
         DIContainer.shared.register(
-            type: MultipeerVideoListViewModel.self,
+            type: (any VideoListViewModel).self,
             instance: MultipeerVideoListViewModel()
         )
     }
