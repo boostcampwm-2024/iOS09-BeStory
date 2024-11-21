@@ -16,6 +16,10 @@ enum CircleViewStyle {
 }
 
 final class CircleView: UIView {
+    // MARK: - Properties
+
+    let id: String?
+
     // MARK: - UI Components
 
     private let emojiLabel = UILabel()
@@ -24,7 +28,8 @@ final class CircleView: UIView {
 
     // MARK: - Initiailizer
 
-    init(style: CircleViewStyle) {
+    init(id: String? = nil, style: CircleViewStyle) {
+        self.id = id
         self.style = style
         super.init(frame: .zero)
 

@@ -76,39 +76,39 @@ extension ConnectionViewController {
                 switch result {
                     // Connection Output
 
-                case .found(let user, let position, let emoji):
+                case .foundUser(let user, let position, let emoji):
                     addUserCircleView(user: user, position: position, emoji: emoji)
-                case .lost(let user, let position):
-                    removeUserCircleView(user: user, position: position)
+                case .lostUser(let user):
+                    removeUserCircleView(user: user)
                     closeCurrentAlert()
 
                     // Invitation Output
 
-                case .invited(let invitingUser, let position):
+                case .invitedGroupBy(let user):
                     showAlertWithActions(
-                        title: invitingUser.name,
+                        title: user.name,
                         message: "초대를 수락하시겠습니까?",
                         onConfirm: {
-                            self.input.send(.accept(user: invitingUser))
+                            self.input.send(.acceptInvitation(user: user))
                             self.closeCurrentAlert()
-                            self.removeUserCircleView(user: invitingUser, position: position)
+                            self.removeUserCircleView(user: user)
                         },
                         onCancel: {
-                            self.input.send(.reject)
+                            self.input.send(.rejectInvitation)
                             self.closeCurrentAlert()
                         }
                     )
-                case .accepted(let invitedUser, let position):
+                case .invitationAcceptedBy(let user):
                     self.closeCurrentAlert()
 
                     showAlertWithActions(
                         title: "Accepted",
-                        message: "상대방(\(invitedUser.name))이 초대를 수락했습니다.",
+                        message: "상대방(\(user.name))이 초대를 수락했습니다.",
                         onConfirm: { self.closeCurrentAlert() },
                         onCancel: { self.closeCurrentAlert() }
                     )
-                    self.removeUserCircleView(user: invitedUser, position: position)
-                case .rejected(let userName):
+                    self.removeUserCircleView(user: user)
+                case .invitationRejectedBy(let userName):
                     self.closeCurrentAlert()
 
                     showAlertWithActions(
@@ -117,7 +117,7 @@ extension ConnectionViewController {
                         onConfirm: { self.closeCurrentAlert() },
                         onCancel: { self.closeCurrentAlert() }
                     )
-                case .timeout:
+                case .invitationTimeout:
                     guard let alert = currentAlert else { return }
                     alert.dismiss(animated: true)
                     self.currentAlert = nil
@@ -144,7 +144,7 @@ private extension ConnectionViewController {
             title: "Invite",
             message: "초대하시겠습니까?",
             onConfirm: {
-                self.input.send(.invite(id: id))
+                self.input.send(.inviteUser(id: id))
                 self.closeCurrentAlert()
 
                 self.showAlertWithoutActions(
@@ -166,7 +166,7 @@ private extension ConnectionViewController {
 
 private extension ConnectionViewController {
     func addUserCircleView(user: BrowsedUser, position: CGPoint, emoji: String) {
-        let userCircleView = CircleView(style: .small)
+        let userCircleView = CircleView(id: user.id, style: .small)
         userCircleView.configure(emoji: emoji, name: user.name)
 
         userContainerView.addSubview(userCircleView)
@@ -186,12 +186,12 @@ private extension ConnectionViewController {
         userContainerView.layoutIfNeeded()
     }
 
-    func removeUserCircleView(user: BrowsedUser, position: CGPoint) {
-        userContainerView.subviews.forEach {
-            if $0.center == position {
-                $0.removeFromSuperview()
-            }
-        }
+    func removeUserCircleView(user: BrowsedUser) {
+        userContainerView.subviews
+            .compactMap { $0 as? CircleView }
+            .filter { $0.id == user.id }
+            .forEach { $0.removeFromSuperview() }
+
         userContainerView.layoutIfNeeded()
     }
 

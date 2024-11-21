@@ -61,46 +61,22 @@ extension ConnectionViewModel {
             // Connection Input
 
             case .fetchUsers:
-                fetchUsers().forEach({ self.found(user: $0) })
-            case .invite(let id):
-                invite(id: id)
+                usecase.fetchBrowsedUsers().forEach({ self.found(user: $0) })
+            case .inviteUser(let id):
+                usecase.inviteUser(with: id)
 
             // Invitation Input
 
-            case .accept(let user):
-                acceptInvitation()
-                self.removeCurrentPosition(id: user.id)
-            case .reject:
-                rejectInvitation()
+            case .acceptInvitation(let user):
+                usecase.acceptInvitation()
+                removeCurrentPosition(id: user.id)
+            case .rejectInvitation:
+                usecase.rejectInvitation()
             }
         }
         .store(in: &cancellables)
 
         return output.eraseToAnyPublisher()
-    }
-}
-
-// MARK: - UseCase Methods
-
-private extension ConnectionViewModel {
-    // Connection Methods
-
-    func fetchUsers() -> [BrowsedUser] {
-        return usecase.fetchBrowsedUsers()
-    }
-
-    func invite(id: String) {
-        usecase.inviteUser(with: id)
-    }
-
-    // Invitation Methods
-
-    func acceptInvitation() {
-        usecase.acceptInvitation()
-    }
-
-    func rejectInvitation() {
-        usecase.rejectInvitation()
     }
 }
 
@@ -128,9 +104,7 @@ private extension ConnectionViewModel {
         usecase.invitationReceived
             .sink { [weak self] invitingUser in
                 guard let self else { return }
-                guard let position =  self.getCurrentPosition(id: invitingUser.id) else { return }
-
-                output.send(.invited(from: invitingUser, position: position))
+                output.send(.invitedGroupBy(user: invitingUser))
             }
             .store(in: &cancellables)
 
@@ -142,15 +116,14 @@ private extension ConnectionViewModel {
 
                 switch invitedUser.state {
                 case .accept:
-                    guard let position =  self.getCurrentPosition(id: invitedUser.id) else { return }
                     self.removeCurrentPosition(id: invitedUser.id)
-                    output.send(.accepted(user: BrowsedUser(
+                    output.send(.invitationAcceptedBy(user: BrowsedUser(
                         id: invitedUser.id,
                         state: .found,
                         name: invitedUser.name
-                    ), position: position))
+                    )))
                 case .reject:
-                    output.send(.rejected(name: invitedUser.name))
+                    output.send(.invitationRejectedBy(name: invitedUser.name))
                 }
             }
             .store(in: &cancellables)
@@ -161,7 +134,7 @@ private extension ConnectionViewModel {
             .sink { [weak self] in
                 guard let self else { return }
 
-                output.send(.timeout)
+                output.send(.invitationTimeout)
             }
             .store(in: &cancellables)
     }
@@ -180,7 +153,7 @@ private extension ConnectionViewModel {
         self.addCurrentPosition(id: user.id, position: position)
 
         self.output.send(
-            .found(
+            .foundUser(
                 user: user,
                 position: position,
                 emoji: emoji
@@ -189,10 +162,9 @@ private extension ConnectionViewModel {
     }
 
     func lost(user: BrowsedUser) {
-        guard let position =  self.getCurrentPosition(id: user.id) else { return }
         self.removeCurrentPosition(id: user.id)
         EmojiManager.shared.removeUserEmoji(id: user.id)
-        self.output.send(.lost(user: user, position: position))
+        self.output.send(.lostUser(user: user))
     }
 }
 
@@ -217,8 +189,8 @@ extension ConnectionViewModel {
             let angle = CGFloat.random(in: 0...(2 * .pi))
 
             position = CGPoint(
-                x: centerPosition.x + (randomRadius * cos(angle)).rounded(),
-                y: centerPosition.y + (randomRadius * sin(angle)).rounded()
+                x: centerPosition.x + randomRadius * cos(angle),
+                y: centerPosition.y + randomRadius * sin(angle)
             )
         } while usedPositions.contains(where: {
             $0.value.x.distance(to: position.x) < 50 || $0.value.y.distance(to: position.y) < 50

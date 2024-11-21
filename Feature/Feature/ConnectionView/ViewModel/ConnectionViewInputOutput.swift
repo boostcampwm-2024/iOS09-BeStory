@@ -14,12 +14,12 @@ enum ConnectionViewInput {
     // Connection Input
 
     case fetchUsers
-    case invite(id: String)
+    case inviteUser(id: String)
 
     // Invitation Input
 
-    case accept(user: BrowsedUser)
-    case reject
+    case acceptInvitation(user: BrowsedUser)
+    case rejectInvitation
 }
 
 // MARK: - Output
@@ -27,13 +27,13 @@ enum ConnectionViewInput {
 enum ConnectionViewOutput {
     // Connection Output
 
-    case found(user: BrowsedUser, position: CGPoint, emoji: String)
-    case lost(user: BrowsedUser, position: CGPoint)
+    case foundUser(user: BrowsedUser, position: CGPoint, emoji: String)
+    case lostUser(user: BrowsedUser)
 
     // Invitation Output
 
-    case invited(from: BrowsedUser, position: CGPoint)
-    case accepted(user: BrowsedUser, position: CGPoint)
-    case rejected(name: String)
-    case timeout
+    case invitedGroupBy(user: BrowsedUser)
+    case invitationAcceptedBy(user: BrowsedUser)
+    case invitationRejectedBy(name: String)
+    case invitationTimeout
 }
