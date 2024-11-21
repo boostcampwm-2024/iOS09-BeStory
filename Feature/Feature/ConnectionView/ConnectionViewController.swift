@@ -53,7 +53,7 @@ final public class ConnectionViewController: UIViewController {
         viewModel.configure(
             centerPosition: (view.center.x, view.center.y),
             innerDiameter: Float(Constants.centralCircleViewSize),
-            outerDiameter: Float(Constants.outerGrayCircleViewSize)
+            outerDiameter: Float(view.frame.width)
         )
 
         input.send(.fetchUsers)
