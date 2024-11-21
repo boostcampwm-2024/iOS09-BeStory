@@ -56,18 +56,18 @@ private extension MainViewController {
     }
 
     func setupViewConstraints() {
-        topViewController.view.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.leading.equalToSuperview()
-            $0.trailing.equalToSuperview()
-            $0.height.equalTo(Constants.topViewHeight)
+        topViewController.view.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.height.equalTo(Constants.topViewHeight)
         }
 
-        bottomNavigationController.view.snp.makeConstraints {
-            $0.top.equalTo(topViewController.view.snp.bottom)
-            $0.leading.equalToSuperview()
-            $0.trailing.equalToSuperview()
-            $0.bottom.equalTo(view.safeAreaLayoutGuide)
+        bottomNavigationController.view.snp.makeConstraints { make in
+            make.top.equalTo(topViewController.view.snp.bottom)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
 }
