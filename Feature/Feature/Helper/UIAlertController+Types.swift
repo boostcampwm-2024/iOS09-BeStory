@@ -10,11 +10,11 @@ import UIKit
 extension UIAlertController {
     enum AlertType {
         case requestInvitation
-        case invitationReceivedBy(userName: String)
-        case invitationAcceptedBy(userName: String)
-        case invitationRejectedBy(userName: String)
+        case invitationReceivedBy(name: String)
+        case invitationAcceptedBy(name: String)
+        case invitationRejectedBy(name: String)
         case invitationTimeout
-        case invitationLostFrom(userName: String)
+        case invitationLostFrom(name: String)
         case custom(title: String, message: String)
     }
 
@@ -37,22 +37,22 @@ extension UIAlertController {
                 message: "상대방을 초대하시겠습니까?",
                 preferredStyle: .alert
             )
-        case .invitationReceivedBy(let userName):
+        case .invitationReceivedBy(let name):
             self.init(
                 title: "Invitation Received",
-                message: "\(userName)의 초대를 수락하시겠습니까?",
+                message: "\(name)의 초대를 수락하시겠습니까?",
                 preferredStyle: .alert
             )
-        case .invitationAcceptedBy(let userName):
+        case .invitationAcceptedBy(let name):
             self.init(
                 title: "Invitation Accepted",
-                message: "\(userName)이 초대를 수락했습니다.",
+                message: "\(name)이 초대를 수락했습니다.",
                 preferredStyle: .alert
             )
-        case .invitationRejectedBy(let userName):
+        case .invitationRejectedBy(let name):
             self.init(
                 title: "Invitation Rejected",
-                message: "\(userName)이 초대를 거절했습니다.",
+                message: "\(name)이 초대를 거절했습니다.",
                 preferredStyle: .alert
             )
         case .invitationTimeout:
@@ -61,10 +61,10 @@ extension UIAlertController {
                 message: "응답시간이 초과되었습니다.",
                 preferredStyle: .alert
             )
-        case .invitationLostFrom(let userName):
+        case .invitationLostFrom(let name):
             self.init(
                 title: "Invitation Lost",
-                message: "\(userName)의 연결이 끊겼습니다.",
+                message: "\(name)의 연결이 끊겼습니다.",
                 preferredStyle: .alert
             )
         case .custom(let title, let message):

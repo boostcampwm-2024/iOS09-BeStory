@@ -70,8 +70,7 @@ final public class ConnectionViewController: UIViewController {
 extension ConnectionViewController {
     func setupBind() {
         let output = viewModel.transform(input.eraseToAnyPublisher())
-        output
-            .receive(on: DispatchQueue.main)
+        output.receive(on: DispatchQueue.main)
             .sink { [weak self] result in
                 guard let self else { return }
                 switch result {
@@ -91,46 +90,40 @@ extension ConnectionViewController {
 
                 case .invitationReceivedBy(let user):
                     let alert = UIAlertController(
-                        type: .invitationReceivedBy(userName: user.name),
+                        type: .invitationReceivedBy(name: user.name),
                         actions: [
                             .confirm(handler: {
                                 self.input.send(.acceptInvitation(user: user))
                                 self.resetCurrentAlert()
                                 self.resetCurrentUserId()
-                                self.removeUserCircleView(user: user)
-                            }),
+                                self.removeUserCircleView(user: user)}),
                             .cancel(handler: {
                                 self.input.send(.rejectInvitation)
                                 self.resetCurrentAlert()
-                                self.resetCurrentUserId()
-                            })
-                        ]
-                    )
+                                self.resetCurrentUserId()})
+                        ])
                     setCurrentAlertAndUserId(alert: alert, userId: user.id)
                     present(alert, animated: true)
                 case .invitationAcceptedBy(let user):
                     self.resetCurrentAlert()
 
                     present(UIAlertController(
-                        type: .invitationAcceptedBy(userName: user.name),
-                        actions: [.confirm(), .cancel()]
-                    ), animated: true)
+                        type: .invitationAcceptedBy(name: user.name),
+                        actions: [.confirm(), .cancel()]), animated: true)
 
                     self.removeUserCircleView(user: user)
                 case .invitationRejectedBy(let userName):
                     self.resetCurrentAlert()
 
                     present(UIAlertController(
-                        type: .invitationRejectedBy(userName: userName),
-                        actions: [.confirm(), .cancel()]
-                    ), animated: true)
+                        type: .invitationRejectedBy(name: userName),
+                        actions: [.confirm(), .cancel()]), animated: true)
                 case .invitationTimeout:
                     self.resetCurrentAlert()
 
                     present(UIAlertController(
                         type: .invitationTimeout,
-                        actions: [.confirm(), .cancel()]
-                    ), animated: true)
+                        actions: [.confirm(), .cancel()]), animated: true)
                 }
             }
             .store(in: &cancellables)
