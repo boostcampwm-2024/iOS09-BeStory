@@ -81,28 +81,33 @@ extension ConnectionViewController {
 
                     // Invitation Output
 
-                case .invited(let invitingUser):
+                case .invited(let invitingUser, let position):
                     showAlertWithActions(
                         title: invitingUser.name,
                         message: "초대를 수락하시겠습니까?",
                         onConfirm: {
                             self.input.send(.accept)
                             self.closeCurrentAlert()
+
+                            let position = CGPoint(x: position.0, y: position.1)
+                            self.removeUserCircleView(user: invitingUser, position: position)
                         },
                         onCancel: {
                             self.input.send(.reject)
                             self.closeCurrentAlert()
                         }
                     )
-                case .accepted(let userName):
+                case .accepted(let invitedUser, let position):
                     self.closeCurrentAlert()
 
                     showAlertWithActions(
                         title: "Accepted",
-                        message: "상대방(\(userName))이 초대를 수락했습니다.",
+                        message: "상대방(\(invitedUser.name))이 초대를 수락했습니다.",
                         onConfirm: { self.closeCurrentAlert() },
                         onCancel: { self.closeCurrentAlert() }
                     )
+                    let position = CGPoint(x: position.0, y: position.1)
+                    self.removeUserCircleView(user: invitedUser, position: position)
                 case .rejected(let userName):
                     self.closeCurrentAlert()
 

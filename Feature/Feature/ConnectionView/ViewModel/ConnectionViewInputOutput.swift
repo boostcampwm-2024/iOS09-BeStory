@@ -32,8 +32,8 @@ enum ConnectionViewOutput {
 
     // Invitation Output
 
-    case invited(from: BrowsedUser)
-    case accepted(name: String)
+    case invited(from: BrowsedUser, position: (Double, Double))
+    case accepted(by: BrowsedUser, position: (Double, Double))
     case rejected(name: String)
     case timeout
 }
