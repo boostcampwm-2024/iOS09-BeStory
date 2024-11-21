@@ -68,6 +68,7 @@
 				"Helper/AVAsset+Thumbnail.swift",
 				Helper/EventPublisher.swift,
 				"Helper/UIColor+HexInitialization.swift",
+				MainViewController.swift,
 				VideoListView/VideoDetailView/VideoDetailViewController.swift,
 				VideoListView/VideoListViewController.swift,
 				VideoListView/View/CollectionView/VideoListCollectionViewCell.swift,
