@@ -27,8 +27,6 @@ final public class ConnectionViewModel {
     private var outerDiameter: Float?
     private var usedPositions: [String: (Double, Double)] = [:]
 
-    private let emojis = ["😀", "😊", "🤪", "🤓", "😡", "🥶", "🤯", "🤖", "👻", "👾"]
-
     // MARK: - Initializer
 
     public init(usecase: BrowsingUserUseCaseInterface) {
@@ -170,7 +168,7 @@ private extension ConnectionViewModel {
         guard
             self.getCurrentPosition(id: user.id) == nil,
             let position = self.getRandomPosition(),
-            let emoji = self.getRandomEmoji()
+            let emoji = EmojiManager.shared.getRandomEmoji(id: user.id)
         else { return }
 
         self.addCurrentPosition(id: user.id, position: position)
@@ -187,6 +185,7 @@ private extension ConnectionViewModel {
     func lost(user: BrowsedUser) {
         guard let position =  self.getCurrentPosition(id: user.id) else { return }
         self.removeCurrentPosition(id: user.id)
+        EmojiManager.shared.removeUserEmoji(id: user.id)
         self.output.send(.lost(user: user, position: position))
     }
 }
@@ -194,10 +193,6 @@ private extension ConnectionViewModel {
 // MARK: - Internal Methods
 
 extension ConnectionViewModel {
-    func getRandomEmoji() -> String? {
-        return emojis.randomElement()
-    }
-
     func getRandomPosition() -> (Double, Double)? {
         guard
             let centerPosition = self.centerPosition,

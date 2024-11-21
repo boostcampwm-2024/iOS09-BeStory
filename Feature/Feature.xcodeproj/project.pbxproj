@@ -66,6 +66,7 @@
 				GroupInfoView/ViewModel/GroupInfoViewModel.swift,
 				GroupInfoView/ViewModel/GroupInfoViewOutput.swift,
 				"Helper/AVAsset+Thumbnail.swift",
+				Helper/EmojiManager.swift,
 				Helper/EventPublisher.swift,
 				"Helper/UIColor+HexInitialization.swift",
 				MainViewController.swift,
