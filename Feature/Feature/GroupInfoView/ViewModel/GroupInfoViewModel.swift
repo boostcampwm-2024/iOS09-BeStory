@@ -69,7 +69,9 @@ private extension GroupInfoViewModel {
     }
     
     func userDidInvited(user: ConnectedUser) {
-        guard !users.contains(user) else { return }
+        if users.contains(where: { $0.id == user.id }) {
+            return userStateDidChanged(user: user)
+        }
         users.append(user)
         output.send(.userDidInvited(user: user))
         output.send(.groupCountDidChanged(count: users.count))
