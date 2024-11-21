@@ -104,7 +104,7 @@ private extension ConnectionViewModel {
         usecase.invitationReceived
             .sink { [weak self] invitingUser in
                 guard let self else { return }
-                output.send(.invitedGroupBy(user: invitingUser))
+                output.send(.invitationReceivedBy(user: invitingUser))
             }
             .store(in: &cancellables)
 

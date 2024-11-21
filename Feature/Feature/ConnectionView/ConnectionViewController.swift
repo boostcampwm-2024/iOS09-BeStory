@@ -84,50 +84,44 @@ extension ConnectionViewController {
 
                     // Invitation Output
 
-                case .invitedGroupBy(let user):
-                    showAlertWithActions(
-                        title: user.name,
-                        message: "초대를 수락하시겠습니까?",
-                        onConfirm: {
-                            self.input.send(.acceptInvitation(user: user))
-                            self.closeCurrentAlert()
-                            self.removeUserCircleView(user: user)
-                        },
-                        onCancel: {
-                            self.input.send(.rejectInvitation)
-                            self.closeCurrentAlert()
-                        }
-                    )
+                case .invitationReceivedBy(let user):
+                    present(UIAlertController(
+                        type: .invitationReceivedBy(userName: user.name),
+                        actions: [
+                            .confirm(handler: {
+                                self.input.send(.acceptInvitation(user: user))
+                                self.closeCurrentAlert()
+                                self.removeUserCircleView(user: user)
+                            }),
+                            .cancel(handler: {
+                                self.input.send(.rejectInvitation)
+                                self.closeCurrentAlert()
+                            })
+                        ]
+                    ), animated: true)
                 case .invitationAcceptedBy(let user):
                     self.closeCurrentAlert()
 
-                    showAlertWithActions(
-                        title: "Accepted",
-                        message: "상대방(\(user.name))이 초대를 수락했습니다.",
-                        onConfirm: { self.closeCurrentAlert() },
-                        onCancel: { self.closeCurrentAlert() }
-                    )
+                    present(UIAlertController(
+                        type: .invitationAcceptedBy(userName: user.name),
+                        actions: [.confirm(), .cancel()]
+                    ), animated: true)
+
                     self.removeUserCircleView(user: user)
                 case .invitationRejectedBy(let userName):
                     self.closeCurrentAlert()
 
-                    showAlertWithActions(
-                        title: "Rejected",
-                        message: "상대방(\(userName))이 초대를 거절했습니다.",
-                        onConfirm: { self.closeCurrentAlert() },
-                        onCancel: { self.closeCurrentAlert() }
-                    )
+                    present(UIAlertController(
+                        type: .invitationRejectedBy(userName: userName),
+                        actions: [.confirm(), .cancel()]
+                    ), animated: true)
                 case .invitationTimeout:
-                    guard let alert = currentAlert else { return }
-                    alert.dismiss(animated: true)
-                    self.currentAlert = nil
+                    self.closeCurrentAlert()
 
-                    showAlertWithActions(
-                        title: "Timeout",
-                        message: "응답 시간이 초과되었습니다.",
-                        onConfirm: { self.closeCurrentAlert() },
-                        onCancel: { self.closeCurrentAlert() }
-                    )
+                    present(UIAlertController(
+                        type: .invitationTimeout,
+                        actions: [.confirm(), .cancel()]
+                    ), animated: true)
                 }
             }
             .store(in: &cancellables)
@@ -140,29 +134,29 @@ extension ConnectionViewController {
 private extension ConnectionViewController {
     func userDidTapped(_ sender: UITapGestureRecognizer) {
         guard let id = sender.view?.accessibilityLabel else { return }
-        showAlertWithActions(
-            title: "Invite",
-            message: "초대하시겠습니까?",
-            onConfirm: {
+        present(UIAlertController(type: .requestInvitation, actions: [
+            .confirm(handler: {
                 self.input.send(.inviteUser(id: id))
-                self.closeCurrentAlert()
-
-                self.showAlertWithoutActions(
+                self.currentAlert = UIAlertController(
                     title: "Waiting",
-                    message: "상대방의 응답을 기다리는 중입니다."
+                    message: "상대방의 응답을 기다리는 중입니다.",
+                    preferredStyle: .alert
                 )
-            },
-            onCancel: { self.closeCurrentAlert() }
-        )
+                self.present(self.currentAlert!, animated: true)
+            }),
+            .cancel()]
+        ), animated: true)
     }
 
     func nextButtonDidTapped() {
-        let videoListViewController = VideoListViewController(viewModel: DIContainer.shared.resolve(type: MultipeerVideoListViewModel.self))
+        let videoListViewController = VideoListViewController(
+            viewModel: DIContainer.shared.resolve(type: MultipeerVideoListViewModel.self)
+        )
         self.navigationController?.pushViewController(videoListViewController, animated: true)
     }
 }
 
-// MARK: - Methods
+// MARK: - Private Methods
 
 private extension ConnectionViewController {
     func addUserCircleView(user: BrowsedUser, position: CGPoint, emoji: String) {
@@ -193,43 +187,6 @@ private extension ConnectionViewController {
             .forEach { $0.removeFromSuperview() }
 
         userContainerView.layoutIfNeeded()
-    }
-
-    func showAlertWithActions(
-        title: String,
-        message: String,
-        onConfirm: @escaping () -> Void,
-        onCancel: @escaping () -> Void
-    ) {
-        let alert = UIAlertController(
-            title: title,
-            message: message,
-            preferredStyle: .alert
-        )
-
-        let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
-            onConfirm()
-        }
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel) { _ in
-            onCancel()
-        }
-
-        alert.addAction(confirmAction)
-        alert.addAction(cancelAction)
-
-        present(alert, animated: true)
-        currentAlert = alert
-    }
-
-    func showAlertWithoutActions(title: String, message: String) {
-        let alert = UIAlertController(
-            title: title,
-            message: message,
-            preferredStyle: .alert
-        )
-
-        present(alert, animated: true)
-        currentAlert = alert
     }
 
     func closeCurrentAlert() {

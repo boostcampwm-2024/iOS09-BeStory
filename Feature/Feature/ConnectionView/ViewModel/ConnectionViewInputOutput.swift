@@ -32,7 +32,7 @@ enum ConnectionViewOutput {
 
     // Invitation Output
 
-    case invitedGroupBy(user: BrowsedUser)
+    case invitationReceivedBy(user: BrowsedUser)
     case invitationAcceptedBy(user: BrowsedUser)
     case invitationRejectedBy(name: String)
     case invitationTimeout
