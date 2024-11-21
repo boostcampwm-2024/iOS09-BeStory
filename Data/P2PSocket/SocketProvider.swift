@@ -10,7 +10,7 @@ import MultipeerConnectivity
 
 public final class SocketProvider: NSObject, SocketProvidable {
 	fileprivate enum Constant {
-		static let serviceType = "beStory"
+		static let serviceType = "bestory"
 	}
 	
 	// MARK: - Properties
@@ -255,13 +255,14 @@ extension SocketProvider: MCNearbyServiceBrowserDelegate {
 		
 		if peer.state == .connected {
 			MCPeerIDStorage.shared.update(state: .pending, id: peerID)
+			peer.state = .pending
 		} else if peer.state == .found {
 			peer.state = .lost
 		}
 		
 		updatedPeer.send(peer)
 		
-		if peer.state == .found {
+		if peer.state == .lost {
 			MCPeerIDStorage.shared.remove(id: peerID)
 		}
 	}

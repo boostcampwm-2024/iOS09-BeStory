@@ -22,10 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 		let window = UIWindow(windowScene: windowScene)
 
-    let connectionViewController = ConnectionViewController(
-        viewModel: DIContainer.shared.resolve(type: ConnectionViewModel.self)
-    )
-    window.rootViewController = connectionViewController
+        window.rootViewController = RootViewController()
 
 		self.window = window
 		window.makeKeyAndVisible()
@@ -96,7 +93,9 @@ extension SceneDelegate {
 
         DIContainer.shared.register(
             type: GroupInfoViewModel.self,
-            instance: GroupInfoViewModel()
+            instance: GroupInfoViewModel(
+                usecase: DIContainer.shared.resolve(type: ConnectedUserUseCaseInterface.self)
+            )
         )
 
         DIContainer.shared.register(

@@ -6,11 +6,11 @@
 //
 
 import Combine
+import Entity
 import SnapKit
 import UIKit
 
 final public class GroupInfoViewController: UIViewController {
-    private let titleLabel = UILabel()
     private let countView = ParticipantCountView()
     private let participantStackView = UIStackView()
     private let participantScrollView = UIScrollView()
@@ -23,10 +23,6 @@ final public class GroupInfoViewController: UIViewController {
     public init(viewModel: GroupInfoViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-    }
-    
-    public convenience init() {
-        self.init(viewModel: GroupInfoViewModel())
     }
     
     public override func viewDidLoad() {
@@ -49,7 +45,8 @@ final public class GroupInfoViewController: UIViewController {
     
     func setupBind() {
         let output = viewModel.transform(input: input.eraseToAnyPublisher())
-        output.sink { [weak self] outputResult in
+        output.receive(on: DispatchQueue.main)
+            .sink { [weak self] outputResult in
             switch outputResult {
             case .userStateDidChanged(let user):
                 self?.updateInvitedUserState(user: user)
@@ -57,8 +54,8 @@ final public class GroupInfoViewController: UIViewController {
                 self?.addInvitedUser(user: user)
             case .groupCountDidChanged(count: let count):
                 self?.updateGroupCount(to: count)
-            case .titleDidChanged(title: let title):
-                self?.updateTitle(to: title)
+            case .userDidExit(user: let user):
+                self?.removeUserInfo(user: user)
             }
         }
         .store(in: &cancellables)
@@ -67,32 +64,29 @@ final public class GroupInfoViewController: UIViewController {
 
 private extension GroupInfoViewController {
     func setupViewHierarchies() {
-        view.addSubview(titleLabel)
         view.addSubview(countView)
         view.addSubview(participantScrollView)
         view.addSubview(exitButton)
+        exitButton.isEnabled = false
         participantScrollView.addSubview(participantStackView)
     }
     
     func setupViewConstraints() {
-        titleLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(10)
-            $0.leading.equalToSuperview().offset(28)
-        }
         countView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(10)
             $0.trailing.equalToSuperview().inset(28)
-            $0.centerY.equalTo(titleLabel)
+            $0.height.equalTo(20)
         }
         participantScrollView.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(20)
             $0.trailing.equalTo(exitButton.snp.leading).offset(-8)
-            $0.top.equalTo(titleLabel.snp.bottom).offset(12)
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(30)
             $0.height.equalTo(35)
         }
         exitButton.snp.makeConstraints {
+            $0.top.equalTo(countView.snp.bottom).offset(10)
             $0.height.equalTo(38)
             $0.trailing.equalToSuperview().inset(14)
-            $0.centerY.equalTo(participantScrollView)
         }
         participantStackView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
@@ -102,9 +96,7 @@ private extension GroupInfoViewController {
     
     func setupViewAttributes() {
         view.backgroundColor = UIColor(red: 17/255, green: 24/255, blue: 38/255, alpha: 1)
-        titleLabel.text = title
-        titleLabel.font = .systemFont(ofSize: 16, weight: .semibold)
-        titleLabel.textColor = .white
+        
         var buttonConfig = UIButton.Configuration.filled()
         buttonConfig.buttonSize = .small
         buttonConfig.title = "나가기"
@@ -128,24 +120,29 @@ private extension GroupInfoViewController {
         participantStackView.spacing = 14
     }
     
-    func addInvitedUser(user: InvitedUser) {
+    func addInvitedUser(user: ConnectedUser) {
         participantStackView.addArrangedSubview(ParticipantInfoView(user: user))
     }
     
-    func updateInvitedUserState(user: InvitedUser) {
-        Task {
-            participantStackView.arrangedSubviews.forEach {
-                ($0 as? ParticipantInfoView)?.updateState(user: user)
-            }
-        }
+    func updateInvitedUserState(user: ConnectedUser) {
+        participantStackView.arrangedSubviews
+            .compactMap { $0 as? ParticipantInfoView }
+            .first(where: { (view: ParticipantInfoView) in
+                view.user.id == user.id
+            })?
+            .updateState(user.state)
+    }
+    
+    func removeUserInfo(user: ConnectedUser) {
+        participantStackView.arrangedSubviews
+            .compactMap { $0 as? ParticipantInfoView }
+            .first(where: {
+                $0.user.id == user.id
+            })?
+            .removeFromSuperview()
     }
     
     func updateGroupCount(to count: Int) {
         countView.updateCount(to: count)
-    }
-    
-    func updateTitle(to title: String) {
-        self.title = title
-        titleLabel.text = title
     }
 }
