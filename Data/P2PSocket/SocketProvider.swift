@@ -10,7 +10,7 @@ import MultipeerConnectivity
 
 public final class SocketProvider: NSObject, SocketProvidable {
 	fileprivate enum Constant {
-		static let serviceType = "beStory"
+		static let serviceType = "bestory"
 	}
 	
 	// MARK: - Properties
