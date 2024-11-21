@@ -56,7 +56,6 @@ private extension GroupInfoViewModel {
         usecase.updatedConnectedUser
             .sink { [weak self] updatedUser in
                 guard let self else { return }
-                print(updatedUser)
                 switch updatedUser.state {
                 case .connected:
                     userDidInvited(user: updatedUser)
