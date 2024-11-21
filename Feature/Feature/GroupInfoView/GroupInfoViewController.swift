@@ -11,7 +11,6 @@ import SnapKit
 import UIKit
 
 final public class GroupInfoViewController: UIViewController {
-    private let titleLabel = UILabel()
     private let countView = ParticipantCountView()
     private let participantStackView = UIStackView()
     private let participantScrollView = UIScrollView()
@@ -55,8 +54,6 @@ final public class GroupInfoViewController: UIViewController {
                 self?.addInvitedUser(user: user)
             case .groupCountDidChanged(count: let count):
                 self?.updateGroupCount(to: count)
-            case .titleDidChanged(title: let title):
-                self?.updateTitle(to: title)
             case .userDidExit(user: let user):
                 self?.updateInvitedUserState(user: user)
                 self?.removeUserInfo(user: user)
@@ -68,7 +65,6 @@ final public class GroupInfoViewController: UIViewController {
 
 private extension GroupInfoViewController {
     func setupViewHierarchies() {
-        view.addSubview(titleLabel)
         view.addSubview(countView)
         view.addSubview(participantScrollView)
         view.addSubview(exitButton)
@@ -76,24 +72,21 @@ private extension GroupInfoViewController {
     }
     
     func setupViewConstraints() {
-        titleLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(10)
-            $0.leading.equalToSuperview().offset(28)
-        }
         countView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(10)
             $0.trailing.equalToSuperview().inset(28)
-            $0.centerY.equalTo(titleLabel)
+            $0.height.equalTo(20)
         }
         participantScrollView.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(20)
             $0.trailing.equalTo(exitButton.snp.leading).offset(-8)
-            $0.top.equalTo(titleLabel.snp.bottom).offset(12)
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(30)
             $0.height.equalTo(35)
         }
         exitButton.snp.makeConstraints {
+            $0.top.equalTo(countView.snp.bottom).offset(10)
             $0.height.equalTo(38)
             $0.trailing.equalToSuperview().inset(14)
-            $0.centerY.equalTo(participantScrollView)
         }
         participantStackView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
@@ -103,9 +96,7 @@ private extension GroupInfoViewController {
     
     func setupViewAttributes() {
         view.backgroundColor = UIColor(red: 17/255, green: 24/255, blue: 38/255, alpha: 1)
-        titleLabel.text = title
-        titleLabel.font = .systemFont(ofSize: 16, weight: .semibold)
-        titleLabel.textColor = .white
+        
         var buttonConfig = UIButton.Configuration.filled()
         buttonConfig.buttonSize = .small
         buttonConfig.title = "나가기"
@@ -156,10 +147,5 @@ private extension GroupInfoViewController {
     
     func updateGroupCount(to count: Int) {
         countView.updateCount(to: count)
-    }
-    
-    func updateTitle(to title: String) {
-        self.title = title
-        titleLabel.text = title
     }
 }

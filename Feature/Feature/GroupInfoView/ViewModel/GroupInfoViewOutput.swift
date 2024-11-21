@@ -14,5 +14,4 @@ enum GroupInfoViewOutput {
     case userDidInvited(user: ConnectedUser)
     case userDidExit(user: ConnectedUser)
     case groupCountDidChanged(count: Int)
-    case titleDidChanged(title: String)
 }

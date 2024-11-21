@@ -14,21 +14,14 @@ public final class GroupInfoViewModel {
     typealias Output = GroupInfoViewOutput
     
     private var users = [ConnectedUser]()
-    private var title: String
     private let usecase: ConnectedUserUseCaseInterface
     
     var output = PassthroughSubject<GroupInfoViewOutput, Never>()
     var cancellables: Set<AnyCancellable> = []
 
-    public init(usecase: ConnectedUserUseCaseInterface, title: String) {
+    public init(usecase: ConnectedUserUseCaseInterface) {
         self.usecase = usecase
-        self.title = title
         setupBind()
-    }
-    
-    public convenience init(usecase: ConnectedUserUseCaseInterface) {
-        let title = "차은우원빈현빈장원영의 이야기"
-        self.init(usecase: usecase, title: title)
     }
 
     func transform(input: AnyPublisher<GroupInfoViewInput, Never>) -> AnyPublisher<GroupInfoViewOutput, Never> {
@@ -37,7 +30,6 @@ public final class GroupInfoViewModel {
             
             switch inputResult {
             case .viewDidLoad:
-                output.send(.titleDidChanged(title: title))
                 usecase.fetchConnectedUsers().forEach { user in
                     self.output.send(.userDidInvited(user: user))
                 }
