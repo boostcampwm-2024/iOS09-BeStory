@@ -25,11 +25,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let groupInfoViewController = GroupInfoViewController(viewModel: DIContainer.shared.resolve(type: GroupInfoViewModel.self))
         let connectionViewController = ConnectionViewController(viewModel: DIContainer.shared.resolve(type: ConnectionViewModel.self))
 
-        connectionViewController.onNextButton = {
-            let videoListViewController = VideoListViewController(viewModel: MultipeerVideoListViewModel())
-            connectionViewController.navigationController?.pushViewController(videoListViewController, animated: true)
-        }
-
         window.rootViewController = MainViewController(
             topViewController: groupInfoViewController,
             initialViewController: connectionViewController

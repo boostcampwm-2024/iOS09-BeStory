@@ -13,8 +13,6 @@ import UIKit
 final public class ConnectionViewController: UIViewController {
     // MARK: - Properties
 
-    public var onNextButton: (() -> Void)?
-
     private let viewModel: ConnectionViewModel
     private let input = PassthroughSubject<ConnectionViewModel.Input, Never>()
     private var cancellables = Set<AnyCancellable>()
@@ -158,7 +156,8 @@ private extension ConnectionViewController {
     }
 
     func nextButtonDidTapped() {
-        onNextButton?()
+        let videoListViewController = VideoListViewController(viewModel: MultipeerVideoListViewModel())
+        self.navigationController?.pushViewController(videoListViewController, animated: true)
     }
 }
 
