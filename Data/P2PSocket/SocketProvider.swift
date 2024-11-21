@@ -173,21 +173,25 @@ extension SocketProvider: MCSessionDelegate {
 		peer peerID: MCPeerID,
 		didChange state: MCSessionState
 	) {
-		defer {
-			if state == .notConnected {
-				MCPeerIDStorage.shared.remove(id: peerID)
-			}
-		}
+		guard var socketPeer = mapToSocketPeer(peerID) else { return }
+		var willRemovedAtStorage: Bool = false
 
 		switch state {
 			case .connected:
 				MCPeerIDStorage.shared.update(state: .connected, id: peerID) 
 			case .notConnected:
+				willRemovedAtStorage = socketPeer.state == .connected
 				MCPeerIDStorage.shared.update(state: .disconnected, id: peerID)
 			default: break
 		}
-		guard let socketPeer = mapToSocketPeer(peerID) else { return }
-		updatedPeer.send(socketPeer)
+		
+		if let sendSocketPeer = mapToSocketPeer(peerID) {
+			updatedPeer.send(sendSocketPeer)
+		}
+		
+		if willRemovedAtStorage {
+			MCPeerIDStorage.shared.remove(id: peerID)
+		}
 	}
 	
 	public func session(
