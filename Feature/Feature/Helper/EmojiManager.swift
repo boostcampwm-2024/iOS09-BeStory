@@ -19,14 +19,13 @@ final class EmojiManager {
 
     // MARK: - Methods
 
-    func getRandomEmoji(id: String) -> String? {
-        let randomEmoji = emojis.randomElement()
-        userEmojis[id] = randomEmoji
-        return randomEmoji
-    }
-
-    func getUserEmoji(id: String) -> String? {
-        return userEmojis[id]
+    func getEmoji(id: String) -> String? {
+        guard let userEmoji = userEmojis[id] else {
+            let randomEmoji = emojis.randomElement()
+            userEmojis[id] = randomEmoji
+            return randomEmoji
+        }
+        return userEmoji
     }
 
     func removeUserEmoji(id: String) {

@@ -146,7 +146,7 @@ private extension ConnectionViewModel {
     func found(user: BrowsedUser) {
         guard
             self.getCurrentPosition(id: user.id) == nil,
-            let emoji = EmojiManager.shared.getRandomEmoji(id: user.id)
+            let emoji = EmojiManager.shared.getEmoji(id: user.id)
         else { return }
 
         let position = self.getRandomPosition()

@@ -132,7 +132,7 @@ private extension GroupInfoViewController {
     func addInvitedUser(user: ConnectedUser) {
         participantStackView.addArrangedSubview(ParticipantInfoView(
             user: user,
-            emoji: EmojiManager.shared.getUserEmoji(id: user.id)
+            emoji: EmojiManager.shared.getEmoji(id: user.id)
         ))
     }
     
