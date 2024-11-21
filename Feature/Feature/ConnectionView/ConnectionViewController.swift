@@ -51,9 +51,9 @@ final public class ConnectionViewController: UIViewController {
         setupBind()
 
         viewModel.configure(
-            centerPosition: (view.center.x, view.center.y),
-            innerDiameter: Float(Constants.centralCircleViewSize),
-            outerDiameter: Float(Constants.outerGrayCircleViewSize)
+            centerPosition: view.center,
+            innerRadius: Constants.centralCircleViewRadius,
+            outerRadius: Constants.outerGrayCircleViewRadius
         )
 
         input.send(.fetchUsers)
@@ -73,10 +73,8 @@ extension ConnectionViewController {
                     // Connection Output
 
                 case .found(let user, let position, let emoji):
-                    let position = CGPoint(x: position.0, y: position.1)
                     addUserCircleView(user: user, position: position, emoji: emoji)
                 case .lost(let user, let position):
-                    let position = CGPoint(x: position.0, y: position.1)
                     removeUserCircleView(user: user, position: position)
                     closeCurrentAlert()
 
@@ -89,8 +87,6 @@ extension ConnectionViewController {
                         onConfirm: {
                             self.input.send(.accept)
                             self.closeCurrentAlert()
-
-                            let position = CGPoint(x: position.0, y: position.1)
                             self.removeUserCircleView(user: invitingUser, position: position)
                         },
                         onCancel: {
@@ -107,7 +103,6 @@ extension ConnectionViewController {
                         onConfirm: { self.closeCurrentAlert() },
                         onCancel: { self.closeCurrentAlert() }
                     )
-                    let position = CGPoint(x: position.0, y: position.1)
                     self.removeUserCircleView(user: invitedUser, position: position)
                 case .rejected(let userName):
                     self.closeCurrentAlert()
