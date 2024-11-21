@@ -50,9 +50,10 @@ private extension ParticipantInfoView {
     
     func setupViewConstraints() {
         profileEmojiLabel.snp.makeConstraints {
-            $0.width.height.equalTo(18)
+            $0.height.equalTo(18)
             $0.leading.equalToSuperview().inset(12)
             $0.centerY.equalToSuperview()
+            $0.top.bottom.equalToSuperview().inset(8)
         }
         nameLabel.snp.makeConstraints {
             $0.leading.equalTo(profileEmojiLabel.snp.trailing).offset(6)
@@ -70,7 +71,7 @@ private extension ParticipantInfoView {
         layer.cornerRadius = 12
 //        profileEmojiLabel.backgroundColor = .black
         setupName(to: user.name)
-        nameLabel.font = .systemFont(ofSize: 14, weight: .semibold)
+        nameLabel.font = .systemFont(ofSize: 18, weight: .semibold)
         nameLabel.textColor = .white
         setupStateIndicator(to: user.state)
         stateIndicatorView.layer.cornerRadius = 4
