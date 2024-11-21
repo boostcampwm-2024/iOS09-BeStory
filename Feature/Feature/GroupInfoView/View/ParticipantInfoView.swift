@@ -36,10 +36,6 @@ final class ParticipantInfoView: UIView {
         fatalError("init with XIB not supported")
     }
     
-    public override var intrinsicContentSize: CGSize {
-        return CGSize(width: profileEmojiLabel.frame.width + nameLabel.frame.width, height: 35)
-    }
-    
     func updateState(_ state: ConnectedUser.State) {
         setupStateIndicator(to: state)
     }
