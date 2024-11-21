@@ -5,7 +5,7 @@
 //  Created by 이숲 on 11/11/24.
 //
 
-import Combine
+import Foundation
 import Entity
 
 // MARK: - Input
@@ -27,13 +27,13 @@ enum ConnectionViewInput {
 enum ConnectionViewOutput {
     // Connection Output
 
-    case found(user: BrowsedUser, position: (Double, Double), emoji: String)
-    case lost(user: BrowsedUser, position: (Double, Double))
+    case found(user: BrowsedUser, position: CGPoint, emoji: String)
+    case lost(user: BrowsedUser, position: CGPoint)
 
     // Invitation Output
 
-    case invited(from: BrowsedUser, position: (Double, Double))
-    case accepted(by: BrowsedUser, position: (Double, Double))
+    case invited(from: BrowsedUser, position: CGPoint)
+    case accepted(user: BrowsedUser, position: CGPoint)
     case rejected(name: String)
     case timeout
 }

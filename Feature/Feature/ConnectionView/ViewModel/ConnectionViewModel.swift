@@ -22,10 +22,10 @@ final public class ConnectionViewModel {
     private var output = PassthroughSubject<Output, Never>()
     private var cancellables: Set<AnyCancellable> = []
 
-    private var centerPosition: (Double, Double)?
-    private var innerDiameter: Float?
-    private var outerDiameter: Float?
-    private var usedPositions: [String: (Double, Double)] = [:]
+    private var centerPosition: CGPoint?
+    private var innerRadius: CGFloat?
+    private var outerRadius: CGFloat?
+    private var usedPositions: [String: CGPoint] = [:]
 
     // MARK: - Initializer
 
@@ -35,13 +35,13 @@ final public class ConnectionViewModel {
     }
 
     func configure(
-        centerPosition: (Double, Double),
-        innerDiameter: Float,
-        outerDiameter: Float
+        centerPosition: CGPoint,
+        innerRadius: CGFloat,
+        outerRadius: CGFloat
     ) {
         self.centerPosition = centerPosition
-        self.innerDiameter = innerDiameter
-        self.outerDiameter = outerDiameter
+        self.innerRadius = innerRadius
+        self.outerRadius = outerRadius
     }
 }
 
@@ -138,7 +138,7 @@ private extension ConnectionViewModel {
                 case .accept:
                     guard let position =  self.getCurrentPosition(id: invitedUser.id) else { return }
                     self.removeCurrentPosition(id: invitedUser.id)
-                    output.send(.accepted(by: BrowsedUser(
+                    output.send(.accepted(user: BrowsedUser(
                         id: invitedUser.id,
                         state: .found,
                         name: invitedUser.name
@@ -167,10 +167,10 @@ private extension ConnectionViewModel {
     func found(user: BrowsedUser) {
         guard
             self.getCurrentPosition(id: user.id) == nil,
-            let position = self.getRandomPosition(),
             let emoji = EmojiManager.shared.getRandomEmoji(id: user.id)
         else { return }
 
+        let position = self.getRandomPosition()
         self.addCurrentPosition(id: user.id, position: position)
 
         self.output.send(
@@ -193,43 +193,39 @@ private extension ConnectionViewModel {
 // MARK: - Internal Methods
 
 extension ConnectionViewModel {
-    func getRandomPosition() -> (Double, Double)? {
+    func getRandomPosition() -> CGPoint {
         guard
             let centerPosition = self.centerPosition,
-            let innerDiameter = self.innerDiameter,
-            let outerDiameter = self.outerDiameter
-        else { return nil }
+            let innerRadius = self.innerRadius,
+            let outerRadius = self.outerRadius
+        else { return CGPoint.zero }
 
         let maxAttempts = usedPositions.count + 1
         var attempts = 0
-        var position: (Double, Double)
+        var position: CGPoint
 
         repeat {
             attempts += 1
 
-            let innerRadius = innerDiameter / 2
-            let outerRadius = outerDiameter / 2
+            let randomRadius = CGFloat.random(in: innerRadius...outerRadius)
+            let angle = CGFloat.random(in: 0...(2 * .pi))
 
-            let randomRadius = Float.random(in: innerRadius...outerRadius)
-            let angle = Float.random(in: 0...(2 * .pi))
-
-            position = (
-                (centerPosition.0 + Double(randomRadius * cos(angle))).rounded(),
-                (centerPosition.1 + Double(randomRadius * sin(angle))).rounded()
+            position = CGPoint(
+                x: centerPosition.x + (randomRadius * cos(angle)).rounded(),
+                y: centerPosition.y + (randomRadius * sin(angle)).rounded()
             )
         } while usedPositions.contains(where: {
-            $0.value.0.distance(to: position.0) < 50 ||
-            $0.value.1.distance(to: position.1) < 50
+            $0.value.x.distance(to: position.x) < 50 || $0.value.y.distance(to: position.y) < 50
         }) && attempts < maxAttempts
 
         return position
     }
 
-    func getCurrentPosition(id: String) -> (Double, Double)? {
+    func getCurrentPosition(id: String) -> CGPoint? {
         return usedPositions[id]
     }
 
-    func addCurrentPosition(id: String, position: (Double, Double)) {
+    func addCurrentPosition(id: String, position: CGPoint) {
         usedPositions[id] = position
     }
 
