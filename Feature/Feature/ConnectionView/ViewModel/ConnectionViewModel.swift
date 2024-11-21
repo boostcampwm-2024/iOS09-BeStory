@@ -135,6 +135,7 @@ private extension ConnectionViewModel {
                 guard let self else { return }
 
                 output.send(.invitationTimeout)
+                usecase.rejectInvitation()
             }
             .store(in: &cancellables)
     }
