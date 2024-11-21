@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Core
 import Entity
 import SnapKit
 import UIKit
@@ -156,7 +157,7 @@ private extension ConnectionViewController {
     }
 
     func nextButtonDidTapped() {
-        let videoListViewController = VideoListViewController(viewModel: MultipeerVideoListViewModel())
+        let videoListViewController = VideoListViewController(viewModel: DIContainer.shared.resolve(type: MultipeerVideoListViewModel.self))
         self.navigationController?.pushViewController(videoListViewController, animated: true)
     }
 }

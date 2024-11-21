@@ -105,7 +105,7 @@ extension SceneDelegate {
         )
 
         DIContainer.shared.register(
-            type: (any VideoListViewModel).self,
+            type: MultipeerVideoListViewModel.self,
             instance: MultipeerVideoListViewModel()
         )
     }
