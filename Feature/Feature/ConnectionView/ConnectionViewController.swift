@@ -52,7 +52,7 @@ final public class ConnectionViewController: UIViewController {
 
         viewModel.configure(
             centerPosition: (view.center.x, view.center.y),
-            innerDiameter: Float(Constants.centralCircleViewSize),
+            innerDiameter: Float(Constants.innerGrayCircleViewSize),
             outerDiameter: Float(view.frame.width)
         )
 
