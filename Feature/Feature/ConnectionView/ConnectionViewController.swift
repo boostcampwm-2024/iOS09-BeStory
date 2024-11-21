@@ -78,6 +78,7 @@ extension ConnectionViewController {
                 case .lost(let user, let position):
                     let position = CGPoint(x: position.0, y: position.1)
                     removeUserCircleView(user: user, position: position)
+                    closeCurrentAlert()
 
                     // Invitation Output
 
