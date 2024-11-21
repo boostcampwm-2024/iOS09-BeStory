@@ -55,7 +55,6 @@ final public class GroupInfoViewController: UIViewController {
             case .groupCountDidChanged(count: let count):
                 self?.updateGroupCount(to: count)
             case .userDidExit(user: let user):
-                self?.updateInvitedUserState(user: user)
                 self?.removeUserInfo(user: user)
             }
         }
@@ -135,15 +134,12 @@ private extension GroupInfoViewController {
     }
     
     func removeUserInfo(user: ConnectedUser) {
-        Task {
-            try await Task.sleep(for: .seconds(1))
-            participantStackView.arrangedSubviews
-                .compactMap { $0 as? ParticipantInfoView }
-                .first(where: {
-                    $0.user.id == user.id
-                })?
-                .removeFromSuperview()
-        }
+        participantStackView.arrangedSubviews
+            .compactMap { $0 as? ParticipantInfoView }
+            .first(where: {
+                $0.user.id == user.id
+            })?
+            .removeFromSuperview()
     }
     
     func updateGroupCount(to count: Int) {
