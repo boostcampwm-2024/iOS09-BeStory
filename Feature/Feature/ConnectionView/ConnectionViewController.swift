@@ -13,6 +13,8 @@ import UIKit
 final public class ConnectionViewController: UIViewController {
     // MARK: - Properties
 
+    public var onNextButton: (() -> Void)?
+
     private let viewModel: ConnectionViewModel
     private let input = PassthroughSubject<ConnectionViewModel.Input, Never>()
     private var cancellables = Set<AnyCancellable>()
@@ -23,6 +25,7 @@ final public class ConnectionViewController: UIViewController {
     private var innerGrayCircleView = UIView()
     private var outerGrayCircleView = UIView()
     private var userContainerView = UIView()
+    private var nextButton = UIButton(type: .system)
     private var currentAlert: UIAlertController?
 
     // MARK: - Initializer
@@ -147,6 +150,10 @@ private extension ConnectionViewController {
             onCancel: { self.closeCurrentAlert() }
         )
     }
+
+    func nextButtonDidTapped() {
+        onNextButton?()
+    }
 }
 
 // MARK: - Methods
@@ -214,7 +221,7 @@ private extension ConnectionViewController {
             message: message,
             preferredStyle: .alert
         )
-        
+
         present(alert, animated: true)
         currentAlert = alert
     }
@@ -244,6 +251,14 @@ private extension ConnectionViewController {
         static let outerGrayCircleViewRadius: CGFloat = 175
 
         static let userContainerViewSize: CGFloat = 450
+
+        static let nextButtonBackgroundColor: UIColor = UIColor(red: 31/255, green: 41/255, blue: 55/255, alpha: 1)
+        static let nextButtonTextColor: UIColor = .white
+        static let nextButtonFontSize: CGFloat = 20
+        static let nextButtonCornerRadius: CGFloat = 10
+        static let nextButtonBottomOffset: CGFloat = -20
+        static let nextButtonWidth: CGFloat = 120
+        static let nextButtonHeight: CGFloat = 50
     }
 
     func setupViewAttributes() {
@@ -252,6 +267,7 @@ private extension ConnectionViewController {
         setupCentralCircleView()
         setupGrayCircleViews()
         setupUserContainerView()
+        setupNextButton()
     }
 
     func setupCentralCircleView() {
@@ -276,12 +292,22 @@ private extension ConnectionViewController {
         userContainerView.backgroundColor = .clear
     }
 
+    func setupNextButton() {
+        nextButton.backgroundColor = Constants.nextButtonBackgroundColor
+        nextButton.setTitle("편집하기", for: .normal)
+        nextButton.setTitleColor(.white, for: .normal)
+        nextButton.titleLabel?.font = .systemFont(ofSize: Constants.nextButtonFontSize)
+        nextButton.layer.cornerRadius = Constants.nextButtonCornerRadius
+        nextButton.addTarget(self, action: #selector(nextButtonDidTapped), for: .touchUpInside)
+    }
+
     func setupViewHierarchies() {
         [
             centralCircleView,
             innerGrayCircleView,
             outerGrayCircleView,
-            userContainerView
+            userContainerView,
+            nextButton
         ].forEach({
             view.addSubview($0)
         })
@@ -305,6 +331,13 @@ private extension ConnectionViewController {
 
         userContainerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+
+        nextButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(Constants.nextButtonBottomOffset)
+            make.width.equalTo(Constants.nextButtonWidth)
+            make.height.equalTo(Constants.nextButtonHeight)
         }
     }
 }

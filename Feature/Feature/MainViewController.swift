@@ -33,7 +33,6 @@ public final class MainViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupViewAttributes()
         setupViewHierarchies()
         setupViewConstraints()
     }
@@ -43,23 +42,13 @@ public final class MainViewController: UIViewController {
 
 private extension MainViewController {
     enum Constants {
-        static let topViewCornerRadius: CGFloat = 10
-
-        static let topViewTopOffset: CGFloat = 20
-        static let topViewLeadingOffset: CGFloat = 20
-        static let topViewTrailingOffset: CGFloat = -20
         static let topViewHeight: CGFloat = 120
-    }
-
-    func setupViewAttributes() {
-        topViewController.view.layer.cornerRadius = Constants.topViewCornerRadius
-        topViewController.view.clipsToBounds = true
     }
 
     func setupViewHierarchies() {
         [
-            bottomNavigationController,
-            topViewController
+            topViewController,
+            bottomNavigationController
         ].forEach({
             addChild($0)
             view.addSubview($0.view)
@@ -68,15 +57,18 @@ private extension MainViewController {
     }
 
     func setupViewConstraints() {
-        bottomNavigationController.view.snp.makeConstraints {
-            $0.edges.equalTo(view.safeAreaLayoutGuide)
+        topViewController.view.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.leading.equalToSuperview()
+            $0.trailing.equalToSuperview()
+            $0.height.equalTo(Constants.topViewHeight)
         }
 
-        topViewController.view.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(Constants.topViewTopOffset)
-            $0.leading.equalToSuperview().offset(Constants.topViewLeadingOffset)
-            $0.trailing.equalToSuperview().offset(Constants.topViewTrailingOffset)
-            $0.height.equalTo(Constants.topViewHeight)
+        bottomNavigationController.view.snp.makeConstraints {
+            $0.top.equalTo(topViewController.view.snp.bottom)
+            $0.leading.equalToSuperview()
+            $0.trailing.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
 }
