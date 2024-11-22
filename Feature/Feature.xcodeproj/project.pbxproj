@@ -9,11 +9,8 @@
 /* Begin PBXBuildFile section */
 		FE0334DA2CD9DA1100AA58C9 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = FE0334D92CD9DA1100AA58C9 /* SnapKit */; };
 		FE8208842CED847A00307694 /* Entity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE8208822CED847A00307694 /* Entity.framework */; };
-		FE8208852CED847A00307694 /* Entity.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FE8208822CED847A00307694 /* Entity.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FE8208862CED847A00307694 /* Interfaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE8208832CED847A00307694 /* Interfaces.framework */; };
-		FE8208872CED847A00307694 /* Interfaces.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FE8208832CED847A00307694 /* Interfaces.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FE8209A32CEDF52900307694 /* Core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE8209A22CEDF52900307694 /* Core.framework */; };
-		FE8209A42CEDF52900307694 /* Core.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FE8209A22CEDF52900307694 /* Core.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,23 +24,9 @@
 			name = Dependencies;
 			runOnlyForDeploymentPostprocessing = 1;
 		};
-		FEF7797C2CDCB38B00FFE089 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				FE8208872CED847A00307694 /* Interfaces.framework in Embed Frameworks */,
-				FE8209A42CEDF52900307694 /* Core.framework in Embed Frameworks */,
-				FE8208852CED847A00307694 /* Entity.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		FE0334EE2CD9DE4600AA58C9 /* libDomain.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libDomain.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE8208822CED847A00307694 /* Entity.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Entity.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE8208832CED847A00307694 /* Interfaces.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Interfaces.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE8209A22CEDF52900307694 /* Core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -137,7 +120,6 @@
 				FE8209A22CEDF52900307694 /* Core.framework */,
 				FE8208822CED847A00307694 /* Entity.framework */,
 				FE8208832CED847A00307694 /* Interfaces.framework */,
-				FE0334EE2CD9DE4600AA58C9 /* libDomain.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -153,7 +135,6 @@
 				FED968132CD908B000CD445C /* Sources */,
 				FED968142CD908B000CD445C /* Frameworks */,
 				FE0334E32CD9DD7400AA58C9 /* Dependencies */,
-				FEF7797C2CDCB38B00FFE089 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

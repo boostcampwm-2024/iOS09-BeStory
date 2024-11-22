@@ -7,12 +7,51 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FEC7C1C72CE7450A002D5C0F /* P2PSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEC7C1BF2CE74438002D5C0F /* P2PSocket.framework */; };
-		FEC7C1CA2CE755C5002D5C0F /* P2PSocket.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FEC7C1BF2CE74438002D5C0F /* P2PSocket.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FE820B6A2CF00C1100307694 /* P2PSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE820B692CF00C1100307694 /* P2PSocket.framework */; };
+		FE820B6C2CF00D5300307694 /* Entity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF779402CDC936900FFE089 /* Entity.framework */; };
+		FE820B702CF00D5300307694 /* Interfaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF778DC2CDB21B500FFE089 /* Interfaces.framework */; };
+		FE820B752CF00D5E00307694 /* Entity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF779402CDC936900FFE089 /* Entity.framework */; };
+		FE820B7A2CF00D6800307694 /* Entity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF779402CDC936900FFE089 /* Entity.framework */; };
+		FE820B7E2CF00D6800307694 /* Interfaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF778DC2CDB21B500FFE089 /* Interfaces.framework */; };
 		FEF779852CDCB44E00FFE089 /* libUseCase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FE6EF3C72CD8B5CA005DC39D /* libUseCase.a */; platformFilter = ios; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		FE820B6E2CF00D5300307694 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FEF7793F2CDC936900FFE089;
+			remoteInfo = Entity;
+		};
+		FE820B722CF00D5300307694 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FEF778DB2CDB21B500FFE089;
+			remoteInfo = Interfaces;
+		};
+		FE820B772CF00D5E00307694 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FEF7793F2CDC936900FFE089;
+			remoteInfo = Entity;
+		};
+		FE820B7C2CF00D6800307694 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FEF7793F2CDC936900FFE089;
+			remoteInfo = Entity;
+		};
+		FE820B802CF00D6800307694 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FEF778DB2CDB21B500FFE089;
+			remoteInfo = Interfaces;
+		};
 		FEC7C1792CE73495002D5C0F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
@@ -67,23 +106,11 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FEC7C1C92CE7450A002D5C0F /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				FEC7C1CA2CE755C5002D5C0F /* P2PSocket.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		FE6EF3C72CD8B5CA005DC39D /* libUseCase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUseCase.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		FEC7C1BF2CE74438002D5C0F /* P2PSocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = P2PSocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		FEC7C1E32CE7A7F6002D5C0F /* P2PSocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = P2PSocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE820B692CF00C1100307694 /* P2PSocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = P2PSocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF778DC2CDB21B500FFE089 /* Interfaces.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Interfaces.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF779402CDC936900FFE089 /* Entity.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Entity.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF779812CDCB44E00FFE089 /* UseCaseTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UseCaseTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -131,6 +158,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE820B7E2CF00D6800307694 /* Interfaces.framework in Frameworks */,
+				FE820B7A2CF00D6800307694 /* Entity.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,6 +167,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE820B752CF00D5E00307694 /* Entity.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -152,8 +182,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FEC7C1C72CE7450A002D5C0F /* P2PSocket.framework in Frameworks */,
+				FE820B702CF00D5300307694 /* Interfaces.framework in Frameworks */,
+				FE820B6A2CF00C1100307694 /* P2PSocket.framework in Frameworks */,
 				FEF779852CDCB44E00FFE089 /* libUseCase.a in Frameworks */,
+				FE820B6C2CF00D5300307694 /* Entity.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -186,8 +218,7 @@
 		FEF779602CDCA9F700FFE089 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FEC7C1E32CE7A7F6002D5C0F /* P2PSocket.framework */,
-				FEC7C1BF2CE74438002D5C0F /* P2PSocket.framework */,
+				FE820B692CF00C1100307694 /* P2PSocket.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -226,6 +257,8 @@
 			dependencies = (
 				FEC7C17A2CE73495002D5C0F /* PBXTargetDependency */,
 				FEF778E92CDB21CF00FFE089 /* PBXTargetDependency */,
+				FE820B7D2CF00D6800307694 /* PBXTargetDependency */,
+				FE820B812CF00D6800307694 /* PBXTargetDependency */,
 			);
 			name = UseCase;
 			packageProductDependencies = (
@@ -248,6 +281,7 @@
 			);
 			dependencies = (
 				FEF7796C2CDCB32800FFE089 /* PBXTargetDependency */,
+				FE820B782CF00D5E00307694 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				FEF778DD2CDB21B500FFE089 /* Interfaces */,
@@ -289,7 +323,6 @@
 				FEF7797D2CDCB44E00FFE089 /* Sources */,
 				FEF7797E2CDCB44E00FFE089 /* Frameworks */,
 				FEF7797F2CDCB44E00FFE089 /* Resources */,
-				FEC7C1C92CE7450A002D5C0F /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -297,6 +330,8 @@
 				FEC7C1C42CE7449C002D5C0F /* PBXTargetDependency */,
 				FEC7C1C62CE7449C002D5C0F /* PBXTargetDependency */,
 				FEF779872CDCB44E00FFE089 /* PBXTargetDependency */,
+				FE820B6F2CF00D5300307694 /* PBXTargetDependency */,
+				FE820B732CF00D5300307694 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				FEF779822CDCB44E00FFE089 /* UseCaseTest */,
@@ -451,6 +486,31 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		FE820B6F2CF00D5300307694 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FEF7793F2CDC936900FFE089 /* Entity */;
+			targetProxy = FE820B6E2CF00D5300307694 /* PBXContainerItemProxy */;
+		};
+		FE820B732CF00D5300307694 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FEF778DB2CDB21B500FFE089 /* Interfaces */;
+			targetProxy = FE820B722CF00D5300307694 /* PBXContainerItemProxy */;
+		};
+		FE820B782CF00D5E00307694 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FEF7793F2CDC936900FFE089 /* Entity */;
+			targetProxy = FE820B772CF00D5E00307694 /* PBXContainerItemProxy */;
+		};
+		FE820B7D2CF00D6800307694 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FEF7793F2CDC936900FFE089 /* Entity */;
+			targetProxy = FE820B7C2CF00D6800307694 /* PBXContainerItemProxy */;
+		};
+		FE820B812CF00D6800307694 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FEF778DB2CDB21B500FFE089 /* Interfaces */;
+			targetProxy = FE820B802CF00D6800307694 /* PBXContainerItemProxy */;
+		};
 		FEC7C17A2CE73495002D5C0F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FEF7793F2CDC936900FFE089 /* Entity */;
