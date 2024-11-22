@@ -87,6 +87,11 @@ extension SceneDelegate {
                 repository: DIContainer.shared.resolve(type: ConnectedUserRepositoryInterface.self)
             )
         )
+        
+        DIContainer.shared.register(
+            type: VideoUseCaseInterface.self,
+            instance: VideoUseCase(
+                repository: DIContainer.shared.resolve(type: SharingVideoRepositoryInterface.self)))
     }
 
     func registerViewModel() {
@@ -106,7 +111,9 @@ extension SceneDelegate {
 
         DIContainer.shared.register(
             type: MultipeerVideoListViewModel.self,
-            instance: MultipeerVideoListViewModel()
+            instance: MultipeerVideoListViewModel(
+                usecase: DIContainer.shared.resolve(type: VideoUseCaseInterface.self)
+            )
         )
     }
 }
