@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Core
 import MultipeerConnectivity
 
 public final class SocketProvider: NSObject, SocketProvidable {
@@ -17,6 +18,7 @@ public final class SocketProvider: NSObject, SocketProvidable {
 	public let updatedPeer = PassthroughSubject<SocketPeer, Never>()
 	public let invitationReceived = PassthroughSubject<SocketPeer, Never>()
     public let resourceShared = PassthroughSubject<SharedResource, Never>()
+    public let isSynchronized = PassthroughSubject<Void, Never>()
 	private var isAllowedInvitation: Bool = true
 	private var invitationHandler: ((Bool, MCSession?) -> Void)?
 	
@@ -26,6 +28,7 @@ public final class SocketProvider: NSObject, SocketProvidable {
 	private let session: MCSession
     private var sharingTasks = [Task<(), Never>]()
     private var sharedResources = [SharedResource]()
+    private var syncFlags: [MCPeerID: Bool] = [:]
     
 	// MARK: - Initializers
 	public override init() {
@@ -122,6 +125,15 @@ public extension SocketProvider {
 		
 		invitationHandler = nil
 	}
+    
+    func sendHashes(_ hashes: [String: String]) {
+        guard let data = try? JSONSerialization.data(withJSONObject: hashes, options: []) else { return }
+        try? session.send(data, toPeers: session.connectedPeers, with: .reliable)
+        
+        for peer in session.connectedPeers {
+            syncFlags[peer] = false
+        }
+    }
 	  
     func shareResource(url localUrl: URL, resourceName: String) async throws -> SharedResource {
         return try await withCheckedThrowingContinuation { resourceUrlContinuation in
@@ -198,7 +210,36 @@ extension SocketProvider: MCSessionDelegate {
 		_ session: MCSession,
 		didReceive data: Data,
 		fromPeer peerID: MCPeerID
-	) { }
+	) {
+        // hashes 관련 코드입니다.
+        if let hashes = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: String] {
+            let localHashes = FileSystemManager.shared.collectHashes()
+            let result: SyncMessage = (hashes == localHashes) ? .hashMatch : .hashMismatch
+            guard let data = try? JSONEncoder().encode(result) else { return }
+            try? session.send(data, toPeers: [peerID], with: .reliable)
+        }
+        
+        // 동기화 결과 관련 코드입니다.
+        if let result = try? JSONDecoder().decode(SyncMessage.self, from: data) {
+            switch result {
+            case .hashMatch:
+                syncFlags[peerID] = true
+                let allSynced = syncFlags.values.allSatisfy { $0 }
+                if allSynced {
+                    guard let completedMessage = try? JSONEncoder().encode(SyncMessage.completed) else { return }
+                    try? session.send(completedMessage,
+                        toPeers: session.connectedPeers,
+                        with: .reliable
+                    )
+                    isSynchronized.send(())
+                }
+            case .hashMismatch:
+                return
+            case .completed:
+                isSynchronized.send(())
+            }
+        }
+    }
 	
 	public func session(
 		_ session: MCSession,
@@ -244,16 +285,17 @@ extension SocketProvider: MCNearbyServiceBrowserDelegate {
 		foundPeer peerID: MCPeerID,
 		withDiscoveryInfo info: [String: String]?
 	) {
-		if let peer = MCPeerIDStorage.shared.findPeer(for: peerID)?.value {
-			if peer.state == .pending {
-				MCPeerIDStorage.shared.update(state: .connected, id: peerID)
-			}
-		} else {
-			MCPeerIDStorage.shared.append(id: peerID, state: .found)
-		}
-		
-		guard let peer = mapToSocketPeer(peerID) else { return }
-		updatedPeer.send(peer)
+//		if let peer = MCPeerIDStorage.shared.findPeer(for: peerID)?.value {
+//			if peer.state == .pending {
+//				MCPeerIDStorage.shared.update(state: .connected, id: peerID)
+//			}
+//		} else {
+//			MCPeerIDStorage.shared.append(id: peerID, state: .found)
+//		}
+//		
+//		guard let peer = mapToSocketPeer(peerID) else { return }
+//		updatedPeer.send(peer)
+        browser.invitePeer(peerID, to: session, withContext: nil, timeout: 10)
 	}
 	
 	public func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
@@ -282,13 +324,14 @@ extension SocketProvider: MCNearbyServiceAdvertiserDelegate {
 		withContext context: Data?,
 		invitationHandler: @escaping (Bool, MCSession?) -> Void
 	) {
-		guard
-			isAllowedInvitation,
-			let invitationPeer = mapToSocketPeer(peerID)
-		else { return invitationHandler(false, session) }
-		
-		invitationReceived.send(invitationPeer)
-		self.invitationHandler = invitationHandler
+//		guard
+//			isAllowedInvitation,
+//			let invitationPeer = mapToSocketPeer(peerID)
+//		else { return invitationHandler(false, session) }
+//		
+//		invitationReceived.send(invitationPeer)
+//		self.invitationHandler = invitationHandler
+        invitationHandler(true, session)
 	}
 }
 
@@ -329,5 +372,13 @@ private extension SocketProvider {
             }
             self?.sharingTasks.append(task)
         }
+    }
+}
+
+private extension SocketProvider {
+    enum SyncMessage: Codable {
+        case hashMatch
+        case hashMismatch
+        case completed
     }
 }
