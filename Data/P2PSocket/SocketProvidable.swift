@@ -8,7 +8,9 @@
 import Combine
 import Foundation
 
-public protocol SocketProvidable: SocketInvitable, SocketBwrosable, SocketAdvertiseable, SocketResourceSendable, HashSynchronizable { }
+public protocol SocketProvidable:
+    SocketInvitable, SocketBwrosable, SocketAdvertiseable,
+    SocketResourceSendable, HashSynchronizable { }
 
 public protocol SocketAdvertiseable {
 	func startAdvertising()

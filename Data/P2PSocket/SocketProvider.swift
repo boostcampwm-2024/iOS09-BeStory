@@ -185,7 +185,7 @@ extension SocketProvider: MCSessionDelegate {
 		peer peerID: MCPeerID,
 		didChange state: MCSessionState
 	) {
-		guard var socketPeer = mapToSocketPeer(peerID) else { return }
+        guard let socketPeer = mapToSocketPeer(peerID) else { return }
 		var willRemovedAtStorage: Bool = false
 
 		switch state {
@@ -265,7 +265,10 @@ extension SocketProvider: MCSessionDelegate {
         let videoManager = FileSystemManager.shared
         guard let localURL,
               let (resourceName, uuid) = ResourceValidator.extractInformation(name: resourceName),
-              let url = videoManager.copyToFileSystemWithName(tempURL: localURL, resourceName: resourceName) else { return }
+              let url = videoManager.copyToFileSystemWithName(
+                tempURL: localURL,
+                resourceName: resourceName
+              ) else { return }
         
         let resource = SharedResource(
             localUrl: url,

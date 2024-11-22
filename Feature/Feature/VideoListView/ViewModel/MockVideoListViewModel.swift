@@ -25,13 +25,7 @@ public final class MockVideoListViewModel {
 }
 
 private extension MockVideoListViewModel {
-    func setupBind() {
-        usecase.updatedVideo
-            .sink { [weak self] updatedVideo in
-                guard let self else { return }
-            }
-            .store(in: &cancellables)
-    }
+    func setupBind() { }
 }
 
 extension MockVideoListViewModel: VideoListViewModel {
