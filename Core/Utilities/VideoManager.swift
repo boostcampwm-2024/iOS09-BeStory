@@ -34,6 +34,15 @@ public final class FileSystemManager {
         return destinationURL
     }
     
+    public func copyToFileSystemWithName(tempURL: URL, resourceName: String) -> URL? {
+        let originalFileName = resourceName + ".mp4"
+        let destinationURL = folder.appending(path: originalFileName)
+        if !fileManager.fileExists(atPath: destinationURL.path) {
+            try? fileManager.copyItem(at: tempURL, to: destinationURL)
+        }
+        return destinationURL
+    }
+    
     public func deleteAllFiles() {
         guard let fileURLs = try? fileManager.contentsOfDirectory(
             at: folder,

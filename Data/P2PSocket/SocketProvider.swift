@@ -221,17 +221,19 @@ extension SocketProvider: MCSessionDelegate {
 		at localURL: URL?,
 		withError error: (any Error)?
 	) {
-        if let localURL,
-            let (resourceName, uuid) = ResourceValidator.extractInformation(name: resourceName) {
-            let resource = SharedResource(
-                localUrl: localURL,
-                name: resourceName,
-                uuid: uuid,
-                sender: peerID.displayName
-            )
-            sharedResources.append(resource)
-            resourceShared.send(resource)
-        }
+        let videoManager = FileSystemManager.shared
+        guard let localURL,
+              let (resourceName, uuid) = ResourceValidator.extractInformation(name: resourceName),
+              let url = videoManager.copyToFileSystemWithName(tempURL: localURL, resourceName: resourceName) else { return }
+        
+        let resource = SharedResource(
+            localUrl: url,
+            name: resourceName,
+            uuid: uuid,
+            sender: peerID.displayName
+        )
+        sharedResources.append(resource)
+        resourceShared.send(resource)
     }
 }
 
