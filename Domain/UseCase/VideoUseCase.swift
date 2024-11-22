@@ -16,6 +16,7 @@ public final class VideoUseCase: VideoUseCaseInterface {
     private let repository: SharingVideoRepositoryInterface
     
     public let updatedVideo = PassthroughSubject<SharedVideo, Never>()
+    public let isSynchronized = PassthroughSubject<Void, Never>()
     
     public init(repository: SharingVideoRepositoryInterface) {
         self.repository = repository
@@ -36,6 +37,10 @@ public extension VideoUseCase {
             try? await repository.shareVideo(url: url, resourceName: resourceName)
         }
     }
+    
+    func synchronizeVideos() {
+        repository.synchronizeVideos()
+    }
 }
 
 // MARK: - Private Methods
@@ -43,6 +48,9 @@ private extension VideoUseCase {
     func bind() {
         repository.updatedSharedVideo
             .subscribe(updatedVideo)
+            .store(in: &cancellables)
+        repository.isSynchronized
+            .subscribe(isSynchronized)
             .store(in: &cancellables)
     }
 }

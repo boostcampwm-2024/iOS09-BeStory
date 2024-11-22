@@ -35,6 +35,13 @@ private extension MultipeerVideoListViewModel {
                 }
             }
             .store(in: &cancellables)
+        
+        usecase.isSynchronized
+            .sink { [weak self] _ in
+                guard let self else { return }
+                output.send(.readyForNextScreen)
+            }
+            .store(in: &cancellables)
     }
 }
 
@@ -49,6 +56,9 @@ extension MultipeerVideoListViewModel: VideoListViewModel {
                 Task {
                     await self.shareItem(with: url)
                 }
+            case .validateSynchronization:
+                Task {
+                    self.usecase.synchronizeVideos()
                 }
             }
         }

@@ -48,6 +48,8 @@ extension MockVideoListViewModel: VideoListViewModel {
                 Task {
                     await self.appendItem(with: url)
                 }
+            case .validateSynchronization:
+                output.send(.readyForNextScreen)
             }
         }
         .store(in: &cancellables)
