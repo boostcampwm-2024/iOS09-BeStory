@@ -52,6 +52,7 @@
 				Helper/EventPublisher.swift,
 				"Helper/UIAlertController+Types.swift",
 				"Helper/UIColor+HexInitialization.swift",
+				VideoListView/TempViewController.swift,
 				MainViewController.swift,
 				VideoListView/VideoDetailView/VideoDetailViewController.swift,
 				VideoListView/VideoListViewController.swift,
