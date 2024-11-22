@@ -7,15 +7,31 @@
 
 import AVFoundation
 import Combine
+import Entity
+import Interfaces
 
 /// 비디오 리스트를 테스트하기 위한 Mock View Model
 public final class MockVideoListViewModel {
     private var videoItems: [VideoListItem] = []
+    private let usecase: VideoUseCaseInterface
     
     var output = PassthroughSubject<Output, Never>()
     var cancellables: Set<AnyCancellable> = []
     
-    public init() { }
+    public init(usecase: VideoUseCaseInterface) {
+        self.usecase = usecase
+        setupBind()
+    }
+}
+
+private extension MockVideoListViewModel {
+    func setupBind() {
+        usecase.updatedVideo
+            .sink { [weak self] updatedVideo in
+                guard let self else { return }
+            }
+            .store(in: &cancellables)
+    }
 }
 
 extension MockVideoListViewModel: VideoListViewModel {
