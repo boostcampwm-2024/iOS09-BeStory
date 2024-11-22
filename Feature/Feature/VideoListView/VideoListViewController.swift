@@ -14,7 +14,7 @@ public final class VideoListViewController: UIViewController {
     private let viewModel: any VideoListViewModel
     private let input = PassthroughSubject<VideoListViewInput, Never>()
     private var cancellables = Set<AnyCancellable>()
-    private let videoManager = VideoManager.shared
+    private let videoManager = FileSystemManager.shared
     
     // MARK: - UI Components
     private let headerView = VideoListHeaderView()
@@ -203,7 +203,7 @@ extension VideoListViewController: PHPickerViewControllerDelegate {
         
         itemProvider.loadFileRepresentation(forTypeIdentifier: UTType.movie.identifier) { [weak self] tempURL, error in
             guard let tempURL, error == nil,
-                  let url = self?.videoManager.copyVideoToFileSystem(tempURL: tempURL) else { return }
+                  let url = self?.videoManager.copyToFileSystem(tempURL: tempURL) else { return }
             self?.input.send(.appendVideo(url: url))
         }
     }

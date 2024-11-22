@@ -7,8 +7,8 @@
 
 import Foundation
 
-public final class VideoManager {
-    public static let shared = VideoManager()
+public final class FileSystemManager {
+    public static let shared = FileSystemManager()
 
     private let fileManager = FileManager.default
     private let folder: URL
@@ -25,7 +25,7 @@ public final class VideoManager {
         }
     }
     
-    public func copyVideoToFileSystem(tempURL: URL) -> URL? {
+    public func copyToFileSystem(tempURL: URL) -> URL? {
         let originalFileName = tempURL.lastPathComponent
         let destinationURL = folder.appending(path: originalFileName)
         if !fileManager.fileExists(atPath: destinationURL.path) {
