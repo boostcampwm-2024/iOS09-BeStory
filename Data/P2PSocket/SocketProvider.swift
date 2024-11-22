@@ -288,17 +288,16 @@ extension SocketProvider: MCNearbyServiceBrowserDelegate {
 		foundPeer peerID: MCPeerID,
 		withDiscoveryInfo info: [String: String]?
 	) {
-//		if let peer = MCPeerIDStorage.shared.findPeer(for: peerID)?.value {
-//			if peer.state == .pending {
-//				MCPeerIDStorage.shared.update(state: .connected, id: peerID)
-//			}
-//		} else {
-//			MCPeerIDStorage.shared.append(id: peerID, state: .found)
-//		}
-//		
-//		guard let peer = mapToSocketPeer(peerID) else { return }
-//		updatedPeer.send(peer)
-        browser.invitePeer(peerID, to: session, withContext: nil, timeout: 10)
+		if let peer = MCPeerIDStorage.shared.findPeer(for: peerID)?.value {
+			if peer.state == .pending {
+				MCPeerIDStorage.shared.update(state: .connected, id: peerID)
+			}
+		} else {
+			MCPeerIDStorage.shared.append(id: peerID, state: .found)
+		}
+		
+		guard let peer = mapToSocketPeer(peerID) else { return }
+		updatedPeer.send(peer)
 	}
 	
 	public func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
@@ -327,14 +326,13 @@ extension SocketProvider: MCNearbyServiceAdvertiserDelegate {
 		withContext context: Data?,
 		invitationHandler: @escaping (Bool, MCSession?) -> Void
 	) {
-//		guard
-//			isAllowedInvitation,
-//			let invitationPeer = mapToSocketPeer(peerID)
-//		else { return invitationHandler(false, session) }
-//		
-//		invitationReceived.send(invitationPeer)
-//		self.invitationHandler = invitationHandler
-        invitationHandler(true, session)
+		guard
+			isAllowedInvitation,
+			let invitationPeer = mapToSocketPeer(peerID)
+		else { return invitationHandler(false, session) }
+		
+		invitationReceived.send(invitationPeer)
+		self.invitationHandler = invitationHandler
 	}
 }
 
