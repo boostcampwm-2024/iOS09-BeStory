@@ -95,23 +95,32 @@ private extension GroupInfoViewController {
     }
     
     func setupViewAttributes() {
-        view.backgroundColor = UIColor(red: 17/255, green: 24/255, blue: 38/255, alpha: 1)
-        
+        view.backgroundColor = UIColor(
+            red: 17/255,
+            green: 24/255,
+            blue: 38/255,
+            alpha: 1
+        )
+
         var buttonConfig = UIButton.Configuration.filled()
         buttonConfig.buttonSize = .small
         buttonConfig.title = "나가기"
         buttonConfig.titlePadding = 4
-        buttonConfig.baseBackgroundColor = UIColor(red: 244/255,
-                                                   green: 244/255,
-                                                   blue: 245/255,
-                                                   alpha: 1)
-        buttonConfig.baseForegroundColor = UIColor(red: 64/255,
-                                                   green: 64/255,
-                                                   blue: 66/255,
-                                                   alpha: 1)
+        buttonConfig.baseBackgroundColor = UIColor(
+            red: 244/255,
+            green: 244/255,
+            blue: 245/255,
+            alpha: 1
+        )
+        buttonConfig.baseForegroundColor = UIColor(
+            red: 64/255,
+            green: 64/255,
+            blue: 66/255,
+            alpha: 1
+        )
         buttonConfig.cornerStyle = .large
         exitButton.configuration = buttonConfig
-        
+
         participantScrollView.backgroundColor = .clear
         participantScrollView.showsVerticalScrollIndicator = false
         participantScrollView.showsHorizontalScrollIndicator = false
@@ -119,9 +128,12 @@ private extension GroupInfoViewController {
         participantStackView.axis = .horizontal
         participantStackView.spacing = 14
     }
-    
+
     func addInvitedUser(user: ConnectedUser) {
-        participantStackView.addArrangedSubview(ParticipantInfoView(user: user))
+        participantStackView.addArrangedSubview(ParticipantInfoView(
+            user: user,
+            emoji: EmojiManager.shared.getEmoji(id: user.id)
+        ))
     }
     
     func updateInvitedUserState(user: ConnectedUser) {

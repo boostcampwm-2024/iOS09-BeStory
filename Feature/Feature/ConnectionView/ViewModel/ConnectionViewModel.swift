@@ -22,12 +22,10 @@ final public class ConnectionViewModel {
     private var output = PassthroughSubject<Output, Never>()
     private var cancellables: Set<AnyCancellable> = []
 
-    private var centerPosition: (Double, Double)?
-    private var innerDiameter: Float?
-    private var outerDiameter: Float?
-    private var usedPositions: [String: (Double, Double)] = [:]
-
-    private let emojis = ["😀", "😊", "🤪", "🤓", "😡", "🥶", "🤯", "🤖", "👻", "👾"]
+    private var centerPosition: CGPoint?
+    private var innerRadius: CGFloat?
+    private var outerRadius: CGFloat?
+    private var usedPositions: [String: CGPoint] = [:]
 
     // MARK: - Initializer
 
@@ -37,13 +35,18 @@ final public class ConnectionViewModel {
     }
 
     func configure(
-        centerPosition: (Double, Double),
-        innerDiameter: Float,
-        outerDiameter: Float
+        centerPosition: CGPoint,
+        innerRadius: CGFloat,
+        outerRadius: CGFloat
     ) {
         self.centerPosition = centerPosition
-        self.innerDiameter = innerDiameter
-        self.outerDiameter = outerDiameter
+        self.innerRadius = innerRadius
+        self.outerRadius = outerRadius
+    }
+
+    func compareCenter(currentCenter: CGPoint) -> Bool {
+        guard self.centerPosition == currentCenter else { return false }
+        return true
     }
 }
 
@@ -58,45 +61,22 @@ extension ConnectionViewModel {
             // Connection Input
 
             case .fetchUsers:
-                fetchUsers().forEach({ self.found(user: $0) })
-            case .invite(let id):
-                invite(id: id)
+                usecase.fetchBrowsedUsers().forEach({ self.found(user: $0) })
+            case .inviteUser(let id):
+                usecase.inviteUser(with: id)
 
             // Invitation Input
 
-            case .accept:
-                acceptInvitation()
-            case .reject:
-                rejectInvitation()
+            case .acceptInvitation(let user):
+                usecase.acceptInvitation()
+                removeCurrentPosition(id: user.id)
+            case .rejectInvitation:
+                usecase.rejectInvitation()
             }
         }
         .store(in: &cancellables)
 
         return output.eraseToAnyPublisher()
-    }
-}
-
-// MARK: - UseCase Methods
-
-private extension ConnectionViewModel {
-    // Connection Methods
-
-    func fetchUsers() -> [BrowsedUser] {
-        return usecase.fetchBrowsedUsers()
-    }
-
-    func invite(id: String) {
-        usecase.inviteUser(with: id)
-    }
-
-    // Invitation Methods
-
-    func acceptInvitation() {
-        usecase.acceptInvitation()
-    }
-
-    func rejectInvitation() {
-        usecase.rejectInvitation()
     }
 }
 
@@ -124,8 +104,7 @@ private extension ConnectionViewModel {
         usecase.invitationReceived
             .sink { [weak self] invitingUser in
                 guard let self else { return }
-
-                output.send(.invited(from: invitingUser))
+                output.send(.invitationReceivedBy(user: invitingUser))
             }
             .store(in: &cancellables)
 
@@ -137,9 +116,14 @@ private extension ConnectionViewModel {
 
                 switch invitedUser.state {
                 case .accept:
-                    output.send(.accepted(name: invitedUser.name))
+                    self.removeCurrentPosition(id: invitedUser.id)
+                    output.send(.invitationAcceptedBy(user: BrowsedUser(
+                        id: invitedUser.id,
+                        state: .found,
+                        name: invitedUser.name
+                    )))
                 case .reject:
-                    output.send(.rejected(name: invitedUser.name))
+                    output.send(.invitationRejectedBy(name: invitedUser.name))
                 }
             }
             .store(in: &cancellables)
@@ -150,7 +134,8 @@ private extension ConnectionViewModel {
             .sink { [weak self] in
                 guard let self else { return }
 
-                output.send(.timeout)
+                output.send(.invitationTimeout)
+                usecase.rejectInvitation()
             }
             .store(in: &cancellables)
     }
@@ -162,14 +147,14 @@ private extension ConnectionViewModel {
     func found(user: BrowsedUser) {
         guard
             self.getCurrentPosition(id: user.id) == nil,
-            let position = self.getRandomPosition(),
-            let emoji = self.getRandomEmoji()
+            let emoji = EmojiManager.shared.getEmoji(id: user.id)
         else { return }
 
+        let position = self.getRandomPosition()
         self.addCurrentPosition(id: user.id, position: position)
 
         self.output.send(
-            .found(
+            .foundUser(
                 user: user,
                 position: position,
                 emoji: emoji
@@ -178,56 +163,48 @@ private extension ConnectionViewModel {
     }
 
     func lost(user: BrowsedUser) {
-        guard let position =  self.getCurrentPosition(id: user.id) else { return }
         self.removeCurrentPosition(id: user.id)
-        self.output.send(.lost(user: user, position: position))
+        EmojiManager.shared.removeUserEmoji(id: user.id)
+        self.output.send(.lostUser(user: user))
     }
 }
 
 // MARK: - Internal Methods
 
 extension ConnectionViewModel {
-    func getRandomEmoji() -> String? {
-        return emojis.randomElement()
-    }
-
-    func getRandomPosition() -> (Double, Double)? {
+    func getRandomPosition() -> CGPoint {
         guard
             let centerPosition = self.centerPosition,
-            let innerDiameter = self.innerDiameter,
-            let outerDiameter = self.outerDiameter
-        else { return nil }
+            let innerRadius = self.innerRadius,
+            let outerRadius = self.outerRadius
+        else { return CGPoint.zero }
 
         let maxAttempts = usedPositions.count + 1
         var attempts = 0
-        var position: (Double, Double)
+        var position: CGPoint
 
         repeat {
             attempts += 1
 
-            let innerRadius = innerDiameter / 2
-            let outerRadius = outerDiameter / 2
+            let randomRadius = CGFloat.random(in: innerRadius...outerRadius)
+            let angle = CGFloat.random(in: 0...(2 * .pi))
 
-            let randomRadius = Float.random(in: innerRadius...outerRadius)
-            let angle = Float.random(in: 0...(2 * .pi))
-
-            position = (
-                (centerPosition.0 + Double(randomRadius * cos(angle))).rounded(),
-                (centerPosition.1 + Double(randomRadius * sin(angle))).rounded()
+            position = CGPoint(
+                x: centerPosition.x + randomRadius * cos(angle),
+                y: centerPosition.y + randomRadius * sin(angle)
             )
         } while usedPositions.contains(where: {
-            $0.value.0.distance(to: position.0) < 50 ||
-            $0.value.1.distance(to: position.1) < 50
+            $0.value.x.distance(to: position.x) < 50 || $0.value.y.distance(to: position.y) < 50
         }) && attempts < maxAttempts
 
         return position
     }
 
-    func getCurrentPosition(id: String) -> (Double, Double)? {
+    func getCurrentPosition(id: String) -> CGPoint? {
         return usedPositions[id]
     }
 
-    func addCurrentPosition(id: String, position: (Double, Double)) {
+    func addCurrentPosition(id: String, position: CGPoint) {
         usedPositions[id] = position
     }
 

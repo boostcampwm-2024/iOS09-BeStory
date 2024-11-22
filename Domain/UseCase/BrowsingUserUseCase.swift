@@ -47,15 +47,15 @@ public extension BrowsingUserUseCase {
 	}
 	
 	func acceptInvitation() {
+		stopInvitationTimer()
 		repository.startReceiveInvitation()
 		repository.acceptInvitation()
-		stopInvitationTimer()
 	}
 	
 	func rejectInvitation() {
+		stopInvitationTimer()
 		repository.startReceiveInvitation()
 		repository.rejectInvitation()
-		stopInvitationTimer()
 	}
 }
 
@@ -68,10 +68,6 @@ private extension BrowsingUserUseCase {
 			}
 			.store(in: &cancellables)
 		
-		repository.invitationReceived
-			.subscribe(invitationReceived)
-			.store(in: &cancellables)
-		
 		repository.updatedInvitedUser
 			.sink { [weak self] invitedUser in
 				self?.invitationResultDidReceive(with: invitedUser)
@@ -79,8 +75,8 @@ private extension BrowsingUserUseCase {
 			.store(in: &cancellables)
 		
 		repository.invitationReceived
-			.sink { [weak self] _ in
-				self?.invitationDidReceive()
+			.sink { [weak self] user in
+				self?.invitationDidReceive(from: user)
 			}
 			.store(in: &cancellables)
 	}
@@ -104,9 +100,10 @@ private extension BrowsingUserUseCase {
 		invitationResult.send(invitedUser)
 	}
 	
-	func invitationDidReceive() {
+	func invitationDidReceive(from user: BrowsedUser) {
 		repository.stopReceiveInvitation()
 		startInvitationTimer()
+		invitationReceived.send(user)
 	}
 	
 	func startInvitationTimer() {

@@ -22,7 +22,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 		let window = UIWindow(windowScene: windowScene)
 
-        window.rootViewController = RootViewController()
+        let groupInfoViewController = GroupInfoViewController(viewModel: DIContainer.shared.resolve(type: GroupInfoViewModel.self))
+        let connectionViewController = ConnectionViewController(viewModel: DIContainer.shared.resolve(type: ConnectionViewModel.self))
+
+        window.rootViewController = MainViewController(
+            topViewController: groupInfoViewController,
+            initialViewController: connectionViewController
+        )
 
 		self.window = window
 		window.makeKeyAndVisible()

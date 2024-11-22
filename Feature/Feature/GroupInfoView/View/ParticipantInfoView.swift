@@ -10,13 +10,13 @@ import UIKit
 import Entity
 
 final class ParticipantInfoView: UIView {
-    private let profileImageView = UIImageView()
+    private let profileEmojiLabel = UILabel()
     private let nameLabel = UILabel()
     private let stateIndicatorView = UIView()
     
     let user: ConnectedUser
     
-    init(user: ConnectedUser) {
+    init(user: ConnectedUser, emoji: String?) {
         self.user = user
         super.init(frame: .zero)
         setupViewHierarchies()
@@ -28,15 +28,12 @@ final class ParticipantInfoView: UIView {
             blue: 55/255,
             alpha: 1
         )
+        profileEmojiLabel.text = emoji
     }
     
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init with XIB not supported")
-    }
-    
-    public override var intrinsicContentSize: CGSize {
-        return CGSize(width: profileImageView.frame.width + nameLabel.frame.width, height: 35)
     }
     
     func updateState(_ state: ConnectedUser.State) {
@@ -46,19 +43,20 @@ final class ParticipantInfoView: UIView {
 
 private extension ParticipantInfoView {
     func setupViewHierarchies() {
-        addSubview(profileImageView)
+        addSubview(profileEmojiLabel)
         addSubview(nameLabel)
         addSubview(stateIndicatorView)
     }
     
     func setupViewConstraints() {
-        profileImageView.snp.makeConstraints {
-            $0.width.height.equalTo(18)
+        profileEmojiLabel.snp.makeConstraints {
+            $0.height.equalTo(18)
             $0.leading.equalToSuperview().inset(12)
             $0.centerY.equalToSuperview()
+            $0.top.bottom.equalToSuperview().inset(8)
         }
         nameLabel.snp.makeConstraints {
-            $0.leading.equalTo(profileImageView.snp.trailing).offset(6)
+            $0.leading.equalTo(profileEmojiLabel.snp.trailing).offset(6)
             $0.centerY.equalToSuperview()
         }
         stateIndicatorView.snp.makeConstraints {
@@ -71,9 +69,9 @@ private extension ParticipantInfoView {
     
     func setupViewAttributes() {
         layer.cornerRadius = 12
-        profileImageView.backgroundColor = .black
+//        profileEmojiLabel.backgroundColor = .black
         setupName(to: user.name)
-        nameLabel.font = .systemFont(ofSize: 14, weight: .semibold)
+        nameLabel.font = .systemFont(ofSize: 18, weight: .semibold)
         nameLabel.textColor = .white
         setupStateIndicator(to: user.state)
         stateIndicatorView.layer.cornerRadius = 4

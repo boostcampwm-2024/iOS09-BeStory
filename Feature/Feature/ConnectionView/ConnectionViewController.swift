@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Core
 import Entity
 import SnapKit
 import UIKit
@@ -23,7 +24,9 @@ final public class ConnectionViewController: UIViewController {
     private var innerGrayCircleView = UIView()
     private var outerGrayCircleView = UIView()
     private var userContainerView = UIView()
+    private var nextButton = UIButton(type: .system)
     private var currentAlert: UIAlertController?
+    private var currentUserId: String?
 
     // MARK: - Initializer
 
@@ -47,13 +50,18 @@ final public class ConnectionViewController: UIViewController {
         setupViewConstraints()
         setupBind()
 
-        viewModel.configure(
-            centerPosition: (view.center.x, view.center.y),
-            innerDiameter: Float(Constants.centralCircleViewSize),
-            outerDiameter: Float(Constants.outerGrayCircleViewSize)
-        )
-
         input.send(.fetchUsers)
+    }
+
+    public override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        guard !viewModel.compareCenter(currentCenter: view.center) else { return }
+        viewModel.configure(
+            centerPosition: view.center,
+            innerRadius: Constants.centralCircleViewRadius,
+            outerRadius: Constants.outerGrayCircleViewRadius
+        )
     }
 }
 
@@ -62,64 +70,60 @@ final public class ConnectionViewController: UIViewController {
 extension ConnectionViewController {
     func setupBind() {
         let output = viewModel.transform(input.eraseToAnyPublisher())
-        output
-            .receive(on: DispatchQueue.main)
+        output.receive(on: DispatchQueue.main)
             .sink { [weak self] result in
                 guard let self else { return }
                 switch result {
                     // Connection Output
 
-                case .found(let user, let position, let emoji):
-                    let position = CGPoint(x: position.0, y: position.1)
+                case .foundUser(let user, let position, let emoji):
                     addUserCircleView(user: user, position: position, emoji: emoji)
-                case .lost(let user, let position):
-                    let position = CGPoint(x: position.0, y: position.1)
-                    removeUserCircleView(user: user, position: position)
+                case .lostUser(let user):
+                    removeUserCircleView(user: user)
+                    resetCurrentAlert()
+                    if user.id == self.currentUserId {
+                        resetCurrentUserId()
+                        input.send(.rejectInvitation)
+                    }
 
                     // Invitation Output
 
-                case .invited(let invitingUser):
-                    showAlertWithActions(
-                        title: invitingUser.name,
-                        message: "초대를 수락하시겠습니까?",
-                        onConfirm: {
-                            self.input.send(.accept)
-                            self.closeCurrentAlert()
-                        },
-                        onCancel: {
-                            self.input.send(.reject)
-                            self.closeCurrentAlert()
-                        }
-                    )
-                case .accepted(let userName):
-                    self.closeCurrentAlert()
+                case .invitationReceivedBy(let user):
+                    let alert = UIAlertController(
+                        type: .invitationReceivedBy(name: user.name),
+                        actions: [
+                            .confirm(handler: {
+                                self.input.send(.acceptInvitation(user: user))
+                                self.resetCurrentAlert()
+                                self.resetCurrentUserId()
+                                self.removeUserCircleView(user: user)}),
+                            .cancel(handler: {
+                                self.input.send(.rejectInvitation)
+                                self.resetCurrentAlert()
+                                self.resetCurrentUserId()})
+                        ])
+                    setCurrentAlertAndUserId(alert: alert, userId: user.id)
+                    present(alert, animated: true)
+                case .invitationAcceptedBy(let user):
+                    self.resetCurrentAlert()
 
-                    showAlertWithActions(
-                        title: "Accepted",
-                        message: "상대방(\(userName))이 초대를 수락했습니다.",
-                        onConfirm: { self.closeCurrentAlert() },
-                        onCancel: { self.closeCurrentAlert() }
-                    )
-                case .rejected(let userName):
-                    self.closeCurrentAlert()
+                    present(UIAlertController(
+                        type: .invitationAcceptedBy(name: user.name),
+                        actions: [.confirm(), .cancel()]), animated: true)
 
-                    showAlertWithActions(
-                        title: "Rejected",
-                        message: "상대방(\(userName))이 초대를 거절했습니다.",
-                        onConfirm: { self.closeCurrentAlert() },
-                        onCancel: { self.closeCurrentAlert() }
-                    )
-                case .timeout:
-                    guard let alert = currentAlert else { return }
-                    alert.dismiss(animated: true)
-                    self.currentAlert = nil
+                    self.removeUserCircleView(user: user)
+                case .invitationRejectedBy(let userName):
+                    self.resetCurrentAlert()
 
-                    showAlertWithActions(
-                        title: "Timeout",
-                        message: "응답 시간이 초과되었습니다.",
-                        onConfirm: { self.closeCurrentAlert() },
-                        onCancel: { self.closeCurrentAlert() }
-                    )
+                    present(UIAlertController(
+                        type: .invitationRejectedBy(name: userName),
+                        actions: [.confirm(), .cancel()]), animated: true)
+                case .invitationTimeout:
+                    self.resetCurrentAlert()
+
+                    present(UIAlertController(
+                        type: .invitationTimeout,
+                        actions: [.confirm(), .cancel()]), animated: true)
                 }
             }
             .store(in: &cancellables)
@@ -132,28 +136,34 @@ extension ConnectionViewController {
 private extension ConnectionViewController {
     func userDidTapped(_ sender: UITapGestureRecognizer) {
         guard let id = sender.view?.accessibilityLabel else { return }
-        showAlertWithActions(
-            title: "Invite",
-            message: "초대하시겠습니까?",
-            onConfirm: {
-                self.input.send(.invite(id: id))
-                self.closeCurrentAlert()
-
-                self.showAlertWithoutActions(
+        present(UIAlertController(type: .requestInvitation, actions: [
+            .confirm(handler: {
+                self.input.send(.inviteUser(id: id))
+                let alert = UIAlertController(
                     title: "Waiting",
-                    message: "상대방의 응답을 기다리는 중입니다."
+                    message: "상대방의 응답을 기다리는 중입니다.",
+                    preferredStyle: .alert
                 )
-            },
-            onCancel: { self.closeCurrentAlert() }
+                self.setCurrentAlertAndUserId(alert: alert)
+                self.present(alert, animated: true)
+            }),
+            .cancel()]
+        ), animated: true)
+    }
+
+    func nextButtonDidTapped() {
+        let videoListViewController = VideoListViewController(
+            viewModel: DIContainer.shared.resolve(type: MultipeerVideoListViewModel.self)
         )
+        self.navigationController?.pushViewController(videoListViewController, animated: true)
     }
 }
 
-// MARK: - Methods
+// MARK: - Private Methods
 
 private extension ConnectionViewController {
     func addUserCircleView(user: BrowsedUser, position: CGPoint, emoji: String) {
-        let userCircleView = CircleView(style: .small)
+        let userCircleView = CircleView(id: user.id, style: .small)
         userCircleView.configure(emoji: emoji, name: user.name)
 
         userContainerView.addSubview(userCircleView)
@@ -173,56 +183,28 @@ private extension ConnectionViewController {
         userContainerView.layoutIfNeeded()
     }
 
-    func removeUserCircleView(user: BrowsedUser, position: CGPoint) {
-        userContainerView.subviews.forEach {
-            if $0.center == position {
-                $0.removeFromSuperview()
-            }
-        }
+    func removeUserCircleView(user: BrowsedUser) {
+        userContainerView.subviews
+            .compactMap { $0 as? CircleView }
+            .filter { $0.id == user.id }
+            .forEach { $0.removeFromSuperview() }
+
         userContainerView.layoutIfNeeded()
     }
 
-    func showAlertWithActions(
-        title: String,
-        message: String,
-        onConfirm: @escaping () -> Void,
-        onCancel: @escaping () -> Void
-    ) {
-        let alert = UIAlertController(
-            title: title,
-            message: message,
-            preferredStyle: .alert
-        )
-
-        let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
-            onConfirm()
-        }
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel) { _ in
-            onCancel()
-        }
-
-        alert.addAction(confirmAction)
-        alert.addAction(cancelAction)
-
-        present(alert, animated: true)
+    func setCurrentAlertAndUserId(alert: UIAlertController, userId: String? = nil) {
         currentAlert = alert
+        currentUserId = userId
     }
 
-    func showAlertWithoutActions(title: String, message: String) {
-        let alert = UIAlertController(
-            title: title,
-            message: message,
-            preferredStyle: .alert
-        )
-        
-        present(alert, animated: true)
-        currentAlert = alert
-    }
-
-    func closeCurrentAlert() {
+    func resetCurrentAlert() {
         guard let alert = currentAlert else { return }
         alert.dismiss(animated: true)
         currentAlert = nil
+    }
+
+    func resetCurrentUserId() {
+        currentUserId = nil
     }
 }
 
@@ -244,6 +226,14 @@ private extension ConnectionViewController {
         static let outerGrayCircleViewRadius: CGFloat = 175
 
         static let userContainerViewSize: CGFloat = 450
+
+        static let nextButtonBackgroundColor: UIColor = UIColor(red: 31/255, green: 41/255, blue: 55/255, alpha: 1)
+        static let nextButtonTextColor: UIColor = .white
+        static let nextButtonFontSize: CGFloat = 20
+        static let nextButtonCornerRadius: CGFloat = 10
+        static let nextButtonBottomOffset: CGFloat = -20
+        static let nextButtonWidth: CGFloat = 120
+        static let nextButtonHeight: CGFloat = 50
     }
 
     func setupViewAttributes() {
@@ -252,6 +242,7 @@ private extension ConnectionViewController {
         setupCentralCircleView()
         setupGrayCircleViews()
         setupUserContainerView()
+        setupNextButton()
     }
 
     func setupCentralCircleView() {
@@ -276,12 +267,22 @@ private extension ConnectionViewController {
         userContainerView.backgroundColor = .clear
     }
 
+    func setupNextButton() {
+        nextButton.backgroundColor = Constants.nextButtonBackgroundColor
+        nextButton.setTitle("편집하기", for: .normal)
+        nextButton.setTitleColor(.white, for: .normal)
+        nextButton.titleLabel?.font = .systemFont(ofSize: Constants.nextButtonFontSize)
+        nextButton.layer.cornerRadius = Constants.nextButtonCornerRadius
+        nextButton.addTarget(self, action: #selector(nextButtonDidTapped), for: .touchUpInside)
+    }
+
     func setupViewHierarchies() {
         [
             centralCircleView,
             innerGrayCircleView,
             outerGrayCircleView,
-            userContainerView
+            userContainerView,
+            nextButton
         ].forEach({
             view.addSubview($0)
         })
@@ -305,6 +306,13 @@ private extension ConnectionViewController {
 
         userContainerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+
+        nextButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(Constants.nextButtonBottomOffset)
+            make.width.equalTo(Constants.nextButtonWidth)
+            make.height.equalTo(Constants.nextButtonHeight)
         }
     }
 }
