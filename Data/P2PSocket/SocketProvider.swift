@@ -265,10 +265,8 @@ extension SocketProvider: MCSessionDelegate {
         let fileSystemManager = FileSystemManager.shared
         guard let localURL,
               let (resourceName, uuid) = ResourceValidator.extractInformation(name: resourceName),
-              let url = fileSystemManager.copyToFileSystemWithName(
-                tempURL: localURL,
-                resourceName: resourceName
-              ) else { return }
+              let url = fileSystemManager.copyToFileSystem(tempURL: localURL, resourceName: resourceName)
+        else { return }
         
         let resource = SharedResource(
             localUrl: url,

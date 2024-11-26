@@ -26,17 +26,11 @@ public final class FileSystemManager {
         }
     }
     
-    public func copyToFileSystem(tempURL: URL) -> URL? {
-        let originalFileName = tempURL.lastPathComponent
-        let destinationURL = folder.appending(path: originalFileName)
-        if !fileManager.fileExists(atPath: destinationURL.path) {
-            try? fileManager.copyItem(at: tempURL, to: destinationURL)
+    public func copyToFileSystem(tempURL: URL, resourceName: String? = nil) -> URL? {
+        var originalFileName = resourceName ?? tempURL.lastPathComponent
+        if !originalFileName.hasSuffix(".mp4") {
+            originalFileName += ".mp4"
         }
-        return destinationURL
-    }
-    
-    public func copyToFileSystemWithName(tempURL: URL, resourceName: String) -> URL? {
-        let originalFileName = resourceName + ".mp4"
         let destinationURL = folder.appending(path: originalFileName)
         if !fileManager.fileExists(atPath: destinationURL.path) {
             try? fileManager.copyItem(at: tempURL, to: destinationURL)
