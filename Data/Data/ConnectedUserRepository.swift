@@ -34,6 +34,9 @@ public extension ConnectedUserRepository {
         return socketProvider.connectedPeers()
             .compactMap({ mappingToConnectedUser($0) })
     }
+    func leaveGroup() {
+        socketProvider.disconnectAllUser()
+    }
 }
 
 // MARK: - Private Methods

@@ -12,4 +12,5 @@ public protocol ConnectedUserRepositoryInterface {
     var updatedConnectedUser: PassthroughSubject<ConnectedUser, Never> { get }
 
     func fetchConnectedUsers() -> [ConnectedUser]
+    func leaveGroup()
 }
