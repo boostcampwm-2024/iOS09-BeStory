@@ -10,12 +10,14 @@ import Entity
 import Foundation
 import Interfaces
 import P2PSocket
+import Core
 
 public final class SharingVideoRepository: SharingVideoRepositoryInterface {
     private var cancellables: Set<AnyCancellable> = []
     private let socketProvider: SocketProvidable
 
     public let updatedSharedVideo = PassthroughSubject<SharedVideo, Never>()
+    public let isSynchronized = PassthroughSubject<Void, Never>()
 
     public init(socketProvider: SocketProvidable) {
         self.socketProvider = socketProvider
@@ -24,6 +26,10 @@ public final class SharingVideoRepository: SharingVideoRepositoryInterface {
                 self?.mappingToSharedVideo(resource)
             }
             .subscribe(updatedSharedVideo)
+            .store(in: &cancellables)
+        
+        socketProvider.isSynchronized
+            .subscribe(isSynchronized)
             .store(in: &cancellables)
     }
 }
@@ -46,5 +52,10 @@ public extension SharingVideoRepository {
             .compactMap { [weak self] resource in
                 self?.mappingToSharedVideo(resource)
             }
+    }
+    
+    func synchronizeVideos() {
+        let hashes = FileSystemManager.shared.collectHashes()
+        socketProvider.sendHashes(hashes)
     }
 }

@@ -14,11 +14,12 @@ public final class VideoListViewController: UIViewController {
     private let viewModel: any VideoListViewModel
     private let input = PassthroughSubject<VideoListViewInput, Never>()
     private var cancellables = Set<AnyCancellable>()
-    private let videoManager = VideoManager.shared
+    private let fileSystemManager = FileSystemManager.shared
     
     // MARK: - UI Components
     private let headerView = VideoListHeaderView()
     private var collectionView: UICollectionView!
+    private let nextButton = UIButton()
     private var dataSource: VideoListDataSource!
     private let spacing: CGFloat = 20
     
@@ -48,6 +49,7 @@ public final class VideoListViewController: UIViewController {
         setupViewHierarchies()
         setupViewConstraints()
         setupViewBinding()
+        setupNextButton()
         
         input.send(.viewDidLoad)
     }
@@ -65,6 +67,7 @@ private extension VideoListViewController {
     func setupViewHierarchies() {
         view.addSubview(headerView)
         view.addSubview(collectionView)
+        view.addSubview(nextButton)
     }
     
     func setupViewConstraints() {
@@ -78,6 +81,13 @@ private extension VideoListViewController {
             make.horizontalEdges.equalToSuperview().inset(20)
             make.bottom.equalToSuperview()
         }
+        
+        nextButton.snp.makeConstraints { make in
+            make.width.equalTo(160)
+            make.height.equalTo(50)
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-50)
+        }
     }
     
     func setupViewBinding() {
@@ -89,6 +99,8 @@ private extension VideoListViewController {
                 switch output {
                 case .videoListDidChanged(let videos):
                     self?.items = videos
+                case .readyForNextScreen:
+                    self?.navigateToEditor()
                 }
             }
             .store(in: &cancellables)
@@ -99,6 +111,20 @@ private extension VideoListViewController {
                 self?.openVideoPicker()
             }
             .store(in: &cancellables)
+        
+        nextButton.publisher(for: .touchUpInside)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.input.send(.validateSynchronization)
+            }
+            .store(in: &cancellables)
+    }
+    
+    func setupNextButton() {
+        nextButton.backgroundColor = .white
+        nextButton.layer.cornerRadius = 25
+        nextButton.setTitle("편집하기", for: .normal)
+        nextButton.setTitleColor(.black, for: .normal)
     }
     
     func setupCollectionView() {
@@ -160,6 +186,11 @@ private extension VideoListViewController {
         picker.delegate = self
         present(picker, animated: true, completion: nil)
     }
+    
+    func navigateToEditor() {
+        let tempViewController = TempViewController(nibName: nil, bundle: nil)
+        navigationController?.pushViewController(tempViewController, animated: true)
+    }
 }
 
 // MARK: - Collection View
@@ -203,7 +234,7 @@ extension VideoListViewController: PHPickerViewControllerDelegate {
         
         itemProvider.loadFileRepresentation(forTypeIdentifier: UTType.movie.identifier) { [weak self] tempURL, error in
             guard let tempURL, error == nil,
-                  let url = self?.videoManager.copyVideoToFileSystem(tempURL: tempURL) else { return }
+                  let url = self?.fileSystemManager.copyToFileSystem(tempURL: tempURL) else { return }
             self?.input.send(.appendVideo(url: url))
         }
     }
