@@ -262,10 +262,10 @@ extension SocketProvider: MCSessionDelegate {
 		at localURL: URL?,
 		withError error: (any Error)?
 	) {
-        let videoManager = FileSystemManager.shared
+        let fileSystemManager = FileSystemManager.shared
         guard let localURL,
               let (resourceName, uuid) = ResourceValidator.extractInformation(name: resourceName),
-              let url = videoManager.copyToFileSystemWithName(
+              let url = fileSystemManager.copyToFileSystemWithName(
                 tempURL: localURL,
                 resourceName: resourceName
               ) else { return }
