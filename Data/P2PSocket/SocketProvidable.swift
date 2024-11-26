@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 public protocol SocketProvidable:
-    SocketInvitable, SocketBwrosable, SocketAdvertiseable,
+    SocketInvitable, SocketBwrosable, SocketAdvertiseable, SocketDisconnectable,
     SocketResourceSendable, HashSynchronizable { }
 
 public protocol SocketAdvertiseable {
@@ -40,6 +40,10 @@ public protocol SocketInvitable {
 	
 	func startReceiveInvitation()
 	func stopReceiveInvitation()
+}
+
+public protocol SocketDisconnectable {
+    func disconnectAllUser()
 }
 
 public protocol SocketResourceSendable {
