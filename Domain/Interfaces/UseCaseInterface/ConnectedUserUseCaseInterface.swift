@@ -14,4 +14,5 @@ public protocol ConnectedUserUseCaseInterface {
     init(repository: ConnectedUserRepositoryInterface)
 
     func fetchConnectedUsers() -> [ConnectedUser]
+    func leaveGroup()
 }
