@@ -40,11 +40,3 @@ final class HeightResizableSlider: UISlider {
         return resizedRect
     }
 }
-
-fileprivate extension UIView {
-  func toImage() -> UIImage {
-    return UIGraphicsImageRenderer(size: bounds.size).image { _ in
-      drawHierarchy(in: bounds, afterScreenUpdates: true)
-    }
-  }
-}

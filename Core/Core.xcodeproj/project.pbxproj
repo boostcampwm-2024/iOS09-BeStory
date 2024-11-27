@@ -18,6 +18,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				"AVAsset+Metadata.swift",
+				"UIView+Image.swift",
 			);
 			target = 853CEB622CECA73E00936AD3 /* Core */;
 		};
