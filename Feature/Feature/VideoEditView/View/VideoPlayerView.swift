@@ -46,7 +46,7 @@ final class VideoPlayerView: UIView {
     }
 }
 
-public extension VideoPlayerView {
+extension VideoPlayerView {
     func replaceVideo(video: AVAsset) {
         let videoItem = AVPlayerItem(asset: video)
         replaceVideo(playerItem: videoItem)
