@@ -9,7 +9,7 @@ import AVFoundation
 import Combine
 import UIKit
 
-public final class VideoPlayerView: UIView {
+final class VideoPlayerView: UIView {
     private var player: AVPlayer
     private var playerLayer: AVPlayerLayer
 
@@ -103,10 +103,10 @@ private extension VideoPlayerView {
     }
     
     @objc private func handleTap() {
+        isHide.toggle()
         UIView.animate(withDuration: 0.25) { [weak self] in
             self?.tapShowHideView.alpha = (self?.isHide ?? true) ? 1 : 0
         }
-        isHide.toggle()
     }
     
     func setupPlayPauseButton() {
