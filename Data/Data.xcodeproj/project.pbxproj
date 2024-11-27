@@ -7,12 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		853CF9162CF6D92700936AD3 /* CRDT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853CF8F82CF6CAD000936AD3 /* CRDT.framework */; };
 		D9CF36472CF0858200B1A92D /* Core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9CF36462CF0858200B1A92D /* Core.framework */; };
 		FEF779662CDCB2CF00FFE089 /* Entity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF779652CDCB2CF00FFE089 /* Entity.framework */; };
 		FEF779962CDCE10300FFE089 /* Interfaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF779952CDCE10300FFE089 /* Interfaces.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		853CF9002CF6CAED00936AD3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FE6EF3242CD8B020005DC39D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 853CF8F72CF6CAD000936AD3;
+			remoteInfo = CRDT;
+		};
 		FEF779692CDCB2D500FFE089 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FE6EF3242CD8B020005DC39D /* Project object */;
@@ -45,6 +53,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		853CF8F82CF6CAD000936AD3 /* CRDT.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CRDT.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9CF36462CF0858200B1A92D /* Core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FED9682A2CD9094300CD445C /* libData.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libData.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FED968552CD90FCF00CD445C /* P2PSocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = P2PSocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,6 +74,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		853CF8F92CF6CAD000936AD3 /* CRDT */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CRDT;
+			sourceTree = "<group>";
+		};
 		FE6EF32E2CD8B020005DC39D /* Data */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -81,6 +95,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		853CF8F52CF6CAD000936AD3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FED968272CD9094300CD445C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -94,6 +115,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				853CF9162CF6D92700936AD3 /* CRDT.framework in Frameworks */,
 				D9CF36472CF0858200B1A92D /* Core.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -106,6 +128,7 @@
 			children = (
 				FE6EF32E2CD8B020005DC39D /* Data */,
 				FED968562CD90FCF00CD445C /* P2PSocket */,
+				853CF8F92CF6CAD000936AD3 /* CRDT */,
 				FED967FA2CD9026100CD445C /* Frameworks */,
 				FE6EF32D2CD8B020005DC39D /* Products */,
 			);
@@ -116,6 +139,7 @@
 			children = (
 				FED9682A2CD9094300CD445C /* libData.a */,
 				FED968552CD90FCF00CD445C /* P2PSocket.framework */,
+				853CF8F82CF6CAD000936AD3 /* CRDT.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -133,6 +157,13 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		853CF8F32CF6CAD000936AD3 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FED968502CD90FCF00CD445C /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -143,6 +174,29 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		853CF8F72CF6CAD000936AD3 /* CRDT */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 853CF8FF2CF6CAD000936AD3 /* Build configuration list for PBXNativeTarget "CRDT" */;
+			buildPhases = (
+				853CF8F32CF6CAD000936AD3 /* Headers */,
+				853CF8F42CF6CAD000936AD3 /* Sources */,
+				853CF8F52CF6CAD000936AD3 /* Frameworks */,
+				853CF8F62CF6CAD000936AD3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				853CF8F92CF6CAD000936AD3 /* CRDT */,
+			);
+			name = CRDT;
+			packageProductDependencies = (
+			);
+			productName = CRDT;
+			productReference = 853CF8F82CF6CAD000936AD3 /* CRDT.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		FED968292CD9094300CD445C /* Data */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FED9682E2CD9094300CD445C /* Build configuration list for PBXNativeTarget "Data" */;
@@ -156,6 +210,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				853CF9012CF6CAED00936AD3 /* PBXTargetDependency */,
 				FEF7796A2CDCB2D500FFE089 /* PBXTargetDependency */,
 			);
 			name = Data;
@@ -199,6 +254,10 @@
 				LastSwiftUpdateCheck = 1600;
 				LastUpgradeCheck = 1610;
 				TargetAttributes = {
+					853CF8F72CF6CAD000936AD3 = {
+						CreatedOnToolsVersion = 16.1;
+						LastSwiftMigration = 1610;
+					};
 					FED968292CD9094300CD445C = {
 						CreatedOnToolsVersion = 16.0;
 					};
@@ -224,11 +283,19 @@
 			targets = (
 				FED968292CD9094300CD445C /* Data */,
 				FED968542CD90FCF00CD445C /* P2PSocket */,
+				853CF8F72CF6CAD000936AD3 /* CRDT */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		853CF8F62CF6CAD000936AD3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FED968532CD90FCF00CD445C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -278,6 +345,13 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		853CF8F42CF6CAD000936AD3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FED968262CD9094300CD445C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -295,6 +369,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		853CF9012CF6CAED00936AD3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 853CF8F72CF6CAD000936AD3 /* CRDT */;
+			targetProxy = 853CF9002CF6CAED00936AD3 /* PBXContainerItemProxy */;
+		};
 		FEF7796A2CDCB2D500FFE089 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FED968542CD90FCF00CD445C /* P2PSocket */;
@@ -303,6 +382,81 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		853CF8FC2CF6CAD000936AD3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = B3PWYBKFUK;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.bestory.crdt.CRDT;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		853CF8FD2CF6CAD000936AD3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = B3PWYBKFUK;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.bestory.crdt.CRDT;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		FE6EF3422CD8B021005DC39D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -552,6 +706,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		853CF8FF2CF6CAD000936AD3 /* Build configuration list for PBXNativeTarget "CRDT" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				853CF8FC2CF6CAD000936AD3 /* Debug */,
+				853CF8FD2CF6CAD000936AD3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		FE6EF3272CD8B020005DC39D /* Build configuration list for PBXProject "Data" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
