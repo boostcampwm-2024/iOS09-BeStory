@@ -28,6 +28,7 @@ public final class VideoPlayerView: UIView {
         setupViewAttributes()
         setupViewHierarchies()
         setupViewBinding()
+        setupViewConstraints()
     }
     
     convenience init() {
@@ -41,9 +42,7 @@ public final class VideoPlayerView: UIView {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-        print("k")
-        self.backgroundColor = .systemGray6
-        setupViewConstraints()
+        playerLayer.frame = bounds
     }
 }
 
@@ -66,6 +65,7 @@ public extension VideoPlayerView {
 
 private extension VideoPlayerView {
     func setupViewAttributes() {
+        self.backgroundColor = .systemGray6
         setupPlayTappableView()
         setupPlayPauseButton()
         setupSeekingSlider()
