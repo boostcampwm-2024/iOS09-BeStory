@@ -13,7 +13,6 @@ final class VideoPlayerView: UIView {
     private var player: AVPlayer
     private var playerLayer: AVPlayerLayer
 
-    private let tapShowHideView = UIView()
     private let playPauseButton = UIButton()
     private let seekingSlider = HeightResizableSlider(trackHeight: 6)
     
@@ -74,16 +73,13 @@ private extension VideoPlayerView {
     
     func setupViewHierarchies() {
         layer.addSublayer(playerLayer)
-        addSubview(tapShowHideView)
-        tapShowHideView.addSubview(playPauseButton)
-        tapShowHideView.addSubview(seekingSlider)
+        addSubview(playPauseButton)
+        addSubview(seekingSlider)
     }
     
     func setupViewConstraints() {
         playerLayer.frame = bounds
-        tapShowHideView.snp.makeConstraints {
-            $0.top.leading.trailing.bottom.equalToSuperview()
-        }
+        
         playPauseButton.snp.makeConstraints {
             $0.width.equalTo(30)
             $0.height.equalTo(30)
@@ -105,7 +101,8 @@ private extension VideoPlayerView {
     @objc private func handleTap() {
         isHide.toggle()
         UIView.animate(withDuration: 0.25) { [weak self] in
-            self?.tapShowHideView.alpha = (self?.isHide ?? true) ? 1 : 0
+            self?.playPauseButton.alpha = (self?.isHide ?? true) ? 1 : 0
+            self?.seekingSlider.alpha = (self?.isHide ?? true) ? 1 : 0
         }
     }
     
