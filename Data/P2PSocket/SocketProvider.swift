@@ -126,6 +126,12 @@ public extension SocketProvider {
 		invitationHandler = nil
 	}
     
+    func disconnectAllUser() {
+        session.connectedPeers.forEach { peerID in
+            session.cancelConnectPeer(peerID)
+        }
+    }
+    
     func sendHashes(_ hashes: [String: String]) {
         guard let data = try? JSONSerialization.data(withJSONObject: hashes, options: []) else { return }
         try? session.send(data, toPeers: session.connectedPeers, with: .reliable)

@@ -29,6 +29,11 @@ public extension ConnectedUserUseCase {
 		connectedUsersID = connectedUsers.map { $0.id }
 		return connectedUsers
 	}
+    
+    func leaveGroup() {
+        repository.leaveGroup()
+        
+    }
 }
 
 // MARK: - Private Methods
