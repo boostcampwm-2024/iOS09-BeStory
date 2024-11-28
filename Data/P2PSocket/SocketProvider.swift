@@ -18,6 +18,7 @@ public final class SocketProvider: NSObject, SocketProvidable {
 	public let updatedPeer = PassthroughSubject<SocketPeer, Never>()
 	public let invitationReceived = PassthroughSubject<SocketPeer, Never>()
     public let resourceShared = PassthroughSubject<SharedResource, Never>()
+    public let dataShared = PassthroughSubject<(Data, String), Never>()
     
     public var connectedPeerIDs: [String] {
         session.connectedPeers.compactMap { peerID in
@@ -138,9 +139,15 @@ public extension SocketProvider {
         }
     }
     
-    func sendHashes(_ hashes: [String: String]) {
-        guard let data = try? JSONSerialization.data(withJSONObject: hashes, options: []) else { return }
+    func send(data: Data, to peerID: String) {
+        guard let mcPeerID = MCPeerIDStorage.shared.peerIDByIdentifier[peerID]?.id else { return }
+        try? session.send(data, toPeers: [mcPeerID], with: .reliable)
+    }
+    
+    func sendAll(data: Data) {
         try? session.send(data, toPeers: session.connectedPeers, with: .reliable)
+    }
+    
     func shareResource(
         url localURL: URL,
         resourceName: String,

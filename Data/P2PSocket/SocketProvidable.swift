@@ -65,9 +65,10 @@ public protocol SocketResourceSendable {
 	func sharedAllResources() -> [SharedResource]
 }
 
-public protocol HashSynchronizable {
-    var isSynchronized: PassthroughSubject<Void, Never> { get }
+public protocol DataSendable {
+    var dataShared: PassthroughSubject<(Data, String), Never> { get }
     
-    func sendHashes(_ hashes: [String: String])
+    func send(data: Data, to peerID: String)
+    func sendAll(data: Data)
 }
 
