@@ -18,6 +18,14 @@ public final class SocketProvider: NSObject, SocketProvidable {
 	public let updatedPeer = PassthroughSubject<SocketPeer, Never>()
 	public let invitationReceived = PassthroughSubject<SocketPeer, Never>()
     public let resourceShared = PassthroughSubject<SharedResource, Never>()
+    
+    public var connectedPeerIDs: [String] {
+        session.connectedPeers.compactMap { peerID in
+            MCPeerIDStorage.shared.peerIDByIdentifier.first {
+                $0.value.id == peerID
+            }?.key
+        }
+    }
 	private var isAllowedInvitation: Bool = true
 	private var invitationHandler: ((Bool, MCSession?) -> Void)?
 	
