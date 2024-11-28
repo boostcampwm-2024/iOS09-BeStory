@@ -139,42 +139,56 @@ public extension SocketProvider {
         }
     }
 	  
-    func shareResource(url localUrl: URL, resourceName: String) async throws -> SharedResource {
-        return try await withCheckedThrowingContinuation { resourceUrlContinuation in
+    func shareResource(url localUrl: URL, resourceName: String) async throws {
             let uuid = UUID()
             let nameWithUUID = [resourceName, uuid.uuidString].joined(separator: "/")
             
             let recievers = session.connectedPeers
-            let recieverCount = recievers.count
-            let counter = Counter(targetCount: recieverCount)
-            
-            let sharedResource = SharedResource(
-                localUrl: localUrl,
-                name: resourceName,
-                uuid: uuid,
-                sender: session.myPeerID.displayName
-            )
-            
-            let handler = continuedCountableResouceHandler(
-                counter: counter,
-                sharedResource: sharedResource,
-                continuation: resourceUrlContinuation
-            )
-            
             recievers.forEach { peer in
-                let progress = session.sendResource(
-                    at: localUrl,
-                    withName: nameWithUUID,
-                    toPeer: peer,
-                    withCompletionHandler: handler
-                )
-                
-                guard progress == nil else { return }
-                
-                let error = ShareResourceError.peerFailedDownload(id: peerID.displayName)
-                resourceUrlContinuation.resume(throwing: error)
+                session.sendResource(at: localUrl, withName: nameWithUUID, toPeer: peer)
             }
-        }
+        let sharedResource = SharedResource(
+            localUrl: localUrl,
+            name: resourceName,
+            uuid: uuid,
+            sender: session.myPeerID.displayName
+        )
+        resourceShared.send(sharedResource)
+        
+        /// 이 부분에서 continuation leak이 나는 것 같습니다.
+        /// 리소스를 공유한 뒤 최종적으로 동기화를 시키기 때문에
+        /// 현재는 주석 처리 해두었습니다.
+//        return try await withCheckedThrowingContinuation { resourceUrlContinuation in
+//            let recieverCount = recievers.count
+//            let counter = Counter(targetCount: recieverCount)
+            
+//            let sharedResource = SharedResource(
+//                localUrl: localUrl,
+//                name: resourceName,
+//                uuid: uuid,
+//                sender: session.myPeerID.displayName
+//            )
+//            
+//            let handler = continuedCountableResouceHandler(
+//                counter: counter,
+//                sharedResource: sharedResource,
+//                continuation: resourceUrlContinuation
+//            )
+//            
+//            recievers.forEach { peer in
+//                let progress = session.sendResource(
+//                    at: localUrl,
+//                    withName: nameWithUUID,
+//                    toPeer: peer,
+//                    withCompletionHandler: handler
+//                )
+//                
+//                guard progress == nil else { return }
+//                
+//                let error = ShareResourceError.peerFailedDownload(id: peerID.displayName)
+//                resourceUrlContinuation.resume(throwing: error)
+//            }
+//        }
     }
     
     func sharedAllResources() -> [SharedResource] {
