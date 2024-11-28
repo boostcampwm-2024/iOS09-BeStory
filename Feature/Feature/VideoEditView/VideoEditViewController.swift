@@ -10,12 +10,18 @@ import SnapKit
 import UIKit
 
 public final class SharedMovieEditViewController: UIViewController {
+    // MARK: - Properties
+
     private let viewModel: SharedVideoEditViewModel
     private let input = PassthroughSubject<SharedVideoEditViewInput, Never>()
     private var cancellables = Set<AnyCancellable>()
 
+    // MARK: - UI Components
+
     private let moviePlayerView = VideoPlayerView()
-    
+
+    // MARK: - Initializer
+
     public init(viewModel: SharedVideoEditViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -25,7 +31,9 @@ public final class SharedMovieEditViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+    // MARK: - LifeCycle
+
     public override func viewDidLoad() {
         super.viewDidLoad()
         setupViewHierarchies()
@@ -39,6 +47,8 @@ public final class SharedMovieEditViewController: UIViewController {
         navigationController?.setNavigationBarHidden(true, animated: true)
     }
 }
+
+// MARK: - UI Configure
 
 private extension SharedMovieEditViewController {
     enum Constants {
