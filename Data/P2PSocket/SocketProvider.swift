@@ -133,10 +133,20 @@ public extension SocketProvider {
     func sendHashes(_ hashes: [String: String]) {
         guard let data = try? JSONSerialization.data(withJSONObject: hashes, options: []) else { return }
         try? session.send(data, toPeers: session.connectedPeers, with: .reliable)
+    func shareResource(
+        url localURL: URL,
+        resourceName: String,
+        to peerID: String,
+        completion: (((any Error)?) -> Void)? = nil
+    ) {
+        let uuid = UUID()
+        let nameWithUUID = [resourceName, uuid.uuidString].joined(separator: "/")
+        guard let mcPeerID = MCPeerIDStorage.shared.peerIDByIdentifier[peerID]?.id else { return }
         
-        for peer in session.connectedPeers {
-            syncFlags[peer] = false
-        }
+        session.sendResource(at: localURL,
+                             withName: nameWithUUID,
+                             toPeer: mcPeerID,
+                             withCompletionHandler: completion)
     }
 	  
     func shareResource(url localUrl: URL, resourceName: String) async throws {
