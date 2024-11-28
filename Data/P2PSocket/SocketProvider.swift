@@ -17,9 +17,7 @@ public final class SocketProvider: NSObject, SocketProvidable {
 	// MARK: - Properties
 	public let updatedPeer = PassthroughSubject<SocketPeer, Never>()
 	public let invitationReceived = PassthroughSubject<SocketPeer, Never>()
-  public let resourceShared = PassthroughSubject<SharedResource, Never>()
-  public let isSynchronized = PassthroughSubject<Void, Never>()
-
+    public let resourceShared = PassthroughSubject<SharedResource, Never>()
 	private var isAllowedInvitation: Bool = true
 	private var invitationHandler: ((Bool, MCSession?) -> Void)?
 	
@@ -27,9 +25,8 @@ public final class SocketProvider: NSObject, SocketProvidable {
 	private let browser: MCNearbyServiceBrowser
 	private let advertiser: MCNearbyServiceAdvertiser
 	private let session: MCSession
-  private var sharingTasks = [Task<(), Never>]()
-  private var sharedResources = [SharedResource]()
-  private var syncFlags: [MCPeerID: Bool] = [:]
+    private var sharingTasks = [Task<(), Never>]()
+    private var sharedResources = [SharedResource]()
     
 	// MARK: - Initializers
 	public override init() {
@@ -379,13 +376,5 @@ private extension SocketProvider {
             }
             self?.sharingTasks.append(task)
         }
-    }
-}
-
-private extension SocketProvider {
-    enum SyncMessage: Codable {
-        case hashMatch
-        case hashMismatch
-        case completed
     }
 }
