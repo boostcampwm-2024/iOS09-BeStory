@@ -162,7 +162,6 @@ public extension SharingVideoRepository {
         
         guard let encodedData = try? JSONEncoder().encode(hashMessage) else { return }
         socketProvider.sendAll(data: encodedData)
-
         
         for peer in socketProvider.connectedPeerIDs {
             sendSyncFlags[peer] = false

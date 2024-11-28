@@ -10,7 +10,7 @@ import Foundation
 
 public protocol SocketProvidable:
     SocketInvitable, SocketBwrosable, SocketAdvertiseable, SocketDisconnectable,
-    SocketResourceSendable, HashSynchronizable { }
+    SocketResourceSendable, DataSendable { }
 
 
 public protocol SocketAdvertiseable {
