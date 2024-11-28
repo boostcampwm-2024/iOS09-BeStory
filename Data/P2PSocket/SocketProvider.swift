@@ -255,34 +255,9 @@ extension SocketProvider: MCSessionDelegate {
 		didReceive data: Data,
 		fromPeer peerID: MCPeerID
 	) {
-        // hashes 관련 코드입니다.
-        if let hashes = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: String] {
-            let localHashes = FileSystemManager.shared.collectHashes()
-            let result: SyncMessage = (hashes == localHashes) ? .hashMatch : .hashMismatch
-            guard let data = try? JSONEncoder().encode(result) else { return }
-            try? session.send(data, toPeers: [peerID], with: .reliable)
-        }
+        guard let peerID = MCPeerIDStorage.shared.findPeer(for: peerID)?.key else { return }
         
-        // 동기화 결과 관련 코드입니다.
-        if let result = try? JSONDecoder().decode(SyncMessage.self, from: data) {
-            switch result {
-            case .hashMatch:
-                syncFlags[peerID] = true
-                let allSynced = syncFlags.values.allSatisfy { $0 }
-                if allSynced {
-                    guard let completedMessage = try? JSONEncoder().encode(SyncMessage.completed) else { return }
-                    try? session.send(completedMessage,
-                        toPeers: session.connectedPeers,
-                        with: .reliable
-                    )
-                    isSynchronized.send(())
-                }
-            case .hashMismatch:
-                return
-            case .completed:
-                isSynchronized.send(())
-            }
-        }
+        dataShared.send((data, peerID))
     }
 	
 	public func session(
