@@ -53,3 +53,7 @@ public final class Synchronizer {
     }
 }
 
+@frozen public enum HashCondition: Codable {
+    case missing
+    case additional
+}
