@@ -31,9 +31,8 @@ public final class FileSystemManager {
             originalFileName += ".mp4"
         }
         let destinationURL = folder.appending(path: originalFileName)
-        if !fileManager.fileExists(atPath: destinationURL.path) {
-            try? fileManager.copyItem(at: tempURL, to: destinationURL)
-        }
+        guard !fileManager.fileExists(atPath: destinationURL.path) else { return nil }
+        try? fileManager.copyItem(at: tempURL, to: destinationURL)
         return destinationURL
     }
     
