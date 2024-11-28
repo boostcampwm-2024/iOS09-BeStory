@@ -1,5 +1,5 @@
 //
-//  MovieEditViewController.swift
+//  SharedVideoEditViewController.swift
 //  Feature
 //
 //  Created by Yune gim on 11/26/24.
@@ -9,7 +9,7 @@ import Combine
 import SnapKit
 import UIKit
 
-public final class SharedMovieEditViewController: UIViewController {
+public final class SharedVideoEditViewController: UIViewController {
     // MARK: - Properties
 
     private let viewModel: SharedVideoEditViewModel
@@ -18,7 +18,7 @@ public final class SharedMovieEditViewController: UIViewController {
 
     // MARK: - UI Components
 
-    private let moviePlayerView = VideoPlayerView()
+    private let videoPlayerView = VideoPlayerView()
 
     // MARK: - Initializer
 
@@ -50,24 +50,24 @@ public final class SharedMovieEditViewController: UIViewController {
 
 // MARK: - UI Configure
 
-private extension SharedMovieEditViewController {
+private extension SharedVideoEditViewController {
     enum Constants {
         static let topMargin: CGFloat = 14
         static let playerViewRatio: CGFloat = 9 / 16
     }
 }
 
-private extension SharedMovieEditViewController {
+private extension SharedVideoEditViewController {
     func setupViewHierarchies() {
-        view.addSubview(moviePlayerView)
+        view.addSubview(videoPlayerView)
     }
     
     func setupViewConstraints() {
-        moviePlayerView.snp.makeConstraints {
+        videoPlayerView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(Constants.topMargin)
             $0.leading.equalToSuperview()
             $0.trailing.equalToSuperview()
-            $0.height.equalTo(moviePlayerView.snp.width).multipliedBy(Constants.playerViewRatio)
+            $0.height.equalTo(videoPlayerView.snp.width).multipliedBy(Constants.playerViewRatio)
         }
     }
     
