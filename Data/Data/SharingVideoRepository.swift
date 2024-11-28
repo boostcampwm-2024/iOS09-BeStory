@@ -58,6 +58,14 @@ public extension SharingVideoRepository {
     func synchronizeVideos() {
         let hashes = FileSystemManager.shared.collectHashes()
         socketProvider.sendHashes(hashes)
+extension SharingVideoRepository {
+    enum SyncMessage: Codable {
+        case hash([String: String])
+        case hashMatch([String: HashCondition])
+        case request([String])
+        case sendResponse
+        case receiveResponse
+        case completed
     }
 
 }
