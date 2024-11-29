@@ -38,14 +38,16 @@ extension LWWElementSet {
     @discardableResult
     public func localAdd(element: T) -> LWWElementSetState<T> {
         let clock = vectorClock.increase(replicaId: id)
-        additions[element] = clock
+        additions.removeValue(forKey: element)
+        additions.updateValue(clock, forKey: element)
         return payloading()
     }
     
     @discardableResult
     public func localRemove(element: T) -> LWWElementSetState<T> {
         let clock = vectorClock.increase(replicaId: id)
-        removals[element] = clock
+        removals.removeValue(forKey: element)
+        removals.updateValue(clock, forKey: element)
         return payloading()
     }
 
@@ -75,7 +77,8 @@ private extension LWWElementSet {
            clock >= remoteClock {
             return
         }
-        self.additions[element] = remoteClock
+         additions.removeValue(forKey: element)
+         additions.updateValue(remoteClock, forKey: element)
     }
 
     func remove(element: T, remoteClock: VectorClock) {
@@ -83,7 +86,8 @@ private extension LWWElementSet {
            clock >= remoteClock {
             return
         }
-        self.removals[element] = remoteClock
+        removals.removeValue(forKey: element)
+        removals.updateValue(remoteClock, forKey: element)
     }
     
     func payloading() -> LWWElementSetState<T> {

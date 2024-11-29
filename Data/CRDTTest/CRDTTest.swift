@@ -65,7 +65,7 @@ final class CRDTTest: XCTestCase {
         let p1 = LWWElementSet<LWWDummy>(id: 1, peerCount: peerCount)
         
         let p0data = LWWDummy(data: 1, author: "p0")
-        let p1data = LWWDummy(data: 1, author: "p0")
+        let p1data = LWWDummy(data: 1, author: "p1")
         
         let p0event = await p0.localAdd(element: p0data)
         await p1.merge(with: p0event)
@@ -76,6 +76,8 @@ final class CRDTTest: XCTestCase {
         let p1element = await p1.elements()
 
         XCTAssertEqual(p0element, p1element)
+        XCTAssertEqual(p0element.first?.author, "p1")
+        XCTAssertEqual(p1element.first?.author, "p1")
     }
 }
 
