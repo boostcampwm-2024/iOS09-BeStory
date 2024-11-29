@@ -52,7 +52,7 @@ extension LWWElementSet {
     public func merge(with state: LWWElementSetState<T>) async {
         let otherSet = state.excute()
         if await !mergeAvailableSet(with: otherSet) {
-            waitSet.append(otherSet)
+            return waitSet.append(otherSet)
         }
         return await mergeWatingSet()
     }

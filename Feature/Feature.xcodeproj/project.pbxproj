@@ -52,7 +52,6 @@
 				Helper/EventPublisher.swift,
 				"Helper/UIAlertController+Types.swift",
 				"Helper/UIColor+HexInitialization.swift",
-				VideoListView/TempViewController.swift,
 				MainViewController.swift,
 				VideoEditView/VideoEditViewController.swift,
 				VideoEditView/View/HeightResizableSlider.swift,
