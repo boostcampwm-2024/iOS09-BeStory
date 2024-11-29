@@ -40,24 +40,21 @@ public final class SharingVideoRepository: SharingVideoRepositoryInterface {
         
         socketProvider.dataShared
             .sink { [weak self] (data, peerID) in
+                guard let self else { return }
                 guard let data = try? JSONDecoder().decode(SyncMessage.self, from: data) else { return }
                 switch data {
                 case .hash(let hashes):
-                    self?.sendComparingResult(with: hashes, to: peerID)
+                    sendComparingResult(with: hashes, to: peerID)
                 case .hashMatch(let result):
-                    self?.synchronize(with: result, to: peerID)
-                case .request(let fileNames):
-                    self?.sendFiles(fileNames: fileNames, to: peerID, isRequested: true)
-                case .sendResponse:
-                    guard let self else { return }
-                    sendSyncFlags[peerID] = true
+                    synchronize(with: result, to: peerID)
                     checkIfAllSynced()
-                case .receiveResponse:
-                    guard let self else { return }
+                case .request(let fileNames):
+                    sendFiles(fileNames: fileNames, to: peerID, isRequested: true)
+                case .requestCompletionFlag:
                     receiveSyncFlags[peerID]  = true
                     checkIfAllSynced()
                 case .completed:
-                    self?.isSynchronized.send(())
+                    isSynchronized.send(())
                 }
             }
             .store(in: &cancellables)    
@@ -88,7 +85,6 @@ private extension SharingVideoRepository {
         if result.isEmpty {
             sendSyncFlags[peerID] = true
             receiveSyncFlags[peerID] = true
-            checkIfAllSynced()
             return
         }
         
@@ -114,7 +110,7 @@ private extension SharingVideoRepository {
             }
             
             if isRequested {
-                sendReceivedResponse(to: peerID)
+                sendRequestResponse(to: peerID)
             }
         }
     }
@@ -126,10 +122,10 @@ private extension SharingVideoRepository {
         socketProvider.send(data: requestData, to: peerID)
     }
     
-    func sendResponse(isRequested: Bool, to peerID: String) {
-        let responseFlag = isRequested ? SyncMessage.receiveResponse : SyncMessage.sendResponse
-        guard let responseData = try? JSONEncoder().encode(responseFlag) else { return }
-        self.socketProvider.send(data: responseData, to: peerID)
+    func sendRequestResponse(to peerID: String) {
+        let receivedFlag = SyncMessage.requestCompletionFlag
+        guard let data = try? JSONEncoder().encode(receivedFlag) else { return }
+        self.socketProvider.send(data: data, to: peerID)
     }
     
     func checkIfAllSynced() {
@@ -175,8 +171,7 @@ extension SharingVideoRepository {
         case hash([String: String])
         case hashMatch([String: HashCondition])
         case request([String])
-        case sendResponse
-        case receiveResponse
+        case requestCompletionFlag
         case completed
     }
 
