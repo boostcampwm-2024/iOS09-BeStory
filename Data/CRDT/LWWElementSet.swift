@@ -22,36 +22,35 @@ public actor LWWElementSet<T: Codable & Hashable> {
         vectorClock = VectorClock(replicaCount: peerCount)
     }
     
-    private init(id: Int,
-                 clock: VectorClock,
-                 additions: [T: VectorClock],
-                 removals: [T: VectorClock],
-                 waitSet: [LWWElementSet]
+    fileprivate init(id: Int,
+                     clock: VectorClock,
+                     additions: [T: VectorClock],
+                     removals:[T: VectorClock]
     ) {
         self.id = id
         self.vectorClock = clock
         self.additions = additions
         self.removals = removals
-        self.waitSet = waitSet
     }
 }
 
 extension LWWElementSet {
     @discardableResult
-    public func localAdd(element: T) -> LWWElementSet {
+    public func localAdd(element: T) -> LWWElementSetState<T> {
         let clock = vectorClock.increase(replicaId: id)
         additions[element] = clock
-        return clone()
+        return payloading()
     }
     
     @discardableResult
-    public func localRemove(element: T) -> LWWElementSet {
+    public func localRemove(element: T) -> LWWElementSetState<T> {
         let clock = vectorClock.increase(replicaId: id)
         removals[element] = clock
-        return clone()
+        return payloading()
     }
 
-    public func merge(with otherSet: LWWElementSet<T>) async {
+    public func merge(with state: LWWElementSetState<T>) async {
+        let otherSet = state.excute()
         if await mergeAvailableSet(with: otherSet) {
             return await mergeWatingSet()
         }
@@ -87,13 +86,12 @@ private extension LWWElementSet {
         self.removals[element] = remoteClock
     }
     
-    func clone() -> LWWElementSet {
-        return LWWElementSet(
+    func payloading() -> LWWElementSetState<T> {
+        return LWWElementSetState(
             id: id,
             clock: vectorClock,
             additions: additions,
-            removals: removals,
-            waitSet: waitSet
+            removals: removals
         )
     }
     
