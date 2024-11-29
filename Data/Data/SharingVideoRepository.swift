@@ -102,21 +102,20 @@ private extension SharingVideoRepository {
     }
     
     func sendFiles(fileNames: [String], to peerID: String, isRequested: Bool) {
-        guard !fileNames.isEmpty else {
-            sendResponse(isRequested: isRequested, to: peerID)
-            return
-        }
-        
-        for index in fileNames.indices {
-            let fileName = fileNames[index]
-            let fileURL = FileSystemManager.shared.folder.appending(component: fileName)
-            let completion: (((any Error)?) -> Void)? = (index == fileNames.count - 1) ? { _ in
-                self.sendResponse(isRequested: isRequested, to: peerID) } : nil
+        Task {
+            for index in fileNames.indices {
+                let fileName = fileNames[index]
+                let fileURL = FileSystemManager.shared.folder.appending(component: fileName)
+                
+                await socketProvider.sendResource(url: fileURL,
+                                                  resourceName: fileName,
+                                                  to: peerID)
+                sendSyncFlags[peerID] = true
+            }
             
-            socketProvider.sendResource(url: fileURL,
-                                         resourceName: fileName,
-                                         to: peerID,
-                                         completion: completion)
+            if isRequested {
+                sendReceivedResponse(to: peerID)
+            }
         }
     }
     

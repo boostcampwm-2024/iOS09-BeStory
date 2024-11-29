@@ -144,17 +144,14 @@ public extension SocketProvider {
     func sendResource(
         url localURL: URL,
         resourceName: String,
-        to peerID: String,
-        completion: (((any Error)?) -> Void)? = nil
-    ) {
+        to peerID: String) async {
         let uuid = UUID()
         let nameWithUUID = [resourceName, uuid.uuidString].joined(separator: "/")
         guard let mcPeerID = MCPeerIDStorage.shared.peerIDByIdentifier[peerID]?.id else { return }
         
         session.sendResource(at: localURL,
                              withName: nameWithUUID,
-                             toPeer: mcPeerID,
-                             withCompletionHandler: completion)
+                             toPeer: mcPeerID)
     }
 	  
     func sendResourceToAll(url localUrl: URL, resourceName: String) async throws {

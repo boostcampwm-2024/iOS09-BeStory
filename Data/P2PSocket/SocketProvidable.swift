@@ -54,9 +54,8 @@ public protocol SocketResourceSendable {
     func sendResource(
         url localURL: URL,
         resourceName: String,
-        to peerID: String,
-        completion: (((any Error)?) -> Void)?
-    )
+        to peerID: String
+    ) async
 	/// 연결된 모든 Peer들에게 리소스를 전송합니다.
     func sendResourceToAll(url: URL, resourceName: String) async throws
 	/// Peer들과 공유한 모든 리소스를 리턴합니다.
