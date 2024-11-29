@@ -52,6 +52,7 @@
 				Helper/EventPublisher.swift,
 				"Helper/UIAlertController+Types.swift",
 				"Helper/UIColor+HexInitialization.swift",
+				"Helper/UIView+Extension.swift",
 				MainViewController.swift,
 				SharedVideoEditView/SharedVideoEditViewController.swift,
 				SharedVideoEditView/View/CollectionView/VideoTimelineCollectionViewCell.swift,
