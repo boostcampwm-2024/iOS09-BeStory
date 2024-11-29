@@ -141,7 +141,7 @@ public extension SocketProvider {
         try? session.send(data, toPeers: session.connectedPeers, with: .reliable)
     }
     
-    func shareResource(
+    func sendResource(
         url localURL: URL,
         resourceName: String,
         to peerID: String,
@@ -157,7 +157,7 @@ public extension SocketProvider {
                              withCompletionHandler: completion)
     }
 	  
-    func shareResource(url localUrl: URL, resourceName: String) async throws {
+    func sendResourceToAll(url localUrl: URL, resourceName: String) async throws {
             let uuid = UUID()
             let nameWithUUID = [resourceName, uuid.uuidString].joined(separator: "/")
             

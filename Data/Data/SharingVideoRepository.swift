@@ -112,7 +112,7 @@ private extension SharingVideoRepository {
             let completion: (((any Error)?) -> Void)? = (index == fileNames.count - 1) ? { _ in
                 self.sendResponse(isRequested: isRequested, to: peerID) } : nil
             
-            socketProvider.shareResource(url: fileURL,
+            socketProvider.sendResource(url: fileURL,
                                          resourceName: fileName,
                                          to: peerID,
                                          completion: completion)
@@ -146,7 +146,7 @@ private extension SharingVideoRepository {
 // MARK: - Public Methods
 public extension SharingVideoRepository {
     func shareVideo(url: URL, resourceName: String) async throws {
-        try await socketProvider.shareResource(url: url, resourceName: resourceName)
+        try await socketProvider.sendResourceToAll(url: url, resourceName: resourceName)
     }
     
     func fetchVideos() -> [SharedVideo] {
