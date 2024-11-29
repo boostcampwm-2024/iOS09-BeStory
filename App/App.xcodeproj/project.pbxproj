@@ -15,6 +15,7 @@
 		FE8207E12CED780200307694 /* Entity.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FE8207DC2CED780200307694 /* Entity.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FE8207E22CED780200307694 /* Interfaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE8207DD2CED780200307694 /* Interfaces.framework */; };
 		FE8207E32CED780200307694 /* Interfaces.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FE8207DD2CED780200307694 /* Interfaces.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FEE455212CF9A3F6001B66CD /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FEE455202CF9A3F6001B66CD /* Media.xcassets */; };
 		FEF778B92CDB00F000FFE089 /* libData.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF778B72CDB00F000FFE089 /* libData.a */; };
 		FEF778BA2CDB00F000FFE089 /* libFeature.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF778B82CDB00F000FFE089 /* libFeature.a */; };
 		FEF779742CDCB35800FFE089 /* libUseCase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF779732CDCB35800FFE089 /* libUseCase.a */; };
@@ -53,6 +54,7 @@
 		FE8207DB2CED780200307694 /* P2PSocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = P2PSocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE8207DC2CED780200307694 /* Entity.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Entity.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE8207DD2CED780200307694 /* Interfaces.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Interfaces.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FEE455202CF9A3F6001B66CD /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		FEF778B72CDB00F000FFE089 /* libData.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libData.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF778B82CDB00F000FFE089 /* libFeature.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libFeature.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF779732CDCB35800FFE089 /* libUseCase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libUseCase.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -100,6 +102,7 @@
 		FE6EF2E12CD8B005005DC39D = {
 			isa = PBXGroup;
 			children = (
+				FEE4551F2CF9A3ED001B66CD /* Resources */,
 				FE6EF2EC2CD8B005005DC39D /* App */,
 				FE6EF3E12CD8B6A2005DC39D /* Frameworks */,
 				FE6EF2EB2CD8B005005DC39D /* Products */,
@@ -126,6 +129,14 @@
 				FEF778B82CDB00F000FFE089 /* libFeature.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FEE4551F2CF9A3ED001B66CD /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FEE455202CF9A3F6001B66CD /* Media.xcassets */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -195,6 +206,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FEE455212CF9A3F6001B66CD /* Media.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
