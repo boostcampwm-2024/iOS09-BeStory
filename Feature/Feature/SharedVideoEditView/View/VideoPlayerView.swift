@@ -46,6 +46,7 @@ final class VideoPlayerView: UIView {
     }
 }
 
+// MARK: - Internal Methods
 extension VideoPlayerView {
     func replaceVideo(video: AVAsset) {
         let videoItem = AVPlayerItem(asset: video)
@@ -63,6 +64,7 @@ extension VideoPlayerView {
     }
 }
 
+// MARK: - UI Methods
 private extension VideoPlayerView {
     func setupViewAttributes() {
         self.backgroundColor = .systemGray6
@@ -99,14 +101,6 @@ private extension VideoPlayerView {
         addGestureRecognizer(tapGesture)
     }
     
-    @objc private func handleTap() {
-        isHide.toggle()
-        UIView.animate(withDuration: 0.25) { [weak self] in
-            self?.playPauseButton.alpha = (self?.isHide ?? true) ? 1 : 0
-            self?.seekingSlider.alpha = (self?.isHide ?? true) ? 1 : 0
-        }
-    }
-    
     func setupPlayPauseButton() {
         var buttonConfigurarion = UIButton.Configuration.plain()
         buttonConfigurarion.image = UIImage(systemName: "pause.circle")
@@ -121,62 +115,79 @@ private extension VideoPlayerView {
         seekingSlider.maximumValue = 100
         seekingSlider.value = 0
     }
-    
-    func setupViewBinding() {
-        // Thanks to LURKS02
-        playPauseButton.publisher(for: .touchUpInside)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.updatePlaying()
-            }
-            .store(in: &cancellables)
-        
-        seekingSlider.publisher(for: .valueChanged)
-            .compactMap { $0 as? UISlider }
-            .sink { [weak self] slider in
-                self?.updateVideoTime(to: slider.value)
-            }
-            .store(in: &cancellables)
-    }
-    
-    func setupTimeObserver() {
-        // Thanks to LURKS02
-        let interval = CMTime(seconds: 1, preferredTimescale: 1)
-        player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
-            guard let self,
-                  let playerDuration = self.player.currentItem?.duration else { return }
-            let currentTime = CMTimeGetSeconds(time)
-            let duration = CMTimeGetSeconds(playerDuration)
-            let progress = Float(currentTime / duration)
-            self.seekingSlider.value = progress * 100
-        }
-    }
-    
-    func updatePlaying() {
-        switch player.timeControlStatus {
-        case .paused:
-            if let playerDuration = player.currentItem?.duration,
-               playerDuration == player.currentTime() {
-                updateVideoTime(to: .zero)
-            }
-            let image = UIImage(systemName: "pause.circle")
-            playPauseButton.setImage(image, for: .normal)
-            self.player.play()
-        case .playing:
-            let image = UIImage(systemName: "play.circle.fill")
-            playPauseButton.setImage(image, for: .normal)
-            player.pause()
-        default:
-            break
-        }
-    }
-    
-    func updateVideoTime(to value: Float) {
-        // Thanks to LURKS02
-        guard let playerDuration = player.currentItem?.duration else { return }
-        let duration = CMTimeGetSeconds(playerDuration)
-        let newTime = Double(value / 100) * duration
-        let seekTime = CMTime(seconds: newTime, preferredTimescale: 1)
-        player.seek(to: seekTime)
-    }
+}
+
+// MARK: - Binding
+private extension VideoPlayerView {
+	func setupViewBinding() {
+		// Thanks to LURKS02
+		playPauseButton.publisher(for: .touchUpInside)
+			.receive(on: DispatchQueue.main)
+			.sink { [weak self] _ in
+				self?.updatePlaying()
+			}
+			.store(in: &cancellables)
+		
+		seekingSlider.publisher(for: .valueChanged)
+			.compactMap { $0 as? UISlider }
+			.sink { [weak self] slider in
+				self?.updateVideoTime(to: slider.value)
+			}
+			.store(in: &cancellables)
+	}
+}
+
+// MARK: - Action
+@objc private extension VideoPlayerView {
+	private func handleTap() {
+		isHide.toggle()
+		UIView.animate(withDuration: 0.25) { [weak self] in
+			self?.playPauseButton.alpha = (self?.isHide ?? true) ? 1 : 0
+			self?.seekingSlider.alpha = (self?.isHide ?? true) ? 1 : 0
+		}
+	}
+}
+
+// MARK: - Private Methods
+private extension VideoPlayerView {
+	func setupTimeObserver() {
+		// Thanks to LURKS02
+		let interval = CMTime(seconds: 1, preferredTimescale: 1)
+		player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
+			guard let self,
+				  let playerDuration = self.player.currentItem?.duration else { return }
+			let currentTime = CMTimeGetSeconds(time)
+			let duration = CMTimeGetSeconds(playerDuration)
+			let progress = Float(currentTime / duration)
+			self.seekingSlider.value = progress * 100
+		}
+	}
+	
+	func updatePlaying() {
+		switch player.timeControlStatus {
+		case .paused:
+			if let playerDuration = player.currentItem?.duration,
+			   playerDuration == player.currentTime() {
+				updateVideoTime(to: .zero)
+			}
+			let image = UIImage(systemName: "pause.circle")
+			playPauseButton.setImage(image, for: .normal)
+			self.player.play()
+		case .playing:
+			let image = UIImage(systemName: "play.circle.fill")
+			playPauseButton.setImage(image, for: .normal)
+			player.pause()
+		default:
+			break
+		}
+	}
+	
+	func updateVideoTime(to value: Float) {
+		// Thanks to LURKS02
+		guard let playerDuration = player.currentItem?.duration else { return }
+		let duration = CMTimeGetSeconds(playerDuration)
+		let newTime = Double(value / 100) * duration
+		let seekTime = CMTime(seconds: newTime, preferredTimescale: 1)
+		player.seek(to: seekTime)
+	}
 }
