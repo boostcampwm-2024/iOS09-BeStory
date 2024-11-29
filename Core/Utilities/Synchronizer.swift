@@ -20,12 +20,12 @@ public final class Synchronizer {
         let localHashes = collectHashes()
         var result: [String: HashCondition] = [:]
         
-        for (fileName, _) in localHashes where hashes[fileName] == nil {
-            result[fileName] = .additional
+        localHashes.filter { hashes[$0.key] == nil }.keys.forEach {
+            result[$0] = .additional
         }
         
-        for (fileName, _) in hashes where localHashes[fileName] == nil {
-            result[fileName] = .missing
+        hashes.filter { localHashes[$0.key] == nil }.keys.forEach {
+            result[$0] = .missing
         }
     
         return result
