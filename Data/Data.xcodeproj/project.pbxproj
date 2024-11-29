@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		853CF9162CF6D92700936AD3 /* CRDT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853CF8F82CF6CAD000936AD3 /* CRDT.framework */; };
 		D9CF36472CF0858200B1A92D /* Core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9CF36462CF0858200B1A92D /* Core.framework */; };
 		E48FFBC72CFA013000706532 /* CRDT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853CF8F82CF6CAD000936AD3 /* CRDT.framework */; };
 		FEF779662CDCB2CF00FFE089 /* Entity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF779652CDCB2CF00FFE089 /* Entity.framework */; };
@@ -137,7 +136,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				853CF9162CF6D92700936AD3 /* CRDT.framework in Frameworks */,
 				D9CF36472CF0858200B1A92D /* Core.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

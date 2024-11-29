@@ -20,6 +20,7 @@ public final class VideoListViewController: UIViewController {
     private let headerView = VideoListHeaderView()
     private var collectionView: UICollectionView!
     private let nextButton = UIButton()
+  
     private var dataSource: VideoListDataSource!
     private let spacing: CGFloat = 20
     
@@ -188,8 +189,10 @@ private extension VideoListViewController {
     }
     
     func navigateToEditor() {
-        let tempViewController = TempViewController(nibName: nil, bundle: nil)
-        navigationController?.pushViewController(tempViewController, animated: true)
+        let sharedVideoEditViewController = SharedVideoEditViewController(
+            viewModel: DIContainer.shared.resolve(type: SharedVideoEditViewModel.self)
+        )
+        navigationController?.pushViewController(sharedVideoEditViewController, animated: true)
     }
 }
 
