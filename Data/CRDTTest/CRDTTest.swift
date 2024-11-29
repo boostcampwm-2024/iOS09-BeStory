@@ -5,8 +5,8 @@
 //  Created by Yune gim on 11/29/24.
 //
 
-import XCTest
 import CRDT
+import XCTest
 
 final class CRDTTest: XCTestCase {
     func testIsLWWElementSetStateCodable() async throws {
