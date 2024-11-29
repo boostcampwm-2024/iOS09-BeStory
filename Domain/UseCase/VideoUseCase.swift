@@ -39,7 +39,7 @@ public extension VideoUseCase {
     }
     
     func synchronizeVideos() {
-        repository.synchronizeVideos()
+        repository.broadcastHashes()
     }
 }
 

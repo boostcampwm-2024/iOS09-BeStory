@@ -10,7 +10,8 @@ import Foundation
 
 public protocol SocketProvidable:
     SocketInvitable, SocketBwrosable, SocketAdvertiseable, SocketDisconnectable,
-    SocketResourceSendable, HashSynchronizable { }
+    SocketResourceSendable, DataSendable { }
+
 
 public protocol SocketAdvertiseable {
 	func startAdvertising()
@@ -46,18 +47,25 @@ public protocol SocketDisconnectable {
     func disconnectAllUser()
 }
 
+
 public protocol SocketResourceSendable {
 	var resourceShared: PassthroughSubject<SharedResource, Never> { get }
 	
+    func sendResource(
+        url localURL: URL,
+        resourceName: String,
+        to peerID: String
+    ) async
 	/// 연결된 모든 Peer들에게 리소스를 전송합니다.
-	@discardableResult
-    func shareResource(url: URL, resourceName: String) async throws -> SharedResource
+    func sendResourceToAll(url: URL, resourceName: String) async throws
 	/// Peer들과 공유한 모든 리소스를 리턴합니다.
 	func sharedAllResources() -> [SharedResource]
 }
 
-public protocol HashSynchronizable {
-    var isSynchronized: PassthroughSubject<Void, Never> { get }
+public protocol DataSendable {
+    var dataShared: PassthroughSubject<(Data, String), Never> { get }
     
-    func sendHashes(_ hashes: [String: String])
+    func send(data: Data, to peerID: String)
+    func sendAll(data: Data)
 }
+

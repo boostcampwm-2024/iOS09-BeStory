@@ -1,5 +1,5 @@
 //
-//  FileSystemManager.swift
+//  VideoManager.swift
 //  Feature
 //
 //  Created by 디해 on 11/15/24.
@@ -7,11 +7,11 @@
 
 import Foundation
 
-public final class FileSystemManager {
-    public static let shared = FileSystemManager()
-    public let folder: URL
-    
+public final class VideoManager {
+    public static let shared = VideoManager()
+
     private let fileManager = FileManager.default
+    private let folder: URL
     private let folderName: String = "videos"
     
     private init() {
@@ -25,14 +25,12 @@ public final class FileSystemManager {
         }
     }
     
-    public func copyToFileSystem(tempURL: URL, resourceName: String? = nil) -> URL? {
-        var originalFileName = resourceName ?? tempURL.lastPathComponent
-        if !originalFileName.hasSuffix(".mp4") {
-            originalFileName += ".mp4"
-        }
+    public func copyVideoToFileSystem(tempURL: URL) -> URL? {
+        let originalFileName = tempURL.lastPathComponent
         let destinationURL = folder.appending(path: originalFileName)
-        guard !fileManager.fileExists(atPath: destinationURL.path) else { return nil }
-        try? fileManager.copyItem(at: tempURL, to: destinationURL)
+        if !fileManager.fileExists(atPath: destinationURL.path) {
+            try? fileManager.copyItem(at: tempURL, to: destinationURL)
+        }
         return destinationURL
     }
     
