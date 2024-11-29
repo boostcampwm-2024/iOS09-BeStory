@@ -51,13 +51,6 @@ extension VectorClock {
         clock[replicaId, default: 0] += 1
         return self
     }
-    
-    /// 레플리카ID에 대한 시계눈금을 tick만큼 증가
-    @discardableResult
-    mutating func increase(replicaId: Int, tick value: Int) -> VectorClock {
-        clock[replicaId, default: 0] += value
-        return self
-    }
 }
 
 extension VectorClock: Comparable {
