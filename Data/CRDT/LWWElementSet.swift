@@ -165,7 +165,7 @@ fileprivate extension LWWElementSetState {
 }
 
 extension LWWElementSetState: Codable {
-    enum CodingKeys: String, CodingKey {
+    enum CodingKeys: CodingKey {
         case id
         case vectorClock
         case additions
