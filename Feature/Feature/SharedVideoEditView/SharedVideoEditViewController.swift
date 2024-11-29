@@ -84,7 +84,7 @@ private extension SharedVideoEditViewController {
             alpha: 1
         )
         static let spacing: CGFloat = 10
-        static let topMargin: CGFloat = 14
+        static let topMargin: CGFloat = 14 + 80
         static let height: CGFloat = 120
         static let itemSize: CGSize = .init(width: 160, height: 90)
     }
