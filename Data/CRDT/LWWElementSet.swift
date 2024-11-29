@@ -123,12 +123,9 @@ private extension LWWElementSet {
         let otherAdditions = await otherSet.additions
         let otherRemovals = await otherSet.removals
         
-        for (element, clock) in otherAdditions {
-            self.add(element: element, remoteClock: clock)
-        }
-        for (element, clock) in otherRemovals {
-            self.remove(element: element, remoteClock: clock)
-        }
+        otherAdditions.forEach { add(element: $0, remoteClock: $1) }
+        otherRemovals.forEach { remove(element: $0, remoteClock: $1) }
+        
         updatedElements.send(elements())
         vectorClock.increase(replicaId: otherSet.id)
         return true
@@ -168,10 +165,7 @@ fileprivate extension LWWElementSetState {
 
 extension LWWElementSetState: Codable {
     enum CodingKeys: CodingKey {
-        case id
-        case vectorClock
-        case additions
-        case removals
+        case id, vectorClock, additions, removals
     }
     
     public init(from decoder: Decoder) throws{
