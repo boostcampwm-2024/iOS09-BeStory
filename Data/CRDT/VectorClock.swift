@@ -36,8 +36,9 @@ extension VectorClock {
         if self[replicaId: replica] != vectorClock.clock[replica]! - 1 {
             return false
         }
-        for (replicaId, count) in vectorClock.clock {
-            if replica != replicaId && self[replicaId: replicaId] < count {
+        for (replicaId, remoteCount) in vectorClock.clock {
+            let localClockCont = self[replicaId: replicaId]
+            if replica != replicaId && remoteCount > localClockCont {
                 return false
             }
         }
