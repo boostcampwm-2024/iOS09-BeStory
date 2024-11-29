@@ -14,8 +14,6 @@ public protocol SocketProvidable:
 
 
 public protocol SocketAdvertiseable {
-    var connectedPeerIDs: [String] { get }
-    
 	func startAdvertising()
 	func stopAdvertising()
 }
