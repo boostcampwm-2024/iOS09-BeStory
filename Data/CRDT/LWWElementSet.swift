@@ -36,7 +36,6 @@ public actor LWWElementSet<T: Codable & Hashable> {
 }
 
 extension LWWElementSet {
-    @discardableResult
     public func localAdd(element: T) -> LWWElementSetState<T> {
         let clock = vectorClock.increase(replicaId: id)
         additions.removeValue(forKey: element)
@@ -44,7 +43,6 @@ extension LWWElementSet {
         return payloading()
     }
     
-    @discardableResult
     public func localRemove(element: T) -> LWWElementSetState<T> {
         let clock = vectorClock.increase(replicaId: id)
         removals.removeValue(forKey: element)
