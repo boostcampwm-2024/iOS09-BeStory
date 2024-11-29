@@ -22,10 +22,11 @@ public actor LWWElementSet<T: Codable & Hashable> {
         vectorClock = VectorClock(replicaCount: peerCount)
     }
     
-    fileprivate init(id: Int,
-                     clock: VectorClock,
-                     additions: [T: VectorClock],
-                     removals: [T: VectorClock]
+    fileprivate init(
+        id: Int,
+        clock: VectorClock,
+        additions: [T: VectorClock],
+        removals: [T: VectorClock]
     ) {
         self.id = id
         self.vectorClock = clock
@@ -73,7 +74,7 @@ extension LWWElementSet {
 
 private extension LWWElementSet {
      func add(element: T, remoteClock: VectorClock) {
-        if let clock = self.additions[element],
+        if let clock = additions[element],
            clock >= remoteClock {
             return
         }
@@ -82,7 +83,7 @@ private extension LWWElementSet {
     }
 
     func remove(element: T, remoteClock: VectorClock) {
-        if let clock = self.removals[element],
+        if let clock = removals[element],
            clock >= remoteClock {
             return
         }
@@ -141,10 +142,11 @@ public struct LWWElementSetState <T: Codable & Hashable> {
     fileprivate var additions: [T: VectorClock] = [:]
     fileprivate var removals: [T: VectorClock] = [:]
     
-    fileprivate init(id: Int,
-                     clock: VectorClock,
-                     additions: [T: VectorClock],
-                     removals: [T: VectorClock]
+    fileprivate init(
+        id: Int,
+        clock: VectorClock,
+        additions: [T: VectorClock],
+        removals: [T: VectorClock]
     ) {
         self.id = id
         self.vectorClock = clock
