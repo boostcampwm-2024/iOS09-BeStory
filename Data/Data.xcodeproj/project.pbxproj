@@ -9,12 +9,20 @@
 /* Begin PBXBuildFile section */
 		853CF9162CF6D92700936AD3 /* CRDT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853CF8F82CF6CAD000936AD3 /* CRDT.framework */; };
 		D9CF36472CF0858200B1A92D /* Core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9CF36462CF0858200B1A92D /* Core.framework */; };
+		E48FFBC72CFA013000706532 /* CRDT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853CF8F82CF6CAD000936AD3 /* CRDT.framework */; };
 		FEF779662CDCB2CF00FFE089 /* Entity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF779652CDCB2CF00FFE089 /* Entity.framework */; };
 		FEF779962CDCE10300FFE089 /* Interfaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEF779952CDCE10300FFE089 /* Interfaces.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		853CF9002CF6CAED00936AD3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FE6EF3242CD8B020005DC39D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 853CF8F72CF6CAD000936AD3;
+			remoteInfo = CRDT;
+		};
+		E48FFBC82CFA013000706532 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FE6EF3242CD8B020005DC39D /* Project object */;
 			proxyType = 1;
@@ -55,6 +63,7 @@
 /* Begin PBXFileReference section */
 		853CF8F82CF6CAD000936AD3 /* CRDT.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CRDT.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9CF36462CF0858200B1A92D /* Core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E48FFBC32CFA013000706532 /* CRDTTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CRDTTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FED9682A2CD9094300CD445C /* libData.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libData.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FED968552CD90FCF00CD445C /* P2PSocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = P2PSocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF779652CDCB2CF00FFE089 /* Entity.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Entity.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -79,6 +88,11 @@
 			path = CRDT;
 			sourceTree = "<group>";
 		};
+		E48FFBC42CFA013000706532 /* CRDTTest */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CRDTTest;
+			sourceTree = "<group>";
+		};
 		FE6EF32E2CD8B020005DC39D /* Data */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -99,6 +113,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E48FFBC02CFA013000706532 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E48FFBC72CFA013000706532 /* CRDT.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -129,6 +151,7 @@
 				FE6EF32E2CD8B020005DC39D /* Data */,
 				FED968562CD90FCF00CD445C /* P2PSocket */,
 				853CF8F92CF6CAD000936AD3 /* CRDT */,
+				E48FFBC42CFA013000706532 /* CRDTTest */,
 				FED967FA2CD9026100CD445C /* Frameworks */,
 				FE6EF32D2CD8B020005DC39D /* Products */,
 			);
@@ -140,6 +163,7 @@
 				FED9682A2CD9094300CD445C /* libData.a */,
 				FED968552CD90FCF00CD445C /* P2PSocket.framework */,
 				853CF8F82CF6CAD000936AD3 /* CRDT.framework */,
+				E48FFBC32CFA013000706532 /* CRDTTest.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -197,6 +221,29 @@
 			productReference = 853CF8F82CF6CAD000936AD3 /* CRDT.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		E48FFBC22CFA013000706532 /* CRDTTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E48FFBCA2CFA013000706532 /* Build configuration list for PBXNativeTarget "CRDTTest" */;
+			buildPhases = (
+				E48FFBBF2CFA013000706532 /* Sources */,
+				E48FFBC02CFA013000706532 /* Frameworks */,
+				E48FFBC12CFA013000706532 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E48FFBC92CFA013000706532 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				E48FFBC42CFA013000706532 /* CRDTTest */,
+			);
+			name = CRDTTest;
+			packageProductDependencies = (
+			);
+			productName = CRDTTest;
+			productReference = E48FFBC32CFA013000706532 /* CRDTTest.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		FED968292CD9094300CD445C /* Data */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FED9682E2CD9094300CD445C /* Build configuration list for PBXNativeTarget "Data" */;
@@ -251,12 +298,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1600;
+				LastSwiftUpdateCheck = 1610;
 				LastUpgradeCheck = 1610;
 				TargetAttributes = {
 					853CF8F72CF6CAD000936AD3 = {
 						CreatedOnToolsVersion = 16.1;
 						LastSwiftMigration = 1610;
+					};
+					E48FFBC22CFA013000706532 = {
+						CreatedOnToolsVersion = 16.1;
 					};
 					FED968292CD9094300CD445C = {
 						CreatedOnToolsVersion = 16.0;
@@ -284,12 +334,20 @@
 				FED968292CD9094300CD445C /* Data */,
 				FED968542CD90FCF00CD445C /* P2PSocket */,
 				853CF8F72CF6CAD000936AD3 /* CRDT */,
+				E48FFBC22CFA013000706532 /* CRDTTest */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		853CF8F62CF6CAD000936AD3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E48FFBC12CFA013000706532 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -352,6 +410,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E48FFBBF2CFA013000706532 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FED968262CD9094300CD445C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -373,6 +438,11 @@
 			isa = PBXTargetDependency;
 			target = 853CF8F72CF6CAD000936AD3 /* CRDT */;
 			targetProxy = 853CF9002CF6CAED00936AD3 /* PBXContainerItemProxy */;
+		};
+		E48FFBC92CFA013000706532 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 853CF8F72CF6CAD000936AD3 /* CRDT */;
+			targetProxy = E48FFBC82CFA013000706532 /* PBXContainerItemProxy */;
 		};
 		FEF7796A2CDCB2D500FFE089 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -454,6 +524,40 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		E48FFBCB2CFA013000706532 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B3PWYBKFUK;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.bestory.crdt.CRDTTEST.CRDTTest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E48FFBCC2CFA013000706532 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B3PWYBKFUK;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.codesquad.boostcamp9.bestory.crdt.CRDTTEST.CRDTTest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -711,6 +815,15 @@
 			buildConfigurations = (
 				853CF8FC2CF6CAD000936AD3 /* Debug */,
 				853CF8FD2CF6CAD000936AD3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E48FFBCA2CFA013000706532 /* Build configuration list for PBXNativeTarget "CRDTTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E48FFBCB2CFA013000706532 /* Debug */,
+				E48FFBCC2CFA013000706532 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
