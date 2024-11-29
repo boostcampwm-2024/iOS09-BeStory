@@ -98,6 +98,11 @@ private extension SharingVideoRepository {
     }
     
     func sendFiles(fileNames: [String], to peerID: String, isRequested: Bool) {
+        guard !fileNames.isEmpty else {
+            sendSyncFlags[peerID] = true
+            return
+        }
+        
         Task {
             for index in fileNames.indices {
                 let fileName = fileNames[index]
@@ -116,7 +121,11 @@ private extension SharingVideoRepository {
     }
     
     func requestFiles(fileNames: [String], to peerID: String) {
-        guard !fileNames.isEmpty else { return }
+        guard !fileNames.isEmpty else {
+            receiveSyncFlags[peerID] = true
+            return
+        }
+        
         let request = SyncMessage.request(fileNames)
         guard let requestData = try? JSONEncoder().encode(request) else { return }
         socketProvider.send(data: requestData, to: peerID)
