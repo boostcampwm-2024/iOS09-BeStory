@@ -17,9 +17,9 @@ public final class SocketProvider: NSObject, SocketProvidable {
 	// MARK: - Properties
 	public let updatedPeer = PassthroughSubject<SocketPeer, Never>()
 	public let invitationReceived = PassthroughSubject<SocketPeer, Never>()
-  public let resourceShared = PassthroughSubject<SharedResource, Never>()
-  public let isSynchronized = PassthroughSubject<Void, Never>()
-
+    public let resourceShared = PassthroughSubject<SharedResource, Never>()
+    public let dataShared = PassthroughSubject<(Data, String), Never>()
+    
 	private var isAllowedInvitation: Bool = true
 	private var invitationHandler: ((Bool, MCSession?) -> Void)?
 	
@@ -27,9 +27,8 @@ public final class SocketProvider: NSObject, SocketProvidable {
 	private let browser: MCNearbyServiceBrowser
 	private let advertiser: MCNearbyServiceAdvertiser
 	private let session: MCSession
-  private var sharingTasks = [Task<(), Never>]()
-  private var sharedResources = [SharedResource]()
-  private var syncFlags: [MCPeerID: Bool] = [:]
+    private var sharingTasks = [Task<(), Never>]()
+    private var sharedResources = [SharedResource]()
     
 	// MARK: - Initializers
 	public override init() {
@@ -133,51 +132,78 @@ public extension SocketProvider {
         }
     }
     
-    func sendHashes(_ hashes: [String: String]) {
-        guard let data = try? JSONSerialization.data(withJSONObject: hashes, options: []) else { return }
+    func send(data: Data, to peerID: String) {
+        guard let mcPeerID = MCPeerIDStorage.shared.peerIDByIdentifier[peerID]?.id else { return }
+        try? session.send(data, toPeers: [mcPeerID], with: .reliable)
+    }
+    
+    func sendAll(data: Data) {
         try? session.send(data, toPeers: session.connectedPeers, with: .reliable)
+    }
+    
+    func sendResource(
+        url localURL: URL,
+        resourceName: String,
+        to peerID: String) async {
+        let uuid = UUID()
+        let nameWithUUID = [resourceName, uuid.uuidString].joined(separator: "/")
+        guard let mcPeerID = MCPeerIDStorage.shared.peerIDByIdentifier[peerID]?.id else { return }
         
-        for peer in session.connectedPeers {
-            syncFlags[peer] = false
-        }
+        session.sendResource(at: localURL,
+                             withName: nameWithUUID,
+                             toPeer: mcPeerID)
     }
 	  
-    func shareResource(url localUrl: URL, resourceName: String) async throws -> SharedResource {
-        return try await withCheckedThrowingContinuation { resourceUrlContinuation in
+    func sendResourceToAll(url localUrl: URL, resourceName: String) async throws {
             let uuid = UUID()
             let nameWithUUID = [resourceName, uuid.uuidString].joined(separator: "/")
             
             let recievers = session.connectedPeers
-            let recieverCount = recievers.count
-            let counter = Counter(targetCount: recieverCount)
-            
-            let sharedResource = SharedResource(
-                localUrl: localUrl,
-                name: resourceName,
-                uuid: uuid,
-                sender: session.myPeerID.displayName
-            )
-            
-            let handler = continuedCountableResouceHandler(
-                counter: counter,
-                sharedResource: sharedResource,
-                continuation: resourceUrlContinuation
-            )
-            
             recievers.forEach { peer in
-                let progress = session.sendResource(
-                    at: localUrl,
-                    withName: nameWithUUID,
-                    toPeer: peer,
-                    withCompletionHandler: handler
-                )
-                
-                guard progress == nil else { return }
-                
-                let error = ShareResourceError.peerFailedDownload(id: peerID.displayName)
-                resourceUrlContinuation.resume(throwing: error)
+                session.sendResource(at: localUrl, withName: nameWithUUID, toPeer: peer)
             }
-        }
+        let sharedResource = SharedResource(
+            localUrl: localUrl,
+            name: resourceName,
+            uuid: uuid,
+            sender: session.myPeerID.displayName
+        )
+        resourceShared.send(sharedResource)
+        
+        /// 이 부분에서 continuation leak이 나는 것 같습니다.
+        /// 리소스를 공유한 뒤 최종적으로 동기화를 시키기 때문에
+        /// 현재는 주석 처리 해두었습니다.
+//        return try await withCheckedThrowingContinuation { resourceUrlContinuation in
+//            let recieverCount = recievers.count
+//            let counter = Counter(targetCount: recieverCount)
+            
+//            let sharedResource = SharedResource(
+//                localUrl: localUrl,
+//                name: resourceName,
+//                uuid: uuid,
+//                sender: session.myPeerID.displayName
+//            )
+//            
+//            let handler = continuedCountableResouceHandler(
+//                counter: counter,
+//                sharedResource: sharedResource,
+//                continuation: resourceUrlContinuation
+//            )
+//            
+//            recievers.forEach { peer in
+//                let progress = session.sendResource(
+//                    at: localUrl,
+//                    withName: nameWithUUID,
+//                    toPeer: peer,
+//                    withCompletionHandler: handler
+//                )
+//                
+//                guard progress == nil else { return }
+//                
+//                let error = ShareResourceError.peerFailedDownload(id: peerID.displayName)
+//                resourceUrlContinuation.resume(throwing: error)
+//            }
+//        }
     }
     
     func sharedAllResources() -> [SharedResource] {
@@ -219,34 +245,9 @@ extension SocketProvider: MCSessionDelegate {
 		didReceive data: Data,
 		fromPeer peerID: MCPeerID
 	) {
-        // hashes 관련 코드입니다.
-        if let hashes = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: String] {
-            let localHashes = FileSystemManager.shared.collectHashes()
-            let result: SyncMessage = (hashes == localHashes) ? .hashMatch : .hashMismatch
-            guard let data = try? JSONEncoder().encode(result) else { return }
-            try? session.send(data, toPeers: [peerID], with: .reliable)
-        }
+        guard let peerID = MCPeerIDStorage.shared.findPeer(for: peerID)?.key else { return }
         
-        // 동기화 결과 관련 코드입니다.
-        if let result = try? JSONDecoder().decode(SyncMessage.self, from: data) {
-            switch result {
-            case .hashMatch:
-                syncFlags[peerID] = true
-                let allSynced = syncFlags.values.allSatisfy { $0 }
-                if allSynced {
-                    guard let completedMessage = try? JSONEncoder().encode(SyncMessage.completed) else { return }
-                    try? session.send(completedMessage,
-                        toPeers: session.connectedPeers,
-                        with: .reliable
-                    )
-                    isSynchronized.send(())
-                }
-            case .hashMismatch:
-                return
-            case .completed:
-                isSynchronized.send(())
-            }
-        }
+        dataShared.send((data, peerID))
     }
 	
 	public func session(
@@ -379,13 +380,5 @@ private extension SocketProvider {
             }
             self?.sharingTasks.append(task)
         }
-    }
-}
-
-private extension SocketProvider {
-    enum SyncMessage: Codable {
-        case hashMatch
-        case hashMismatch
-        case completed
     }
 }

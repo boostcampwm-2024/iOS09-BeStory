@@ -15,5 +15,5 @@ public protocol SharingVideoRepositoryInterface {
 
     func shareVideo(url: URL, resourceName: String) async throws
     func fetchVideos() -> [SharedVideo]
-    func synchronizeVideos()
+    func broadcastHashes()
 }
