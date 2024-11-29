@@ -69,8 +69,9 @@ final class CRDTTest: XCTestCase {
         
         let p0event = await p0.localAdd(element: p0data)
         await p1.merge(with: p0event)
-        let p1event = await p0.localAdd(element: p1data)
-        await p0.merge(with: p0event)
+        
+        let p1event1 = await p1.localAdd(element: p1data)
+        await p0.merge(with: p1event1)
 
         let p0element = await p0.elements()
         let p1element = await p1.elements()
