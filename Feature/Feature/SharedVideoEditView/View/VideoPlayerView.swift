@@ -142,8 +142,10 @@ private extension VideoPlayerView {
 	private func handleTap() {
 		isHide.toggle()
 		UIView.animate(withDuration: 0.25) { [weak self] in
-			self?.playPauseButton.alpha = (self?.isHide ?? true) ? 1 : 0
-			self?.seekingSlider.alpha = (self?.isHide ?? true) ? 1 : 0
+			guard let self else { return }
+			self.playPauseButton.alpha = self.isHide ? 0 : 1
+			
+			self.seekingSlider.alpha = (self.isHide) ? 0 : 1
 		}
 	}
 }
