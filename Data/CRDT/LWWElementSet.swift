@@ -58,14 +58,12 @@ extension LWWElementSet {
 
     public func elements() -> [T] {
         var result: [T] = []
-
-        for (element, addTimestamp) in additions {
-            if let removeTimestamp = removals[element], removeTimestamp >= addTimestamp {
+        for (element, clock) in additions {
+            if let removeClock = removals[element], removeClock >= clock {
                 continue
             }
             result.append(element)
         }
-
         return result
     }
 }
