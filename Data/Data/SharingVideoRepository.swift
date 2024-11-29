@@ -36,6 +36,7 @@ public final class SharingVideoRepository: SharingVideoRepositoryInterface {
                 self?.mappingToSharedVideo(resource)
             }
             .subscribe(updatedSharedVideo)
+            .store(in: &cancellables)
         
         socketProvider.dataShared
             .sink { [weak self] (data, peerID) in
@@ -162,8 +163,7 @@ public extension SharingVideoRepository {
         
         guard let encodedData = try? JSONEncoder().encode(hashMessage) else { return }
         socketProvider.sendAll(data: encodedData)
-        
-        for peer in socketProvider.connectedPeers().map({ $0.id }) {
+        for peer in socketProvider.connectedPeers().filter({ $0.state == .connected || $0.state == .pending }).map({ $0.id }) {
             sendSyncFlags[peer] = false
             receiveSyncFlags[peer] = false
         }
