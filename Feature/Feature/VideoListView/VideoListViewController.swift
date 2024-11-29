@@ -189,8 +189,10 @@ private extension VideoListViewController {
     }
     
     func navigateToEditor() {
-        let tempViewController = TempViewController(nibName: nil, bundle: nil)
-        navigationController?.pushViewController(tempViewController, animated: true)
+        let sharedVideoEditViewController = SharedVideoEditViewController(
+            viewModel: DIContainer.shared.resolve(type: SharedVideoEditViewModel.self)
+        )
+        navigationController?.pushViewController(sharedVideoEditViewController, animated: true)
     }
 }
 

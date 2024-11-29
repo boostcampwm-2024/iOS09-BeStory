@@ -16,7 +16,6 @@ public actor LWWElementSet<T: Hashable> {
             return
         }
         self.additions[element] = timestamp
-
     }
 
     public func remove(element: T, timestamp: Timestamp) {
@@ -24,7 +23,6 @@ public actor LWWElementSet<T: Hashable> {
             return
         }
         self.removals[element] = timestamp
-
     }
 
     public func merge(with otherSet: LWWElementSet<T>) async {
@@ -38,7 +36,6 @@ public actor LWWElementSet<T: Hashable> {
         for (element, timestamp) in otherRemovals {
             self.remove(element: element, timestamp: timestamp)
         }
-
     }
 
     public func elements() -> [T] {

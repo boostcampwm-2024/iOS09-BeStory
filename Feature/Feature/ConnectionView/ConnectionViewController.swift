@@ -227,12 +227,10 @@ private extension ConnectionViewController {
 
         static let userContainerViewSize: CGFloat = 450
 
-        static let nextButtonBackgroundColor: UIColor = UIColor(red: 31/255, green: 41/255, blue: 55/255, alpha: 1)
-        static let nextButtonTextColor: UIColor = .white
         static let nextButtonFontSize: CGFloat = 20
-        static let nextButtonCornerRadius: CGFloat = 10
-        static let nextButtonBottomOffset: CGFloat = -20
-        static let nextButtonWidth: CGFloat = 120
+        static let nextButtonCornerRadius: CGFloat = 25
+        static let nextButtonBottomOffset: CGFloat = -50
+        static let nextButtonWidth: CGFloat = 160
         static let nextButtonHeight: CGFloat = 50
     }
 
@@ -268,9 +266,9 @@ private extension ConnectionViewController {
     }
 
     func setupNextButton() {
-        nextButton.backgroundColor = Constants.nextButtonBackgroundColor
+        nextButton.backgroundColor = .white
         nextButton.setTitle("편집하기", for: .normal)
-        nextButton.setTitleColor(.white, for: .normal)
+        nextButton.setTitleColor(.black, for: .normal)
         nextButton.titleLabel?.font = .systemFont(ofSize: Constants.nextButtonFontSize)
         nextButton.layer.cornerRadius = Constants.nextButtonCornerRadius
         nextButton.addTarget(self, action: #selector(nextButtonDidTapped), for: .touchUpInside)
