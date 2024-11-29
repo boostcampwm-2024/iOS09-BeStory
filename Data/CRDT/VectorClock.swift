@@ -61,10 +61,10 @@ extension VectorClock {
 
 extension VectorClock: Comparable {
     static func < (lhs: VectorClock, rhs: VectorClock) -> Bool {
-        if (lhs > rhs) {
+        if lhs > rhs {
             return false
         }
-        if (lhs == rhs) {
+        if lhs == rhs {
             return false
         }
         return true
