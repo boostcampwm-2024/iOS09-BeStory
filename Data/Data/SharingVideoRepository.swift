@@ -12,6 +12,7 @@ import Interfaces
 import P2PSocket
 import Core
 
+
 public final class SharingVideoRepository: SharingVideoRepositoryInterface {
     private var cancellables: Set<AnyCancellable> = []
     private let socketProvider: SocketProvidable
@@ -26,11 +27,11 @@ public final class SharingVideoRepository: SharingVideoRepositoryInterface {
                 self?.mappingToSharedVideo(resource)
             }
             .subscribe(updatedSharedVideo)
-            .store(in: &cancellables)
         
         socketProvider.isSynchronized
             .subscribe(isSynchronized)
             .store(in: &cancellables)
+
     }
 }
 
@@ -53,9 +54,10 @@ public extension SharingVideoRepository {
                 self?.mappingToSharedVideo(resource)
             }
     }
-    
+
     func synchronizeVideos() {
         let hashes = FileSystemManager.shared.collectHashes()
         socketProvider.sendHashes(hashes)
     }
+
 }

@@ -41,6 +41,7 @@ private extension ConnectedUserUseCase {
 	func bind() {
 		repository.updatedConnectedUser
 			.sink { [weak self] user in
+
 				self?.receivedUpdatedState(user: user)
 			}
 			.store(in: &cancellables)

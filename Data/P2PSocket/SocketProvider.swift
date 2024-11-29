@@ -17,8 +17,9 @@ public final class SocketProvider: NSObject, SocketProvidable {
 	// MARK: - Properties
 	public let updatedPeer = PassthroughSubject<SocketPeer, Never>()
 	public let invitationReceived = PassthroughSubject<SocketPeer, Never>()
-    public let resourceShared = PassthroughSubject<SharedResource, Never>()
-    public let isSynchronized = PassthroughSubject<Void, Never>()
+  public let resourceShared = PassthroughSubject<SharedResource, Never>()
+  public let isSynchronized = PassthroughSubject<Void, Never>()
+
 	private var isAllowedInvitation: Bool = true
 	private var invitationHandler: ((Bool, MCSession?) -> Void)?
 	
@@ -26,9 +27,9 @@ public final class SocketProvider: NSObject, SocketProvidable {
 	private let browser: MCNearbyServiceBrowser
 	private let advertiser: MCNearbyServiceAdvertiser
 	private let session: MCSession
-    private var sharingTasks = [Task<(), Never>]()
-    private var sharedResources = [SharedResource]()
-    private var syncFlags: [MCPeerID: Bool] = [:]
+  private var sharingTasks = [Task<(), Never>]()
+  private var sharedResources = [SharedResource]()
+  private var syncFlags: [MCPeerID: Bool] = [:]
     
 	// MARK: - Initializers
 	public override init() {
@@ -192,6 +193,7 @@ extension SocketProvider: MCSessionDelegate {
 		didChange state: MCSessionState
 	) {
         guard let socketPeer = mapToSocketPeer(peerID) else { return }
+
 		var willRemovedAtStorage: Bool = false
 
 		switch state {

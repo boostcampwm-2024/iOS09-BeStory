@@ -89,6 +89,7 @@
 		};
 		FED968562CD90FCF00CD445C /* P2PSocket */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+
 			path = P2PSocket;
 			sourceTree = "<group>";
 		};
@@ -148,6 +149,7 @@
 			isa = PBXGroup;
 			children = (
 				D9CF36462CF0858200B1A92D /* Core.framework */,
+
 				FEF779952CDCE10300FFE089 /* Interfaces.framework */,
 				FEF779652CDCB2CF00FFE089 /* Entity.framework */,
 			);

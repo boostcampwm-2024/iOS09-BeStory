@@ -20,6 +20,7 @@ public final class VideoListViewController: UIViewController {
     private let headerView = VideoListHeaderView()
     private var collectionView: UICollectionView!
     private let nextButton = UIButton()
+  
     private var dataSource: VideoListDataSource!
     private let spacing: CGFloat = 20
     
