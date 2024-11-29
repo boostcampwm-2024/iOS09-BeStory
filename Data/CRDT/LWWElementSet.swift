@@ -51,10 +51,10 @@ extension LWWElementSet {
 
     public func merge(with state: LWWElementSetState<T>) async {
         let otherSet = state.excute()
-        if await mergeAvailableSet(with: otherSet) {
-            return await mergeWatingSet()
+        if await !mergeAvailableSet(with: otherSet) {
+            waitSet.append(otherSet)
         }
-        waitSet.append(otherSet)
+        return await mergeWatingSet()
     }
 
     public func elements() -> [T] {
@@ -184,3 +184,5 @@ extension LWWElementSetState: Codable {
         try container.encode(removals, forKey: .removals)
     }
 }
+
+extension LWWElementSetState: Equatable { }
