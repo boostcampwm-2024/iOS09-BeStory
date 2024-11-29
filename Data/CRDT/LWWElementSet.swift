@@ -5,26 +5,48 @@
 //  Created by 이숲 on 11/27/24.
 //
 
-import Foundation
+import Combine
 
-public actor LWWElementSet<T: Hashable> {
-    private var additions: [T: Timestamp] = [:]
-    private var removals: [T: Timestamp] = [:]
-
-    public func add(element: T, timestamp: Timestamp) {
-        if let existingTimestamp = self.additions[element], existingTimestamp >= timestamp {
-            return
-        }
-        self.additions[element] = timestamp
-
+public actor LWWElementSet<T: Codable & Hashable> {
+    private let id: Int
+    private var vectorClock: VectorClock
+    
+    private var additions: [T: VectorClock] = [:]
+    private var removals: [T: VectorClock] = [:]
+    private var waitSet: [LWWElementSet] = []
+        
+    public init(id: Int, peerCount: Int) {
+        self.id = id
+        vectorClock = VectorClock(replicaCount: peerCount)
     }
+    
+    private init(id: Int,
+                 clock: VectorClock,
+                 additions: [T: VectorClock],
+                 removals: [T: VectorClock],
+                 waitSet: [LWWElementSet]
+    ) {
+        self.id = id
+        self.vectorClock = clock
+        self.additions = additions
+        self.removals = removals
+        self.waitSet = waitSet
+    }
+}
 
-    public func remove(element: T, timestamp: Timestamp) {
-        if let existingTimestamp = self.removals[element], existingTimestamp >= timestamp {
-            return
-        }
-        self.removals[element] = timestamp
-
+extension LWWElementSet {
+    @discardableResult
+    public func localAdd(element: T) -> LWWElementSet {
+        let clock = vectorClock.increase(replicaId: id)
+        additions[element] = clock
+        return clone()
+    }
+    
+    @discardableResult
+    public func localRemove(element: T) -> LWWElementSet {
+        let clock = vectorClock.increase(replicaId: id)
+        removals[element] = clock
+        return clone()
     }
 
     public func merge(with otherSet: LWWElementSet<T>) async {
