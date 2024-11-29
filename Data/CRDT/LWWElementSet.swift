@@ -14,7 +14,9 @@ public actor LWWElementSet<T: Codable & Hashable> {
     private var additions: [T: VectorClock] = [:]
     private var removals: [T: VectorClock] = [:]
     private var waitSet: [LWWElementSet] = []
-        
+    
+    let updatedElements = PassthroughSubject<[T], Never>()
+    
     public init(id: Int, peerCount: Int) {
         self.id = id
         vectorClock = VectorClock(replicaCount: peerCount)
@@ -124,7 +126,7 @@ private extension LWWElementSet {
         for (element, clock) in otherRemovals {
             self.remove(element: element, remoteClock: clock)
         }
-        
+        updatedElements.send(elements())
         vectorClock.increase(replicaId: otherSet.id)
         return true
     }
