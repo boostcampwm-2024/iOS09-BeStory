@@ -25,7 +25,7 @@ public actor LWWElementSet<T: Codable & Hashable> {
     fileprivate init(id: Int,
                      clock: VectorClock,
                      additions: [T: VectorClock],
-                     removals:[T: VectorClock]
+                     removals: [T: VectorClock]
     ) {
         self.id = id
         self.vectorClock = clock
@@ -131,7 +131,6 @@ private extension LWWElementSet {
 }
 
 public struct LWWElementSetState <T: Codable & Hashable> {
-    
     fileprivate let id: Int
     fileprivate var vectorClock: VectorClock
     
@@ -183,6 +182,5 @@ extension LWWElementSetState: Codable {
         try container.encode(vectorClock, forKey: .vectorClock)
         try container.encode(additions, forKey: .additions)
         try container.encode(removals, forKey: .removals)
-
     }
 }
