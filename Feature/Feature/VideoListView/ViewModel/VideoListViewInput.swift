@@ -10,4 +10,5 @@ import Foundation
 public enum VideoListViewInput {
     case viewDidLoad
     case appendVideo(url: URL)
+    case validateSynchronization
 }

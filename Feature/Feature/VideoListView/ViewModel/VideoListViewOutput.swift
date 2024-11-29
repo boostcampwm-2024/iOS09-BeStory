@@ -9,4 +9,5 @@ import Foundation
 
 public enum VideoListViewOutput {
     case videoListDidChanged(videos: [VideoListItem])
+    case readyForNextScreen
 }

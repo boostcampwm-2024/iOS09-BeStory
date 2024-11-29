@@ -85,5 +85,7 @@ private extension GroupInfoViewModel {
         output.send(.groupCountDidChanged(count: users.count))
     }
     
-    func exitGroupButtonDidTab() { }
+    func exitGroupButtonDidTab() {
+        usecase.leaveGroup()
+    }
 }

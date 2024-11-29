@@ -29,13 +29,19 @@ public extension ConnectedUserUseCase {
 		connectedUsersID = connectedUsers.map { $0.id }
 		return connectedUsers
 	}
+    
+    func leaveGroup() {
+        repository.leaveGroup()
+        
+    }
 }
 
 // MARK: - Private Methods
 private extension ConnectedUserUseCase {
 	func bind() {
 		repository.updatedConnectedUser
-			.sink  { [weak self] user in
+			.sink { [weak self] user in
+
 				self?.receivedUpdatedState(user: user)
 			}
 			.store(in: &cancellables)
@@ -52,7 +58,6 @@ private extension ConnectedUserUseCase {
 				guard let index = connectedUsersID.firstIndex(where: { $0 == user.id }) else { return }
 				connectedUsersID.remove(at: index)
 				updatedConnectedUser.send(user)
-			default: break
 		}
 	}
 }
