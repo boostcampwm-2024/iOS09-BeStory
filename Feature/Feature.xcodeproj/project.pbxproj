@@ -60,6 +60,7 @@
 				SharedVideoEditView/View/CollectionView/VideoTimelineItem.swift,
 				SharedVideoEditView/View/CollectionView/VideoTimelineSection.swift,
 				SharedVideoEditView/View/EditSliderBar/ImageFrameBlurView.swift,
+				SharedVideoEditView/View/EditSliderBar/ImageFrameView.swift,
 				SharedVideoEditView/View/HeightResizableSlider.swift,
 				SharedVideoEditView/View/VideoPlayerView.swift,
 				SharedVideoEditView/ViewModel/SharedVideoEditViewInput.swift,
