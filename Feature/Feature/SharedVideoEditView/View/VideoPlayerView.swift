@@ -11,15 +11,19 @@ import SnapKit
 import UIKit
 
 final class VideoPlayerView: UIView {
+	// MARK: - Properties
     private var player: AVPlayer
     private var playerLayer: AVPlayerLayer
+	private var isHide: Bool = false
+	private var cancellables = Set<AnyCancellable>()
+	var isHiddenSliderBar: Bool = false {
+		didSet { seekingSlider.isHidden = isHiddenSliderBar }
+	}
 
+	// MARK: - UI Components
     private let playPauseButton = UIButton()
     private let seekingSlider = HeightResizableSlider(trackHeight: 6)
     
-    private var isHide: Bool = false
-    private var cancellables = Set<AnyCancellable>()
-
     // MARK: - Initializer
     init(playerItem: AVPlayerItem?) {
         player = AVPlayer(playerItem: playerItem)
