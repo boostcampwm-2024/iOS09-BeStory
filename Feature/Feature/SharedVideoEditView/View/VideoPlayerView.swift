@@ -7,6 +7,7 @@
 
 import AVFoundation
 import Combine
+import SnapKit
 import UIKit
 
 final class VideoPlayerView: UIView {
