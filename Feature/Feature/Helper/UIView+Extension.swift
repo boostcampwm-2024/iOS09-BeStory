@@ -13,12 +13,9 @@ public extension UIView {
 	String(describing: self)
   }
   
-  
   /// 여러개의 subview들을 view에 추가합니다.
   /// - Parameter views: 추가할 subViews (ex: `view.addSubviews(view1, view2, view3)`)
   func addSubviews(_ views: UIView...) {
 	views.forEach { addSubview($0) }
   }
 }
-
-
