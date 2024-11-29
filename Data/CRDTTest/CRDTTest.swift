@@ -85,6 +85,10 @@ struct LWWDummy: Hashable, Codable {
     let data: Int
     let author: String
     
+    static func == (lhs: LWWDummy, rhs: LWWDummy) -> Bool {
+        return lhs.data == rhs.data
+    }
+    
     func hash(into hasher: inout Hasher) {
         hasher.combine(data)
     }
