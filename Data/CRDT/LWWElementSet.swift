@@ -131,3 +131,60 @@ private extension LWWElementSet {
         return true
     }
 }
+
+public struct LWWElementSetState <T: Codable & Hashable> {
+    
+    fileprivate let id: Int
+    fileprivate var vectorClock: VectorClock
+    
+    fileprivate var additions: [T: VectorClock] = [:]
+    fileprivate var removals: [T: VectorClock] = [:]
+    
+    fileprivate init(id: Int,
+                     clock: VectorClock,
+                     additions: [T: VectorClock],
+                     removals: [T: VectorClock]
+    ) {
+        self.id = id
+        self.vectorClock = clock
+        self.additions = additions
+        self.removals = removals
+    }
+}
+
+fileprivate extension LWWElementSetState {
+    func excute() -> LWWElementSet<T> {
+        return LWWElementSet(
+            id: id,
+            clock: vectorClock,
+            additions: additions,
+            removals: removals
+        )
+    }
+}
+
+extension LWWElementSetState: Codable {
+    enum CodingKeys: String, CodingKey {
+        case id
+        case vectorClock
+        case additions
+        case removals
+    }
+    
+    public init(from decoder: Decoder) throws{
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        id = try values.decode(Int.self, forKey: .id)
+        vectorClock = try values.decode(VectorClock.self, forKey: .vectorClock)
+        additions = try values.decode([T: VectorClock].self, forKey: .additions)
+        removals = try values.decode([T: VectorClock].self, forKey: .removals)
+    }
+    
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(vectorClock, forKey: .vectorClock)
+        try container.encode(additions, forKey: .additions)
+        try container.encode(removals, forKey: .removals)
+
+    }
+}
