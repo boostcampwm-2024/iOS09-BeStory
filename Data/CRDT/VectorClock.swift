@@ -99,14 +99,4 @@ extension VectorClock: Comparable {
     }
 }
 
-extension VectorClock: Hashable {
-    func hash(into hasher: inout Hasher) {
-        var hash = 7
-        for (key, value) in self.clock {
-            hash += 7 * key * value
-        }
-        hasher.combine(hash)
-    }
-}
-
 extension VectorClock: Codable { }
