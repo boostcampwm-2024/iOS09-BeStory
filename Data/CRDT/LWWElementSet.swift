@@ -50,17 +50,10 @@ extension LWWElementSet {
     }
 
     public func merge(with otherSet: LWWElementSet<T>) async {
-        let otherAdditions = await otherSet.additions
-        let otherRemovals = await otherSet.removals
-
-        for (element, timestamp) in otherAdditions {
-            self.add(element: element, timestamp: timestamp)
+        if await mergeAvailableSet(with: otherSet) {
+            return await mergeWatingSet()
         }
-
-        for (element, timestamp) in otherRemovals {
-            self.remove(element: element, timestamp: timestamp)
-        }
-
+        waitSet.append(otherSet)
     }
 
     public func elements() -> [T] {
@@ -74,5 +67,67 @@ extension LWWElementSet {
         }
 
         return result
+    }
+}
+
+private extension LWWElementSet {
+     func add(element: T, remoteClock: VectorClock) {
+        if let clock = self.additions[element],
+           clock >= remoteClock {
+            return
+        }
+        self.additions[element] = remoteClock
+    }
+
+    func remove(element: T, remoteClock: VectorClock) {
+        if let clock = self.removals[element],
+           clock >= remoteClock {
+            return
+        }
+        self.removals[element] = remoteClock
+    }
+    
+    func clone() -> LWWElementSet {
+        return LWWElementSet(
+            id: id,
+            clock: vectorClock,
+            additions: additions,
+            removals: removals,
+            waitSet: waitSet
+        )
+    }
+    
+    func mergeWatingSet() async {
+        var availableSet = [LWWElementSet]()
+        repeat {
+            while !availableSet.isEmpty {
+                let set = availableSet.removeLast()
+                await mergeAvailableSet(with: set)
+            }
+            for (index, set) in waitSet.enumerated()
+            where await vectorClock.readyFor(replicaId: set.id, to: set.vectorClock) {
+                availableSet.append(set)
+                waitSet.remove(at: index)
+            }
+        } while !availableSet.isEmpty
+    }
+    
+    @discardableResult
+    func mergeAvailableSet(with otherSet: LWWElementSet<T>) async -> Bool {
+        let remoteClock = await otherSet.vectorClock
+        guard vectorClock.readyFor(replicaId: otherSet.id, to: remoteClock) else { return false }
+        
+        let otherAdditions = await otherSet.additions
+        let otherRemovals = await otherSet.removals
+        
+        for (element, clock) in otherAdditions {
+            self.add(element: element, remoteClock: clock)
+        }
+        for (element, clock) in otherRemovals {
+            self.remove(element: element, remoteClock: clock)
+        }
+        
+        vectorClock.increase(replicaId: otherSet.id)
+        return true
     }
 }
