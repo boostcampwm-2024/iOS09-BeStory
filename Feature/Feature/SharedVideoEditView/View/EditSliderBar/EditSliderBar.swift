@@ -211,6 +211,18 @@ private extension EditSliderBar {
 	}
 }
 
+// MARK: - Internal Methods
+extension EditSliderBar {
+	func configure(with model: VideoPresentationModel) {
+		self.maximumValue = model.duration
+		self.lowerValue = model.startTime
+		self.upperValue = model.endTime
+		self.seekValue = lowerValue
+		
+		imageFrameView.image = model.frameImage.image
+	}
+}
+
 // MARK: - Private Methotds
 private extension EditSliderBar {
 	func updateThumbsFrame() {
