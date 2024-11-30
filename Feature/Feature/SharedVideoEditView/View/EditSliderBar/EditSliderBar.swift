@@ -71,10 +71,9 @@ final class EditSliderBar: UIControl {
 		}
 	}
 	
-	// TODO: - 이거 좀 수정해야할듯????
 	var gapBetweenThumbs: Double {
 		let proportion = (maximumValue - minimumValue) / totalLength
-		return (Constants.thumbWidth + Constants.seekThumbWidth) * proportion
+		return Constants.thumbWidth * proportion * 2
 	}
 	
 	// MARK: - Initializers
