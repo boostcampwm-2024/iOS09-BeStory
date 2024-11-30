@@ -35,8 +35,8 @@ extension VectorClock {
     func readyFor(replicaId replica: Int, to vectorClock: VectorClock) -> Bool {
         guard self[replicaId: replica] == vectorClock.clock[replica]! - 1 else { return false }
         for (replicaId, remoteCount) in vectorClock.clock {
-            let localClockCont = self[replicaId: replicaId]
-            if replica != replicaId && remoteCount > localClockCont {
+            let localClockCount = self[replicaId: replicaId]
+            if replica != replicaId && remoteCount > localClockCount {
                 return false
             }
         }
