@@ -33,9 +33,7 @@ extension VectorClock {
     /// - upstream의 레플리카에 대한 count - 1 == downstream의 벡터시계 중 해당 레플리카에 대한 count
     /// - upstream의 나머지 레플리카에 대한 count  <= downstream의 벡터 시계 중 나머지 레플리카에 대한 count
     func readyFor(replicaId replica: Int, to vectorClock: VectorClock) -> Bool {
-        if self[replicaId: replica] != vectorClock.clock[replica]! - 1 {
-            return false
-        }
+        guard self[replicaId: replica] == vectorClock.clock[replica]! - 1 else { return false }
         for (replicaId, remoteCount) in vectorClock.clock {
             let localClockCont = self[replicaId: replicaId]
             if replica != replicaId && remoteCount > localClockCont {
