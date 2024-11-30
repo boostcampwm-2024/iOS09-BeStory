@@ -34,13 +34,15 @@ extension VectorClock {
     /// - upstream의 나머지 레플리카에 대한 count  <= downstream의 벡터 시계 중 나머지 레플리카에 대한 count
     func readyFor(replicaId replica: Int, to vectorClock: VectorClock) -> Bool {
         guard self[replicaId: replica] == vectorClock.clock[replica]! - 1 else { return false }
-        for (replicaId, remoteCount) in vectorClock.clock {
-            let localClockCount = self[replicaId: replicaId]
-            if replica != replicaId && remoteCount > localClockCount {
-                return false
-            }
-        }
-        return true
+        
+        let isReady = vectorClock.clock
+            .filter { (replicaId, _) in
+                replica != replicaId
+            }.filter { (replicaId, remoteCount) in
+                remoteCount > self[replicaId: replicaId]
+            }.isEmpty
+        
+        return isReady
     }
     
     /// 레플리카ID에 대한 시계눈금을 1만큼 증가
