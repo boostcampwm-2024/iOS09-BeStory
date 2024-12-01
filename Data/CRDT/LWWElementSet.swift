@@ -15,7 +15,7 @@ public actor LWWElementSet<T: Codable & Hashable> {
     private var removals: [T: VectorClock] = [:]
     private var waitSet: [LWWElementSet] = []
     
-    let updatedElements = PassthroughSubject<[T], Never>()
+    public let updatedElements = PassthroughSubject<[T], Never>()
     
     public init(id: Int, peerCount: Int) {
         self.id = id
@@ -35,22 +35,22 @@ public actor LWWElementSet<T: Codable & Hashable> {
     }
 }
 
-extension LWWElementSet {
-    public func localAdd(element: T) -> LWWElementSetState<T> {
+public extension LWWElementSet {
+    func localAdd(element: T) -> LWWElementSetState<T> {
         let clock = vectorClock.increase(replicaId: id)
         additions.removeValue(forKey: element)
         additions.updateValue(clock, forKey: element)
         return payloading()
     }
     
-    public func localRemove(element: T) -> LWWElementSetState<T> {
+    func localRemove(element: T) -> LWWElementSetState<T> {
         let clock = vectorClock.increase(replicaId: id)
         removals.removeValue(forKey: element)
         removals.updateValue(clock, forKey: element)
         return payloading()
     }
 
-    public func merge(with state: LWWElementSetState<T>) async {
+    func merge(with state: LWWElementSetState<T>) async {
         let otherSet = state.excute()
         if await !mergeAvailableSet(with: otherSet) {
             return waitSet.append(otherSet)
@@ -58,7 +58,7 @@ extension LWWElementSet {
         return await mergeWatingSet()
     }
 
-    public func elements() -> [T] {
+    func elements() -> [T] {
         var result: [T] = []
         
         for (element, clock) in additions {
