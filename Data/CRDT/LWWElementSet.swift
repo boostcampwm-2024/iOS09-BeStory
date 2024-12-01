@@ -106,7 +106,7 @@ private extension LWWElementSet {
                 await mergeAvailableSet(with: set)
             }
             for (index, set) in waitSet.enumerated()
-            where await vectorClock.readyFor(replicaId: set.id, to: set.vectorClock) {
+            where await vectorClock.isPaasable(to: set.vectorClock, replicaId: set.id) {
                 availableSet.append(set)
                 waitSet.remove(at: index)
             }
@@ -116,7 +116,7 @@ private extension LWWElementSet {
     @discardableResult
     func mergeAvailableSet(with otherSet: LWWElementSet<T>) async -> Bool {
         let remoteClock = await otherSet.vectorClock
-        guard vectorClock.readyFor(replicaId: otherSet.id, to: remoteClock) else { return false }
+        guard vectorClock.isPaasable(to: remoteClock, replicaId: otherSet.id) else { return false }
         
         let otherAdditions = await otherSet.additions
         let otherRemovals = await otherSet.removals
