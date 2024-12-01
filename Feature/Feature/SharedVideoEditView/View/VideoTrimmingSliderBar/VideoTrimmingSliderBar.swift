@@ -9,13 +9,13 @@ import Core
 import UIKit
 import SnapKit
 
-protocol EditSliderBarDelegate: AnyObject {
-	func lowerValueDidChanged(_ sliderBar: EditSliderBar, value: Double)
-	func upperValueDidChanged(_ sliderBar: EditSliderBar, value: Double)
-	func playerValueDidChanged(_ sliderBar: EditSliderBar, value: Double)
+protocol VideoTrimmingSliderBarDelegate: AnyObject {
+	func lowerValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double)
+	func upperValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double)
+	func playerValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double)
 }
 
-final class EditSliderBar: UIControl {
+final class VideoTrimmingSliderBar: UIControl {
 	enum Constants {
 		// TODO: - 이거 네이밍 수정
 		static let thumbWidth: CGFloat = 16
@@ -31,7 +31,7 @@ final class EditSliderBar: UIControl {
 	weak var currentHighlightedThumb: SliderThumb?
 	
 	// MARK: - Properties
-	weak var delegate: EditSliderBarDelegate?
+	weak var delegate: VideoTrimmingSliderBarDelegate?
 	
 	private var previousLocation: CGPoint = .zero
 	private var minimumValue: Double = 0
@@ -49,7 +49,7 @@ final class EditSliderBar: UIControl {
 	}
 	
 	/// 현재 slider의 최솟값
-	private(set) var lowerValue: Double = 10.0 {
+	private(set) var lowerValue: Double = 0 {
 		didSet {
 			updateThumbFrame(lowerThumb)
 			delegate?.lowerValueDidChanged(self, value: lowerValue)
@@ -149,7 +149,6 @@ final class EditSliderBar: UIControl {
 		let maskedRect = selectedRangeAtSlidarBar()
 		let selectedRect = selectedRangeAtImageFrame()
 		
-		self.backgroundColor = UIColor.black.withAlphaComponent(0.4)
 		context.setFillColor(UIColor.systemYellow.cgColor)
 		context.fill(maskedRect)
 		
@@ -158,13 +157,11 @@ final class EditSliderBar: UIControl {
 }
 
 // MARK: - UI Methods
-private extension EditSliderBar {
+private extension VideoTrimmingSliderBar {
 	func setupUI() {
+		setupViewAttributes()
 		setupViewHierarchies()
 		setupViewConstraints()
-		setupLowerThumb()
-		setupUpperThumb()
-		setupSeekThumb()
 		
 		updateThumbsFrame()
 	}
@@ -176,6 +173,13 @@ private extension EditSliderBar {
 			upperThumb,
 			seekThumb
 		)
+	}
+	
+	func setupViewAttributes() {
+		backgroundColor = .init(hex: "212936")
+		setupLowerThumb()
+		setupUpperThumb()
+		setupSeekThumb()
 	}
 	
 	func setupViewConstraints() {
@@ -212,7 +216,7 @@ private extension EditSliderBar {
 }
 
 // MARK: - Internal Methods
-extension EditSliderBar {
+extension VideoTrimmingSliderBar {
 	func configure(with model: VideoPresentationModel) {
 		self.maximumValue = model.duration
 		self.lowerValue = model.startTime
@@ -224,7 +228,7 @@ extension EditSliderBar {
 }
 
 // MARK: - Private Methotds
-private extension EditSliderBar {
+private extension VideoTrimmingSliderBar {
 	func updateThumbsFrame() {
 		updateThumbFrame(lowerThumb)
 		updateThumbFrame(upperThumb)
