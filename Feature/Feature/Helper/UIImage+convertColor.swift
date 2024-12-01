@@ -8,7 +8,7 @@
 import UIKit
 
 extension UIImage {
-  func color(_ color: UIColor) -> UIImage {
-	return self.withTintColor(color, renderingMode: .alwaysOriginal)
-  }
+	func color(_ color: UIColor) -> UIImage {
+		return self.withTintColor(color, renderingMode: .alwaysOriginal)
+	}
 }
