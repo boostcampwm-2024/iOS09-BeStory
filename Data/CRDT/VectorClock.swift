@@ -35,14 +35,13 @@ extension VectorClock {
     func isPaasable(to vectorClock: VectorClock, replicaId replica: Int) -> Bool {
         guard self[replicaId: replica] == vectorClock.clock[replica]! - 1 else { return false }
         
-        let isReady = vectorClock.clock
-            .filter { (replicaId, _) in
-                replica != replicaId
-            }.filter { (replicaId, remoteCount) in
-                remoteCount > self[replicaId: replicaId]
-            }.isEmpty
-        
-        return isReady
+        for (replicaId, remoteCount) in vectorClock.clock {
+             let localClockCont = self[replicaId: replicaId]
+            if replica != replicaId && remoteCount > localClockCont {
+                return false
+            }
+        }
+        return true
     }
     
     /// 레플리카ID에 대한 시계눈금을 1만큼 증가
