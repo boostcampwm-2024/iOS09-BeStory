@@ -351,6 +351,15 @@ private extension SharedVideoEditViewController {
     }
 }
 
+// MARK: - VideoTrimmingSliderBarDelegate
+extension SharedVideoEditViewController: VideoTrimmingSliderBarDelegate {
+	func lowerValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double) { }
+	
+	func upperValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double) { }
+	
+	func playerValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double) { }
+}
+
 // MARK: - Private Methods
 private extension SharedVideoEditViewController {
 	func presentCancelAlertViewController() {
