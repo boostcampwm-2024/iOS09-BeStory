@@ -20,7 +20,6 @@ public final class SharedVideoEditViewController: UIViewController {
 	}
 	
     // MARK: - Properties
-
     private let viewModel: SharedVideoEditViewModel
     private let input = PassthroughSubject<SharedVideoEditViewInput, Never>()
     private var cancellables = Set<AnyCancellable>()
@@ -69,9 +68,13 @@ public final class SharedVideoEditViewController: UIViewController {
 }
 
 // MARK: - Binding
-
 private extension SharedVideoEditViewController {
-    func setupViewBinding() {
+	func setupViewBinding() {
+		setupViewModelBinding()
+		setupUIBinding()
+	}
+	
+    func setupViewModelBinding() {
         let output = viewModel.transform(input.eraseToAnyPublisher())
 
         output
@@ -80,6 +83,28 @@ private extension SharedVideoEditViewController {
             }
             .store(in: &cancellables)
     }
+	
+	func setupUIBinding() {
+		optionButtonStackView.bs.videoTrimmingButtonDidTapped
+			.sink(with: self) { owner, _ in
+				owner.mode = .edite(.videoTrimming)
+			}
+			.store(in: &cancellables)
+		
+		editSaveButton.bs.tap
+			.sink(with: self) { owner, _ in
+				// TODO: - ViewModel로 저장 정보 전송
+				owner.mode = .default
+			}
+			.store(in: &cancellables)
+		
+		editCancelButton.bs.tap
+			.sink(with: self) { owner, _ in
+				// TODO: - ViewModel로 저장 정보 전송
+				owner.presentCancelAlertViewController()
+			}
+			.store(in: &cancellables)
+	}
 }
 
 // MARK: - UI Configure
@@ -324,6 +349,22 @@ private extension SharedVideoEditViewController {
 
         applySnapShot(with: items)
     }
+}
+
+// MARK: - Private Methods
+private extension SharedVideoEditViewController {
+	func presentCancelAlertViewController() {
+		let yesAction = UIAlertController.ActionType.custom(title: "네", style: .default) { [weak self] in
+			self?.mode = .default
+		}
+		let cancelAction = UIAlertController.ActionType.custom(title: "아니오", style: .destructive, handler: nil)
+		let alertMessage = "편집을 취소하게 되면, 편집된 내용은 삭제됩니다. 그래도 취소하시겠습니까?"
+		let alertController = UIAlertController(
+			type: .custom(title: "Cancel Editing", message: alertMessage),
+			actions: [cancelAction, yesAction]
+		)
+		present(alertController, animated: true)
+	}
 }
 
 // MARK: - UICollectionViewDelegate
