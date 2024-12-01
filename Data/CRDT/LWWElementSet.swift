@@ -72,33 +72,6 @@ public extension LWWElementSet {
 }
 
 private extension LWWElementSet {
-     func add(element: T, remoteClock: VectorClock) {
-        if let clock = additions[element],
-           clock >= remoteClock {
-            return
-        }
-         additions.removeValue(forKey: element)
-         additions.updateValue(remoteClock, forKey: element)
-    }
-
-    func remove(element: T, remoteClock: VectorClock) {
-        if let clock = removals[element],
-           clock >= remoteClock {
-            return
-        }
-        removals.removeValue(forKey: element)
-        removals.updateValue(remoteClock, forKey: element)
-    }
-    
-    func payloading() -> LWWElementSetState<T> {
-        return LWWElementSetState(
-            id: id,
-            clock: vectorClock,
-            additions: additions,
-            removals: removals
-        )
-    }
-    
     func mergeWatingSet() async {
         var availableSet = [LWWElementSet]()
         repeat {
