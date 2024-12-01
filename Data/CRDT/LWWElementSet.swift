@@ -59,17 +59,14 @@ extension LWWElementSet {
     }
 
     public func elements() -> [T] {
-        let result = additions
-            .filter { (element, clock) in
-                guard let removeClock = removals[element],
-                      removeClock < clock
-                else { return false }
-                
-                return true
-            }.reduce(into: []) { (partialResult, element) in
-                partialResult.append(element.key)
-            }
+        var result: [T] = []
         
+        for (element, clock) in additions {
+            if let removeClock = removals[element], removeClock >= clock {
+                continue
+            }
+            result.append(element)
+        }
         return result
     }
 }
