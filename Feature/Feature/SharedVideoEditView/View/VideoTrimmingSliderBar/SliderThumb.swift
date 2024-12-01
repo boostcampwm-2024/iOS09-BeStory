@@ -52,6 +52,12 @@ final class SliderThumb: UIView {
 		super.layoutSubviews()
 		
 		self.layer.cornerRadius = self.bounds.width / 2
+		imageView.frame = .init(
+			x: 4,
+			y: 10,
+			width: bounds.width - 8,
+			height: bounds.height - 20
+		)
 	}
 }
 
@@ -59,20 +65,12 @@ final class SliderThumb: UIView {
 private extension SliderThumb {
 	func setupUI() {
 		setupViewHierarchies()
-		setupViewConstraints()
 		setupViewAttributes()
 		setupImageView()
 	}
 	
 	func setupViewHierarchies() {
 		addSubview(imageView)
-	}
-	
-	func setupViewConstraints() {
-		imageView.snp.makeConstraints {
-			$0.top.bottom.equalToSuperview().inset(10)
-			$0.leading.trailing.equalToSuperview().inset(4)
-		}
 	}
 	
 	func setupImageView() {
