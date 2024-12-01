@@ -32,7 +32,7 @@ extension VectorClock {
     /// upstream 레플리카가 전송한 시계가 하기 두 사항을 만족해야 병합 가능
     /// - upstream의 레플리카에 대한 count - 1 == downstream의 벡터시계 중 해당 레플리카에 대한 count
     /// - upstream의 나머지 레플리카에 대한 count  <= downstream의 벡터 시계 중 나머지 레플리카에 대한 count
-    func readyFor(replicaId replica: Int, to vectorClock: VectorClock) -> Bool {
+    func isPaasable(to vectorClock: VectorClock, replicaId replica: Int) -> Bool {
         guard self[replicaId: replica] == vectorClock.clock[replica]! - 1 else { return false }
         
         let isReady = vectorClock.clock
