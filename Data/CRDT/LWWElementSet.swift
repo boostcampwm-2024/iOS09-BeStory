@@ -134,22 +134,22 @@ private extension LWWElementSet {
     }
     
     func add(element: T, remoteClock: VectorClock) {
-       if let clock = additions[element],
-          clock >= remoteClock {
-           return
-       }
+        if let clock = additions[element],
+              remoteClock <= clock
+        { return }
+        
         additions.removeValue(forKey: element)
         additions.updateValue(remoteClock, forKey: element)
-   }
-
-   func remove(element: T, remoteClock: VectorClock) {
-       if let clock = removals[element],
-          clock >= remoteClock {
-           return
-       }
-       removals.removeValue(forKey: element)
-       removals.updateValue(remoteClock, forKey: element)
-   }
+    }
+    
+    func remove(element: T, remoteClock: VectorClock) {
+        if let clock = removals[element],
+              remoteClock <= clock
+        { return }
+        
+        removals.removeValue(forKey: element)
+        removals.updateValue(remoteClock, forKey: element)
+    }
     
     func payloading() -> LWWElementSetState<T> {
         return LWWElementSetState(
