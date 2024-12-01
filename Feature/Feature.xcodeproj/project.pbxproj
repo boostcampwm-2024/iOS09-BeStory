@@ -49,6 +49,8 @@
 				GroupInfoView/ViewModel/GroupInfoViewOutput.swift,
 				"Helper/AVAsset+Thumbnail.swift",
 				"Helper/AVAssetImageGenerator+generateImage.swift",
+				Helper/BeStoryReactive/BeStoryReactive.swift,
+				"Helper/BeStoryReactive/UIButton+BSReactive.swift",
 				"Helper/BeStoryReactive/UIStackView+AddArangeSubViews.swift",
 				Helper/EmojiManager.swift,
 				Helper/EventPublisher.swift,
