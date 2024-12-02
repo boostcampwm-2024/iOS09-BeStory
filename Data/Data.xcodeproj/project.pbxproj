@@ -66,6 +66,7 @@
 			membershipExceptions = (
 				BrowsingUserRepository.swift,
 				ConnectedUserRepository.swift,
+				EventRepository.swift,
 				SharingVideoRepository.swift,
 			);
 			target = FED968292CD9094300CD445C /* Data */;
