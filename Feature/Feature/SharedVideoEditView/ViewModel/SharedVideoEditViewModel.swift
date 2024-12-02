@@ -15,8 +15,6 @@ public final class SharedVideoEditViewModel {
     
     private var output = PassthroughSubject<Output, Never>()
     private var cancellables: Set<AnyCancellable> = []
-    
-    var items: [VideoTimelineItem] = []
 
     public init() {
         setupBind()
@@ -26,7 +24,6 @@ public final class SharedVideoEditViewModel {
         input.sink { [weak self] input in
             guard let self else { return }
             switch input {
-            case .initialize:
             // 테스트 셋업으로 초기화합니다.
             case .setInitialState:
                 let initialItems = [
@@ -51,7 +48,6 @@ public final class SharedVideoEditViewModel {
                         duration: "40:0"
                     )
                 ]
-                self.items = initialItems
                 output.send(.timeLineDidChanged(items: initialItems))
             }
         }
