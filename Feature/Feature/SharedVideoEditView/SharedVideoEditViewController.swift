@@ -80,7 +80,11 @@ private extension SharedVideoEditViewController {
 
         output
             .receive(on: DispatchQueue.main)
-            .sink { output in
+            .sink { [weak self] output in
+                switch output {
+                case .timeLineDidChanged(let items):
+                    self?.reload(with: items)
+                }
             }
             .store(in: &cancellables)
     }
