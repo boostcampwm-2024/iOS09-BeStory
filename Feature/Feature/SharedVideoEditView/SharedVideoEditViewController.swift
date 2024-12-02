@@ -59,6 +59,7 @@ public final class SharedVideoEditViewController: UIViewController {
 		setupUI()
         setupViewBinding()
         
+        input.send(.initialize)
     }
     
     public override func viewWillAppear(_ animated: Bool) {
