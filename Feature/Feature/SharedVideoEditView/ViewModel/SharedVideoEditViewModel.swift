@@ -5,7 +5,9 @@
 //  Created by Yune gim on 11/26/24.
 //
 
+import AVFoundation
 import Combine
+import Core
 
 public final class SharedVideoEditViewModel {
     typealias Input = SharedVideoEditViewInput
@@ -27,8 +29,50 @@ public final class SharedVideoEditViewModel {
     }
 }
 
-// MARK: - Private
-
+// MARK: - Private Methods
 private extension SharedVideoEditViewModel {
     func setupBind() { }
+	
+	/// `frameCount` 만큼의  frame Image들을 단일 frameImage로 리턴해줍니다.
+	func frameImage(from video: AVAsset, frameCount: Int) async -> UIImageWrapper? {
+		guard let cmTimeDuration = try? await video.load(.duration) else { return nil }
+		let secondsDuration = Int(CMTimeGetSeconds(cmTimeDuration))
+		let singleFrameDuration = Double(secondsDuration) / Double(frameCount)
+		
+		let frameCMTimes = (0..<frameCount).map { index -> CMTime in
+			let startTime = singleFrameDuration * Double(index)
+			
+			return CMTimeMakeWithSeconds(startTime, preferredTimescale: Int32(secondsDuration))
+		}
+		
+		let generator = avAssetImageGenerator(from: video)
+		
+		return await frameImage(from: generator, times: frameCMTimes)
+	}
+	
+	func avAssetImageGenerator(from video: AVAsset) -> AVAssetImageGenerator {
+		let generator = AVAssetImageGenerator(asset: video)
+		generator.appliesPreferredTrackTransform = true
+		generator.requestedTimeToleranceAfter = CMTime.zero
+		generator.requestedTimeToleranceBefore = CMTime.zero
+		
+		return generator
+	}
+	
+	func frameImage(from generator: AVAssetImageGenerator, times: [CMTime]) async -> UIImageWrapper? {
+		var resultImages = Array(repeating: UIImageWrapper(), count: times.count)
+		
+		await withTaskGroup(of: Void.self) { group in
+			for (index, time) in times.enumerated() {
+				group.addTask {
+					guard let image = try? await generator.generateUIImage(at: time) else { return }
+					resultImages[index] = .init(image: image)
+				}
+			}
+		}
+		
+		let concatImage = resultImages.map { $0.image }.concatImagesHorizontaly()
+		
+		return .init(image: concatImage)
+	}
 }

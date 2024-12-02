@@ -6,24 +6,42 @@
 //
 
 import Combine
+import Core
 import SnapKit
 import UIKit
 
 public final class SharedVideoEditViewController: UIViewController {
+	enum Mode {
+		case `default`
+		case edite(EditingMode)
+	}
+	
+	enum EditingMode {
+		case videoTrimming
+	}
+	
     // MARK: - Properties
-
     private let viewModel: SharedVideoEditViewModel
     private let input = PassthroughSubject<SharedVideoEditViewInput, Never>()
     private var cancellables = Set<AnyCancellable>()
+	private var mode: Mode = .default {
+		didSet { setupUI(for: mode) }
+	}
 
     // MARK: - UI Components
 
     private let videoPlayerView = VideoPlayerView()
     private var videoTimelineCollectionView: UICollectionView!
-    private var videoTimelineDataSource: VideoTimelineDataSource!
-
+	private let editButtonView = UIView()
+	private let editSaveButton = UIButton()
+	private let editCancelButton = UIButton()
+	private let middleContainerView = UIView()
+	private let optionButtonStackView = OptionButtonStackView()
+	private let videoTrimmingSliderBar = VideoTrimmingSliderBar()
+	
+	private var videoTimelineDataSource: VideoTimelineDataSource!
+	
     // MARK: - Initializer
-
     public init(viewModel: SharedVideoEditViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -35,14 +53,10 @@ public final class SharedVideoEditViewController: UIViewController {
     }
 
     // MARK: - LifeCycle
-
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupViewAttributes()
-        setupViewHierarchies()
-        setupViewConstraints()
-
+		setupUI()
         setupViewBinding()
 
         loadInitialData()
@@ -55,9 +69,13 @@ public final class SharedVideoEditViewController: UIViewController {
 }
 
 // MARK: - Binding
-
 private extension SharedVideoEditViewController {
-    func setupViewBinding() {
+	func setupViewBinding() {
+		setupViewModelBinding()
+		setupUIBinding()
+	}
+	
+    func setupViewModelBinding() {
         let output = viewModel.transform(input.eraseToAnyPublisher())
 
         output
@@ -66,15 +84,52 @@ private extension SharedVideoEditViewController {
             }
             .store(in: &cancellables)
     }
+	
+	func setupUIBinding() {
+		optionButtonStackView.bs.videoTrimmingButtonDidTapped
+			.sink(with: self) { owner, _ in
+				owner.mode = .edite(.videoTrimming)
+			}
+			.store(in: &cancellables)
+		
+		editSaveButton.bs.tap
+			.sink(with: self) { owner, _ in
+				// TODO: - ViewModel로 저장 정보 전송
+				owner.mode = .default
+			}
+			.store(in: &cancellables)
+		
+		editCancelButton.bs.tap
+			.sink(with: self) { owner, _ in
+				// TODO: - ViewModel로 저장 정보 전송
+				owner.presentCancelAlertViewController()
+			}
+			.store(in: &cancellables)
+	}
 }
 
 // MARK: - UI Configure
-
 private extension SharedVideoEditViewController {
+	enum EditButtonViewConstants {
+		static let topMargin: CGFloat = 14
+		static let sideMargin: CGFloat = 12
+		static let height: CGFloat = 40
+	}
+	
+	enum SaveAndCancelButtonConstants {
+		static let width = 60
+	}
+	
     enum VideoPlayerViewConstants {
         static let topMargin: CGFloat = 14
         static let playerViewRatio: CGFloat = 9 / 16
     }
+	
+	enum MiddleContainerViewConstants {
+		static let topMargin: CGFloat = 22
+		static let sideMargin: CGFloat = 24
+		static let height: CGFloat = 50
+	}
 
     enum VideoTimelineCollectionViewConstants {
         static let backgroundColor = UIColor(
@@ -84,15 +139,34 @@ private extension SharedVideoEditViewController {
             alpha: 1
         )
         static let spacing: CGFloat = 10
-        static let topMargin: CGFloat = 14 + 80
+        static let topMargin: CGFloat = 14
         static let height: CGFloat = 120
         static let itemSize: CGSize = .init(width: 160, height: 90)
     }
+	
+	func setupUI() {
+		setupViewAttributes()
+		setupViewHierarchies()
+		setupViewConstraints()
+		setupUI(for: mode)
+	}
 
     func setupViewAttributes() {
         view.backgroundColor = .black
+		setupEditSaveButton()
+		setupEditCancelButton()
         setupVideoTimelineCollectionView()
     }
+	
+	func setupEditCancelButton() {
+		editCancelButton.setTitle("취소", for: .normal)
+		editCancelButton.setTitleColor(.red, for: .normal)
+	}
+	
+	func setupEditSaveButton() {
+		editSaveButton.setTitle("저장", for: .normal)
+		editSaveButton.setTitleColor(.blue, for: .normal)
+	}
 
     func setupVideoTimelineCollectionView() {
         let layout = setupLayout()
@@ -113,29 +187,101 @@ private extension SharedVideoEditViewController {
     }
 
     func setupViewHierarchies() {
-        [
-            videoPlayerView,
-            videoTimelineCollectionView
-        ].forEach({
-            view.addSubview($0)
-        })
+		view.addSubviews(
+			editButtonView,
+			videoPlayerView,
+			videoTimelineCollectionView,
+			editButtonView,
+			middleContainerView
+		)
+		editButtonView.addSubviews(editCancelButton, editSaveButton)
+		middleContainerView.addSubviews(optionButtonStackView, videoTrimmingSliderBar)
     }
     
     func setupViewConstraints() {
+		editButtonView.snp.makeConstraints {
+			$0.leading.trailing.equalToSuperview().inset(EditButtonViewConstants.sideMargin)
+			$0.top.equalTo(view.safeAreaLayoutGuide).offset(EditButtonViewConstants.topMargin)
+			$0.height.equalTo(EditButtonViewConstants.height)
+		}
+		
+		editSaveButton.snp.makeConstraints {
+			$0.trailing.top.bottom.equalToSuperview()
+			$0.width.equalTo(SaveAndCancelButtonConstants.width)
+		}
+		
+		editCancelButton.snp.makeConstraints {
+			$0.leading.top.bottom.equalToSuperview()
+			$0.width.equalTo(SaveAndCancelButtonConstants.width)
+		}
+		
         videoPlayerView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(VideoPlayerViewConstants.topMargin)
             $0.leading.equalToSuperview()
             $0.trailing.equalToSuperview()
             $0.height.equalTo(videoPlayerView.snp.width).multipliedBy(VideoPlayerViewConstants.playerViewRatio)
         }
+		
+		middleContainerView.snp.makeConstraints {
+			$0.top.equalTo(videoPlayerView.snp.bottom).offset(MiddleContainerViewConstants.topMargin)
+			$0.leading.trailing.equalToSuperview().inset(MiddleContainerViewConstants.sideMargin)
+			$0.height.equalTo(MiddleContainerViewConstants.height)
+		}
+
+		optionButtonStackView.snp.makeConstraints {
+			$0.leading.centerY.equalToSuperview()
+			$0.trailing.lessThanOrEqualToSuperview()
+		}
+		
+		videoTrimmingSliderBar.snp.makeConstraints {
+			$0.leading.trailing.top.equalToSuperview()
+			$0.height.equalToSuperview()
+		}
 
         videoTimelineCollectionView.snp.makeConstraints {
-            $0.top.equalTo(videoPlayerView.snp.bottom).offset(VideoTimelineCollectionViewConstants.topMargin)
+			$0.top.equalTo(middleContainerView.snp.bottom).offset(VideoTimelineCollectionViewConstants.topMargin)
             $0.leading.equalToSuperview()
             $0.trailing.equalToSuperview()
             $0.height.equalTo(VideoTimelineCollectionViewConstants.height)
         }
     }
+	
+	func setupUI(for mode: Mode) {
+		switch mode {
+			case .default: setupDefaultModeUI()
+			case let .edite(editingMode): setupEditingModeUI(for: editingMode)
+		}
+	}
+	
+	func setupDefaultModeUI() {
+		videoPlayerView.isHiddenSliderBar = false
+		optionButtonStackView.isHidden = false
+		videoTrimmingSliderBar.isHidden = true
+		editButtonView.isHidden = true
+		
+		videoPlayerView.snp.updateConstraints {
+			$0.top.equalTo(view.safeAreaLayoutGuide).offset(VideoPlayerViewConstants.topMargin)
+		}
+	}
+	
+	func setupEditingModeUI(for mode: EditingMode) {
+		videoPlayerView.isHiddenSliderBar = true
+		optionButtonStackView.isHidden = true
+		editButtonView.isHidden = false
+		
+		let topMargin = VideoPlayerViewConstants.topMargin + EditButtonViewConstants.height
+		videoPlayerView.snp.updateConstraints {
+			$0.top.equalTo(view.safeAreaLayoutGuide).offset(topMargin)
+		}
+		
+		switch mode {
+			case .videoTrimming: setupTrimmingVideoModeUI()
+		}
+	}
+	
+	func setupTrimmingVideoModeUI() {
+		videoTrimmingSliderBar.isHidden = false
+	}
 }
 
 // MARK: - UICollectionView Methods
@@ -204,6 +350,31 @@ private extension SharedVideoEditViewController {
 
         applySnapShot(with: items)
     }
+}
+
+// MARK: - VideoTrimmingSliderBarDelegate
+extension SharedVideoEditViewController: VideoTrimmingSliderBarDelegate {
+	func lowerValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double) { }
+	
+	func upperValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double) { }
+	
+	func playerValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double) { }
+}
+
+// MARK: - Private Methods
+private extension SharedVideoEditViewController {
+	func presentCancelAlertViewController() {
+		let yesAction = UIAlertController.ActionType.custom(title: "네", style: .default) { [weak self] in
+			self?.mode = .default
+		}
+		let cancelAction = UIAlertController.ActionType.custom(title: "아니오", style: .destructive, handler: nil)
+		let alertMessage = "편집을 취소하게 되면, 편집된 내용은 삭제됩니다. 그래도 취소하시겠습니까?"
+		let alertController = UIAlertController(
+			type: .custom(title: "Cancel Editing", message: alertMessage),
+			actions: [cancelAction, yesAction]
+		)
+		present(alertController, animated: true)
+	}
 }
 
 // MARK: - UICollectionViewDelegate

@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleDisplayName</key>
+	<string>Be Story</string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>함께 동영상 편집할 유저를 찾기 위해 권한이 필요합니다.</string>
 	<key>NSBonjourServices</key>

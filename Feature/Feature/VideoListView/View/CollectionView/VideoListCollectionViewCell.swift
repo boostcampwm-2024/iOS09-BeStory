@@ -9,8 +9,6 @@ import SnapKit
 import UIKit
 
 final class VideoListCollectionViewCell: UICollectionViewCell {
-    static let identifier: String = "VideoListCollectionViewCell"
-    
     // MARK: - UI Components
     private let thumbnailImageView = UIImageView()
     
