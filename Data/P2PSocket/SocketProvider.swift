@@ -130,7 +130,6 @@ extension SocketProvider: SocketInvitable {
 
 // MARK: - SocketDisconnectable
 extension SocketProvider: SocketDisconnectable {
-	// TODO: - 이거 가능한지 확인해볼 것
 	public func disconnect() {
 		session.disconnect()
 	}

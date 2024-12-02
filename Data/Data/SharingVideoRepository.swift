@@ -144,7 +144,6 @@ private extension SharingVideoRepository {
 }
 
 // MARK: - Public Methods
-// TODO: - async 이거 삭제
 public extension SharingVideoRepository {
 	func shareVideo(url: URL, resourceName: String) {
 		socketProvider.broadcastResource(url: url, resourceName: resourceName)
