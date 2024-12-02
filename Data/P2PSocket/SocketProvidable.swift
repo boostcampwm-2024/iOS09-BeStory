@@ -49,7 +49,7 @@ public protocol SocketDisconnectable {
 public protocol SocketResourceSendable {
 	var resourceShared: PassthroughSubject<SharedResource, Never> { get }
 	
-	func sendResource(
+	func unicastResource(
 		url localURL: URL,
 		resourceName: String,
 		to peerID: String
@@ -61,6 +61,6 @@ public protocol SocketResourceSendable {
 public protocol SocketDataSendable {
 	var dataShared: PassthroughSubject<(Data, SocketPeer), Never> { get }
 	
-	func send(data: Data, to peerID: String)
+	func unicast(data: Data, to peerID: String)
 	func broadcast(data: Data)
 }

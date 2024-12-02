@@ -137,7 +137,7 @@ extension SocketProvider: SocketDisconnectable {
 
 // MARK: - SocketResourceSendable
 extension SocketProvider: SocketResourceSendable {
-	public func sendResource(
+	public func unicastResource(
 		url localURL: URL,
 		resourceName: String,
 		to peerID: String
@@ -164,7 +164,7 @@ extension SocketProvider: SocketResourceSendable {
 
 // MARK: - SocketDataSendable
 extension SocketProvider: SocketDataSendable {
-	public func send(data: Data, to peerID: String) {
+	public func unicast(data: Data, to peerID: String) {
 		guard let mcPeerID = MCPeerIDStorage.shared.peerIDByIdentifier[peerID]?.id else { return }
 		try? session.send(data, toPeers: [mcPeerID], with: .reliable)
 	}

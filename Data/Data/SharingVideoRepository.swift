@@ -75,7 +75,7 @@ private extension SharingVideoRepository {
 		let hashMessage = SyncMessage.hashMatch(result)
 		
 		guard let serializedData = try? JSONEncoder().encode(hashMessage) else { return }
-		socketProvider.send(data: serializedData, to: peerID)
+		socketProvider.unicast(data: serializedData, to: peerID)
 	}
 	
 	func synchronize(with result: [String: HashCondition], to peerID: String) {
@@ -104,7 +104,7 @@ private extension SharingVideoRepository {
 			let fileName = fileNames[index]
 			let fileURL = FileSystemManager.shared.folder.appending(component: fileName)
 			
-			socketProvider.sendResource(url: fileURL,
+			socketProvider.unicastResource(url: fileURL,
 										resourceName: fileName,
 										to: peerID)
 			sendSyncFlags[peerID] = true
@@ -123,13 +123,13 @@ private extension SharingVideoRepository {
 		
 		let request = SyncMessage.request(fileNames)
 		guard let requestData = try? JSONEncoder().encode(request) else { return }
-		socketProvider.send(data: requestData, to: peerID)
+		socketProvider.unicast(data: requestData, to: peerID)
 	}
 	
 	func sendRequestResponse(to peerID: String) {
 		let receivedFlag = SyncMessage.requestCompletionFlag
 		guard let data = try? JSONEncoder().encode(receivedFlag) else { return }
-		self.socketProvider.send(data: data, to: peerID)
+		self.socketProvider.unicast(data: data, to: peerID)
 	}
 	
 	func checkIfAllSynced() {
