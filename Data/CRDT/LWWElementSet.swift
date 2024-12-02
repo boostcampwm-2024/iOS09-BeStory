@@ -74,6 +74,7 @@ public extension LWWElementSet {
 private extension LWWElementSet {
     func mergeWatingSet() async {
         var availableSet = [LWWElementSet]()
+        var completedSetIndexs = [Int]()
         repeat {
             while !availableSet.isEmpty {
                 let set = availableSet.removeLast()
@@ -82,6 +83,10 @@ private extension LWWElementSet {
             for (index, set) in waitSet.enumerated()
             where await vectorClock.isPaasable(to: set.vectorClock, replicaId: set.id) {
                 availableSet.append(set)
+                completedSetIndexs.append(index)
+            }
+            while !completedSetIndexs.isEmpty {
+                let index = completedSetIndexs.removeLast()
                 waitSet.remove(at: index)
             }
         } while !availableSet.isEmpty
