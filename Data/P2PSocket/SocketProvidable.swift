@@ -8,26 +8,25 @@
 import Combine
 import Foundation
 
-public protocol SocketProvidable:
-    SocketInvitable, SocketBwrosable, SocketAdvertiseable, SocketDisconnectable,
-    SocketResourceSendable, DataSendable { }
-
+// swiftlint:disable line_length
+public typealias SocketProvidable =
+	SocketAdvertiseable & SocketBrowsable & SocketInvitable & SocketDisconnectable & SocketResourceSendable & SocketDataSendable
+// swiftlint:enable line_length
 
 public protocol SocketAdvertiseable {
 	func startAdvertising()
 	func stopAdvertising()
 }
 
-public protocol SocketBwrosable {
+public protocol SocketBrowsable {
 	var updatedPeer: PassthroughSubject<SocketPeer, Never> { get }
 	/// Browsing된 Peer를 리턴합니다.
 	func browsingPeers() -> [SocketPeer]
+	/// Session에 연결된 Peer를 리턴합니다.
+	func connectedPeers() -> [SocketPeer]
 	
 	func startBrowsing()
 	func stopBrowsing()
-	
-	/// Session에 연결된 Peer를 리턴합니다.
-	func connectedPeers() -> [SocketPeer]
 }
 
 public protocol SocketInvitable {
@@ -44,28 +43,24 @@ public protocol SocketInvitable {
 }
 
 public protocol SocketDisconnectable {
-    func disconnectAllUser()
+	func disconnect()
 }
-
 
 public protocol SocketResourceSendable {
 	var resourceShared: PassthroughSubject<SharedResource, Never> { get }
 	
-    func sendResource(
-        url localURL: URL,
-        resourceName: String,
-        to peerID: String
-    ) async
+	func sendResource(
+		url localURL: URL,
+		resourceName: String,
+		to peerID: String
+	)
 	/// 연결된 모든 Peer들에게 리소스를 전송합니다.
-    func sendResourceToAll(url: URL, resourceName: String) async throws
-	/// Peer들과 공유한 모든 리소스를 리턴합니다.
-	func sharedAllResources() -> [SharedResource]
+	func broadcastResource(url: URL, resourceName: String)
 }
 
-public protocol DataSendable {
-    var dataShared: PassthroughSubject<(Data, String), Never> { get }
-    
-    func send(data: Data, to peerID: String)
-    func sendAll(data: Data)
+public protocol SocketDataSendable {
+	var dataShared: PassthroughSubject<(Data, SocketPeer), Never> { get }
+	
+	func send(data: Data, to peerID: String)
+	func broadcast(data: Data)
 }
-
