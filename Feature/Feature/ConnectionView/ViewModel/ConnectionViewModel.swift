@@ -18,7 +18,7 @@ final public class ConnectionViewModel {
 
     // MARK: - Properties
 
-    private let usecase: BrowsingUserUseCaseInterface
+    private let browsingUserUseCase: BrowsingUserUseCaseInterface
     private var output = PassthroughSubject<Output, Never>()
     private var cancellables: Set<AnyCancellable> = []
 
@@ -29,8 +29,9 @@ final public class ConnectionViewModel {
 
     // MARK: - Initializer
 
-    public init(usecase: BrowsingUserUseCaseInterface) {
-        self.usecase = usecase
+    public init(browsingUserUseCase: BrowsingUserUseCaseInterface,
+                openSharedContainerUseCase: OpenSharedContainerUseCaseInterface) {
+        self.browsingUserUseCase = browsingUserUseCase
         setupBind()
     }
 
@@ -61,17 +62,19 @@ extension ConnectionViewModel {
             // Connection Input
 
             case .fetchUsers:
-                usecase.fetchBrowsedUsers().forEach({ self.found(user: $0) })
+                browsingUserUseCase.fetchBrowsedUsers().forEach({ self.found(user: $0) })
             case .inviteUser(let id):
-                usecase.inviteUser(with: id)
+                browsingUserUseCase.inviteUser(with: id)
 
             // Invitation Input
 
             case .acceptInvitation(let user):
-                usecase.acceptInvitation()
+                browsingUserUseCase.acceptInvitation()
                 removeCurrentPosition(id: user.id)
             case .rejectInvitation:
-                usecase.rejectInvitation()
+                browsingUserUseCase.rejectInvitation()
+            case .nextButtonDidTapped:
+                output.send(.openSharedVideoList)
             }
         }
         .store(in: &cancellables)
@@ -86,7 +89,7 @@ private extension ConnectionViewModel {
     func setupBind() {
         // Broswed User (found, lost)
 
-        usecase.browsedUser
+        browsingUserUseCase.browsedUser
             .sink { [weak self] updatedUser in
                 guard let self else { return }
 
@@ -101,7 +104,7 @@ private extension ConnectionViewModel {
 
         // Invitation Received (From Who)
 
-        usecase.invitationReceived
+        browsingUserUseCase.invitationReceived
             .sink { [weak self] invitingUser in
                 guard let self else { return }
                 output.send(.invitationReceivedBy(user: invitingUser))
@@ -110,7 +113,7 @@ private extension ConnectionViewModel {
 
         // Invitation Result (when I invite other users)
 
-        usecase.invitationResult
+        browsingUserUseCase.invitationResult
             .sink { [weak self] invitedUser in
                 guard let self else { return }
 
@@ -130,12 +133,12 @@ private extension ConnectionViewModel {
 
         // Invitaion Fired Due to Timeout (invited user receive)
 
-        usecase.invitationDidFired
+        browsingUserUseCase.invitationDidFired
             .sink { [weak self] in
                 guard let self else { return }
 
                 output.send(.invitationTimeout)
-                usecase.rejectInvitation()
+                browsingUserUseCase.rejectInvitation()
             }
             .store(in: &cancellables)
     }
