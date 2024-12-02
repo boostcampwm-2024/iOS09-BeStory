@@ -123,7 +123,6 @@
 				BrowsingUserUseCase.swift,
 				ConnectedUserUseCase.swift,
 				VideoUseCase.swift,
-
 			);
 			target = FE6EF3C62CD8B5CA005DC39D /* UseCase */;
 		};
