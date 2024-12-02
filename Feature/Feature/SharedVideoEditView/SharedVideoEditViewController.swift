@@ -58,8 +58,7 @@ public final class SharedVideoEditViewController: UIViewController {
 
 		setupUI()
         setupViewBinding()
-
-        loadInitialData()
+        
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -321,34 +320,6 @@ private extension SharedVideoEditViewController {
 
     func reload(with videos: [VideoTimelineItem]) {
         applySnapShot(with: videos)
-    }
-
-    // TEST 용 메서드 입니다.
-    func loadInitialData() {
-        let items = [
-            VideoTimelineItem(
-                thumbnailImage: Data(),
-                duration: "0:0"
-            ),
-            VideoTimelineItem(
-                thumbnailImage: Data(),
-                duration: "10:0"
-            ),
-            VideoTimelineItem(
-                thumbnailImage: Data(),
-                duration: "20:0"
-            ),
-            VideoTimelineItem(
-                thumbnailImage: Data(),
-                duration: "30:0"
-            ),
-            VideoTimelineItem(
-                thumbnailImage: Data(),
-                duration: "40:0"
-            )
-        ]
-
-        applySnapShot(with: items)
     }
 }
 
