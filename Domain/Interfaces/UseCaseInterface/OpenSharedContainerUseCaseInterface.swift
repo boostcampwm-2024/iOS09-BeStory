@@ -8,5 +8,7 @@
 import Combine
 
 public protocol OpenSharedContainerUseCaseInterface {
+    var openEvent: PassthroughSubject<Void, Never> { get }
     
+    func noticeOpening()
 }
