@@ -39,8 +39,9 @@
 			membershipExceptions = (
 				ConnectionView/ConnectionViewController.swift,
 				ConnectionView/View/CustomCircleView.swift,
-				ConnectionView/ViewModel/ConnectionViewInputOutput.swift,
+				ConnectionView/ViewModel/ConnectionViewInput.swift,
 				ConnectionView/ViewModel/ConnectionViewModel.swift,
+				ConnectionView/ViewModel/ConnectionViewOutput.swift,
 				GroupInfoView/GroupInfoViewController.swift,
 				GroupInfoView/View/ParticipantCountView.swift,
 				GroupInfoView/View/ParticipantInfoView.swift,
