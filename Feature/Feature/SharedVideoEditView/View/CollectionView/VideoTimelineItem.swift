@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct VideoTimelineItem: Codable, Hashable {
+struct VideoTimelineItem: Codable, Hashable {
     let identifier = UUID()
     let thumbnailImage: Data
     let duration: String
