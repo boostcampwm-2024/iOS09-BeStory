@@ -79,8 +79,7 @@ private extension SharedVideoEditViewController {
 
         output
             .receive(on: DispatchQueue.main)
-            .sink { output in
-            }
+            .sink { _ in }
             .store(in: &cancellables)
     }
 	
