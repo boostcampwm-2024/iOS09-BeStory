@@ -13,7 +13,7 @@ import UIKit
 public final class SharedVideoEditViewController: UIViewController {
 	enum Mode {
 		case `default`
-		case edite(EditingMode)
+		case edit(EditingMode)
 	}
 	
 	enum EditingMode {
@@ -29,7 +29,6 @@ public final class SharedVideoEditViewController: UIViewController {
 	}
 
     // MARK: - UI Components
-
     private let videoPlayerView = VideoPlayerView()
     private var videoTimelineCollectionView: UICollectionView!
 	private let editButtonView = UIView()
@@ -88,7 +87,7 @@ private extension SharedVideoEditViewController {
 	func setupUIBinding() {
 		optionButtonStackView.bs.videoTrimmingButtonDidTapped
 			.sink(with: self) { owner, _ in
-				owner.mode = .edite(.videoTrimming)
+				owner.mode = .edit(.videoTrimming)
 			}
 			.store(in: &cancellables)
 		
@@ -249,7 +248,7 @@ private extension SharedVideoEditViewController {
 	func setupUI(for mode: Mode) {
 		switch mode {
 			case .default: setupDefaultModeUI()
-			case let .edite(editingMode): setupEditingModeUI(for: editingMode)
+			case let .edit(editingMode): setupEditingModeUI(for: editingMode)
 		}
 	}
 	
