@@ -11,17 +11,19 @@ import Interfaces
 import P2PSocket
 
 public final class ConnectedUserRepository: ConnectedUserRepositoryInterface {
+	public typealias ConnectedUserSocketProvidable = SocketBrowsable & SocketDisconnectable
+
     private var cancellables: Set<AnyCancellable> = []
-    private let socketProvider: SocketProvidable
+    private let socketProvider: ConnectedUserSocketProvidable
 
     public let updatedConnectedUser = PassthroughSubject<ConnectedUser, Never>()
 
-    public init(socketProvider: SocketProvidable) {
+    public init(socketProvider: ConnectedUserSocketProvidable) {
         self.socketProvider = socketProvider
 
         socketProvider.updatedPeer
-            .compactMap({ [weak self] peer in
-                self?.mappingToConnectedUser(peer) })
+            .compactMap { peer in
+				DataMapper.mappingToConnectedUser(peer) }
             .subscribe(updatedConnectedUser)
             .store(in: &cancellables)
     }
@@ -32,26 +34,9 @@ public final class ConnectedUserRepository: ConnectedUserRepositoryInterface {
 public extension ConnectedUserRepository {
     func fetchConnectedUsers() -> [ConnectedUser] {
         return socketProvider.connectedPeers()
-            .compactMap({ mappingToConnectedUser($0) })
+			.compactMap { DataMapper.mappingToConnectedUser($0) }
     }
     func leaveGroup() {
-        socketProvider.disconnectAllUser()
-    }
-}
-
-// MARK: - Private Methods
-
-private extension ConnectedUserRepository {
-    func mappingToConnectedUser(_ peer: SocketPeer) -> ConnectedUser? {
-        switch peer.state {
-        case .connected:
-            return .init(id: peer.id, state: .connected, name: peer.name)
-        case .disconnected:
-            return .init(id: peer.id, state: .disconnected, name: peer.name)
-		case .pending:
-			return .init(id: peer.id, state: .pending, name: peer.name)
-        default:
-            return nil
-        }
+        socketProvider.disconnect()
     }
 }

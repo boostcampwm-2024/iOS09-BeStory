@@ -12,14 +12,16 @@ import Interfaces
 import P2PSocket
 
 public final class BrowsingUserRepository: BrowsingUserRepositoryInterface {
+	public typealias BrowsingUserSocketProvidable = SocketBrowsable & SocketAdvertiseable & SocketInvitable
+	
 	private var cancellables: Set<AnyCancellable> = []
-	private let socketProvider: SocketProvidable
+	private let socketProvider: BrowsingUserSocketProvidable
 	public let updatedBrowsingUser = PassthroughSubject<BrowsedUser, Never>()
 	public let updatedInvitedUser = PassthroughSubject<InvitedUser, Never>()
 	public let invitationReceived = PassthroughSubject<BrowsedUser, Never>()
     public let receivedEvent = PassthroughSubject<OpeningEvent, Never>()
 
-	public init(socketProvider: SocketProvidable) {
+	public init(socketProvider: BrowsingUserSocketProvidable) {
 		self.socketProvider = socketProvider
 		
 		bind()
@@ -30,7 +32,7 @@ public final class BrowsingUserRepository: BrowsingUserRepositoryInterface {
 public extension BrowsingUserRepository {
 	func fetchBrowsingUsers() -> [BrowsedUser] {
 		return socketProvider.browsingPeers()
-			.compactMap { mappingToBrowsingUser($0) }
+			.compactMap { DataMapper.mappingToBrowsingUser($0) }
 	}
 	
 	func inviteUser(with id: String, timeout: Double) {
@@ -64,22 +66,22 @@ public extension BrowsingUserRepository {
 private extension BrowsingUserRepository {
 	func bind() {
 		socketProvider.updatedPeer
-			.compactMap { [weak self] peer in
-				self?.mappingToBrowsingUser(peer)
+			.compactMap { peer in
+				DataMapper.mappingToBrowsingUser(peer)
 			}
 			.subscribe(updatedBrowsingUser)
 			.store(in: &cancellables)
 		
 		socketProvider.updatedPeer
-			.compactMap { [weak self] peer in
-				self?.mappingToInvitedUser(peer)
+			.compactMap { peer in
+				DataMapper.mappingToInvitedUser(peer)
 			}
 			.subscribe(updatedInvitedUser)
 			.store(in: &cancellables)
 		
 		socketProvider.invitationReceived
-			.compactMap { [weak self] peer in
-				self?.mappingToBrowsingUser(peer)
+			.compactMap { peer in
+				DataMapper.mappingToBrowsingUser(peer)
 			}
 			.subscribe(invitationReceived)
 			.store(in: &cancellables)
@@ -90,25 +92,5 @@ private extension BrowsingUserRepository {
             }.sink { [weak self] event in
                 self?.receivedEvent.send(event)
             }.store(in: &cancellables)
-	}
-	
-	func mappingToBrowsingUser(_ peer: SocketPeer) -> BrowsedUser? {
-		switch peer.state {
-			case .found:
-				return .init(id: peer.id, state: .found, name: peer.name)
-			case .lost:
-				return .init(id: peer.id, state: .lost, name: peer.name)
-			default: return nil
-		}
-	}
-	
-	func mappingToInvitedUser(_ peer: SocketPeer) -> InvitedUser? {
-		switch peer.state {
-			case .connected:
-				return .init(id: peer.id, state: .accept, name: peer.name)
-			case .disconnected:
-				return .init(id: peer.id, state: .reject, name: peer.name)
-			default: return nil
-		}
 	}
 }

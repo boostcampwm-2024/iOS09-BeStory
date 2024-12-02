@@ -9,9 +9,9 @@ import Foundation
 
 public struct SharedVideo {
     public let localUrl: URL
-    public let author: String
+	public let author: ConnectedUser
     
-    public init(localUrl: URL, author: String) {
+    public init(localUrl: URL, author: ConnectedUser) {
         self.localUrl = localUrl
         self.author = author
     }

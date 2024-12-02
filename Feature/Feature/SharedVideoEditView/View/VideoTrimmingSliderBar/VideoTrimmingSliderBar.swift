@@ -17,7 +17,6 @@ protocol VideoTrimmingSliderBarDelegate: AnyObject {
 
 final class VideoTrimmingSliderBar: UIControl {
 	enum Constants {
-		// TODO: - 이거 네이밍 수정
 		static let thumbWidth: CGFloat = 16
 		static let imageFramePadding: CGFloat = 5
 		static let seekThumbWidth: CGFloat = 10
