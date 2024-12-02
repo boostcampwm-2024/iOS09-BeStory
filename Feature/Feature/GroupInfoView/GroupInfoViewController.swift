@@ -68,7 +68,7 @@ private extension GroupInfoViewController {
         view.addSubview(participantScrollView)
         view.addSubview(exitButton)
       
-        exitButton.isEnabled = false
+//        exitButton.isEnabled = false
         participantScrollView.addSubview(participantStackView)
     }
     
@@ -122,7 +122,7 @@ private extension GroupInfoViewController {
         buttonConfig.cornerStyle = .large
         exitButton.configuration = buttonConfig
         
-        let buttonAction = UIAction { [weak self] action in
+        let buttonAction = UIAction { [weak self] _ in
             self?.input.send(.exitGroupButtonDidTab)
         }
         exitButton.addAction(buttonAction, for: .primaryActionTriggered)
