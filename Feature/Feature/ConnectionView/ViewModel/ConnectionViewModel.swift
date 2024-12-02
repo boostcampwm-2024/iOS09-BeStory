@@ -72,6 +72,8 @@ extension ConnectionViewModel {
                 removeCurrentPosition(id: user.id)
             case .rejectInvitation:
                 usecase.rejectInvitation()
+            case .nextButtonDidTapped:
+                usecase.noticeOpening()
             }
         }
         .store(in: &cancellables)
@@ -136,6 +138,13 @@ private extension ConnectionViewModel {
 
                 output.send(.invitationTimeout)
                 usecase.rejectInvitation()
+            }
+            .store(in: &cancellables)
+        
+        usecase.openingEvent
+            .sink { [weak self] in
+                guard let self else { return }
+                output.send(.openSharedVideoList)
             }
             .store(in: &cancellables)
     }

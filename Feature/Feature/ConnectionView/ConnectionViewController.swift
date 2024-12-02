@@ -124,6 +124,8 @@ extension ConnectionViewController {
                     present(UIAlertController(
                         type: .invitationTimeout,
                         actions: [.confirm(), .cancel()]), animated: true)
+                case .openSharedVideoList:
+                    openVideoList()
                 }
             }
             .store(in: &cancellables)
@@ -152,10 +154,7 @@ private extension ConnectionViewController {
     }
 
     func nextButtonDidTapped() {
-        let videoListViewController = VideoListViewController(
-            viewModel: DIContainer.shared.resolve(type: MultipeerVideoListViewModel.self)
-        )
-        self.navigationController?.pushViewController(videoListViewController, animated: true)
+        input.send(.nextButtonDidTapped)
     }
 }
 
@@ -205,6 +204,14 @@ private extension ConnectionViewController {
 
     func resetCurrentUserId() {
         currentUserId = nil
+    }
+    
+    func openVideoList() {
+        let videoListViewController = VideoListViewController(
+            viewModel: DIContainer.shared.resolve(type: MultipeerVideoListViewModel.self)
+        )
+        guard navigationController?.viewControllers.last === self else { return }
+        self.navigationController?.pushViewController(videoListViewController, animated: true)
     }
 }
 

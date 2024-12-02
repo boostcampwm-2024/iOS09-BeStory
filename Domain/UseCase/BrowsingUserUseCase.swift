@@ -24,6 +24,7 @@ public final class BrowsingUserUseCase: BrowsingUserUseCaseInterface {
 	public let invitationResult = PassthroughSubject<InvitedUser, Never>()
 	public let invitationReceived = PassthroughSubject<BrowsedUser, Never>()
 	public let invitationDidFired = PassthroughSubject<Void, Never>()
+    public var openingEvent = PassthroughSubject<Void, Never>()
 	
 	public init(repository: BrowsingUserRepositoryInterface, invitationTimeout: Double = 30.0) {
 		self.repository = repository
@@ -57,6 +58,11 @@ public extension BrowsingUserUseCase {
 		repository.startReceiveInvitation()
 		repository.rejectInvitation()
 	}
+    
+    func noticeOpening() {
+        repository.notice(event: OpeningEvent.sharedContainer)
+        openingEvent.send()
+    }
 }
 
 // MARK: - Private Methods
@@ -79,6 +85,12 @@ private extension BrowsingUserUseCase {
 				self?.invitationDidReceive(from: user)
 			}
 			.store(in: &cancellables)
+        repository.receivedEvent
+            .sink { [weak self] event in
+                guard event == .sharedContainer else { return }
+                self?.openingEvent.send()
+            }
+            .store(in: &cancellables)
 	}
 	
 	func receivedBrowsedUser(_ user: BrowsedUser) {

@@ -20,6 +20,7 @@ enum ConnectionViewInput {
 
     case acceptInvitation(user: BrowsedUser)
     case rejectInvitation
+    case nextButtonDidTapped
 }
 
 // MARK: - Output
@@ -36,4 +37,5 @@ enum ConnectionViewOutput {
     case invitationAcceptedBy(user: BrowsedUser)
     case invitationRejectedBy(name: String)
     case invitationTimeout
+    case openSharedVideoList
 }
