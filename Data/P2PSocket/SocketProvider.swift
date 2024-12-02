@@ -322,9 +322,4 @@ private extension SocketProvider {
 		
 		return .init(id: id, name: name, state: state)
 	}
-	
-	/// 자신의 `SocketPeer`를 리턴합니다.
-	func socketPeer() -> SocketPeer {
-		.init(id: "0", name: peerID.displayName, state: .connected)
-	}
 }
