@@ -122,7 +122,6 @@
 			membershipExceptions = (
 				BrowsingUserUseCase.swift,
 				ConnectedUserUseCase.swift,
-				OpenSharedContainerUseCase.swift,
 				VideoUseCase.swift,
 			);
 			target = FE6EF3C62CD8B5CA005DC39D /* UseCase */;

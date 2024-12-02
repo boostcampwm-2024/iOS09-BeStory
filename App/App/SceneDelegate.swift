@@ -71,12 +71,6 @@ extension SceneDelegate {
                 socketProvider: DIContainer.shared.resolve(type: SocketProvidable.self)
             )
         )
-        DIContainer.shared.register(
-            type: NoticedEventRepositoryInterface.self,
-            instance: NoticedEventRepository(
-                socketProvider: DIContainer.shared.resolve(type: SocketProvidable.self)
-                )
-            )
     }
 
     func registerUseCase() {
@@ -98,23 +92,13 @@ extension SceneDelegate {
             type: VideoUseCaseInterface.self,
             instance: VideoUseCase(
                 repository: DIContainer.shared.resolve(type: SharingVideoRepositoryInterface.self)))
-        
-        DIContainer.shared.register(
-            type: OpenSharedContainerUseCaseInterface.self,
-            instance: OpenSharedContainerUseCase(
-                repository: DIContainer.shared.resolve(type: NoticedEventRepositoryInterface.self)))
     }
 
     func registerViewModel() {
         DIContainer.shared.register(
             type: ConnectionViewModel.self,
             instance: ConnectionViewModel(
-                browsingUserUseCase: DIContainer.shared.resolve(
-                    type: BrowsingUserUseCaseInterface.self
-                ),
-                openSharedContainerUseCase: DIContainer.shared.resolve(
-                    type: OpenSharedContainerUseCaseInterface.self
-                )
+                usecase: DIContainer.shared.resolve(type: BrowsingUserUseCaseInterface.self)
             )
         )
 

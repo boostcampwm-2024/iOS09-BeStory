@@ -18,8 +18,7 @@ final public class ConnectionViewModel {
 
     // MARK: - Properties
 
-    private let browsingUserUseCase: BrowsingUserUseCaseInterface
-    private let openSharedContainerUseCase: OpenSharedContainerUseCaseInterface
+    private let usecase: BrowsingUserUseCaseInterface
     private var output = PassthroughSubject<Output, Never>()
     private var cancellables: Set<AnyCancellable> = []
 
@@ -30,10 +29,8 @@ final public class ConnectionViewModel {
 
     // MARK: - Initializer
 
-    public init(browsingUserUseCase: BrowsingUserUseCaseInterface,
-                openSharedContainerUseCase: OpenSharedContainerUseCaseInterface) {
-        self.browsingUserUseCase = browsingUserUseCase
-        self.openSharedContainerUseCase = openSharedContainerUseCase
+    public init(usecase: BrowsingUserUseCaseInterface) {
+        self.usecase = usecase
         setupBind()
     }
 
@@ -64,19 +61,19 @@ extension ConnectionViewModel {
             // Connection Input
 
             case .fetchUsers:
-                browsingUserUseCase.fetchBrowsedUsers().forEach({ self.found(user: $0) })
+                usecase.fetchBrowsedUsers().forEach({ self.found(user: $0) })
             case .inviteUser(let id):
-                browsingUserUseCase.inviteUser(with: id)
+                usecase.inviteUser(with: id)
 
             // Invitation Input
 
             case .acceptInvitation(let user):
-                browsingUserUseCase.acceptInvitation()
+                usecase.acceptInvitation()
                 removeCurrentPosition(id: user.id)
             case .rejectInvitation:
-                browsingUserUseCase.rejectInvitation()
+                usecase.rejectInvitation()
             case .nextButtonDidTapped:
-                openSharedContainerUseCase.noticeOpening()
+                usecase.noticeOpening()
             }
         }
         .store(in: &cancellables)
@@ -91,7 +88,7 @@ private extension ConnectionViewModel {
     func setupBind() {
         // Broswed User (found, lost)
 
-        browsingUserUseCase.browsedUser
+        usecase.browsedUser
             .sink { [weak self] updatedUser in
                 guard let self else { return }
 
@@ -106,7 +103,7 @@ private extension ConnectionViewModel {
 
         // Invitation Received (From Who)
 
-        browsingUserUseCase.invitationReceived
+        usecase.invitationReceived
             .sink { [weak self] invitingUser in
                 guard let self else { return }
                 output.send(.invitationReceivedBy(user: invitingUser))
@@ -115,7 +112,7 @@ private extension ConnectionViewModel {
 
         // Invitation Result (when I invite other users)
 
-        browsingUserUseCase.invitationResult
+        usecase.invitationResult
             .sink { [weak self] invitedUser in
                 guard let self else { return }
 
@@ -135,16 +132,16 @@ private extension ConnectionViewModel {
 
         // Invitaion Fired Due to Timeout (invited user receive)
 
-        browsingUserUseCase.invitationDidFired
+        usecase.invitationDidFired
             .sink { [weak self] in
                 guard let self else { return }
 
                 output.send(.invitationTimeout)
-                browsingUserUseCase.rejectInvitation()
+                usecase.rejectInvitation()
             }
             .store(in: &cancellables)
         
-        openSharedContainerUseCase.openEvent
+        usecase.openingEvent
             .sink { [weak self] in
                 guard let self else { return }
                 output.send(.openSharedVideoList)

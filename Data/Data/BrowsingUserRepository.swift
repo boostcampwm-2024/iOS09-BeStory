@@ -7,6 +7,7 @@
 
 import Combine
 import Entity
+import Foundation
 import Interfaces
 import P2PSocket
 
@@ -16,6 +17,7 @@ public final class BrowsingUserRepository: BrowsingUserRepositoryInterface {
 	public let updatedBrowsingUser = PassthroughSubject<BrowsedUser, Never>()
 	public let updatedInvitedUser = PassthroughSubject<InvitedUser, Never>()
 	public let invitationReceived = PassthroughSubject<BrowsedUser, Never>()
+    public let receivedEvent = PassthroughSubject<OpeningEvent, Never>()
 
 	public init(socketProvider: SocketProvidable) {
 		self.socketProvider = socketProvider
@@ -50,6 +52,12 @@ public extension BrowsingUserRepository {
 	func stopReceiveInvitation() {
 		socketProvider.stopReceiveInvitation()
 	}
+    
+    func notice(event: OpeningEvent) {
+        let event = OpeningEvent.sharedContainer
+        guard let eventData = try? JSONEncoder().encode(event) else { return }
+        socketProvider.sendAll(data: eventData)
+    }
 }
 
 // MARK: - Private Methods
@@ -75,6 +83,13 @@ private extension BrowsingUserRepository {
 			}
 			.subscribe(invitationReceived)
 			.store(in: &cancellables)
+        
+        socketProvider.dataShared
+            .compactMap { (data, _) in
+                try? JSONDecoder().decode(OpeningEvent.self, from: data)
+            }.sink { [weak self] event in
+                self?.receivedEvent.send(event)
+            }.store(in: &cancellables)
 	}
 	
 	func mappingToBrowsingUser(_ peer: SocketPeer) -> BrowsedUser? {
