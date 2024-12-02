@@ -21,7 +21,34 @@ public final class SharedVideoEditViewModel {
     }
     
     func transform(_ input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
-        input.sink { _ in
+        input.sink(with: self) { owner, input in
+            switch input {
+            // 테스트 셋업으로 초기화합니다.
+            case .setInitialState:
+                let initialItems = [
+                    VideoTimelineItem(
+                        thumbnailImage: Data(),
+                        duration: "0:0"
+                    ),
+                    VideoTimelineItem(
+                        thumbnailImage: Data(),
+                        duration: "10:0"
+                    ),
+                    VideoTimelineItem(
+                        thumbnailImage: Data(),
+                        duration: "20:0"
+                    ),
+                    VideoTimelineItem(
+                        thumbnailImage: Data(),
+                        duration: "30:0"
+                    ),
+                    VideoTimelineItem(
+                        thumbnailImage: Data(),
+                        duration: "40:0"
+                    )
+                ]
+                owner.output.send(.timeLineDidChanged(items: initialItems))
+            }
         }
         .store(in: &cancellables)
 
