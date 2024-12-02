@@ -7,4 +7,6 @@
 
 import Foundation
 
-enum SharedVideoEditViewInput { }
+enum SharedVideoEditViewInput {
+    case initialize
+}

@@ -15,13 +15,43 @@ public final class SharedVideoEditViewModel {
     
     private var output = PassthroughSubject<Output, Never>()
     private var cancellables: Set<AnyCancellable> = []
+    
+    var items: [VideoTimelineItem] = []
 
     public init() {
         setupBind()
     }
     
     func transform(_ input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
-        input.sink { _ in
+        input.sink { [weak self] input in
+            guard let self else { return }
+            switch input {
+            case .initialize:
+                let initialItems = [
+                    VideoTimelineItem(
+                        thumbnailImage: Data(),
+                        duration: "0:0"
+                    ),
+                    VideoTimelineItem(
+                        thumbnailImage: Data(),
+                        duration: "10:0"
+                    ),
+                    VideoTimelineItem(
+                        thumbnailImage: Data(),
+                        duration: "20:0"
+                    ),
+                    VideoTimelineItem(
+                        thumbnailImage: Data(),
+                        duration: "30:0"
+                    ),
+                    VideoTimelineItem(
+                        thumbnailImage: Data(),
+                        duration: "40:0"
+                    )
+                ]
+                self.items = initialItems
+                output.send(.timeLineDidChanged(items: initialItems))
+            }
         }
         .store(in: &cancellables)
 
