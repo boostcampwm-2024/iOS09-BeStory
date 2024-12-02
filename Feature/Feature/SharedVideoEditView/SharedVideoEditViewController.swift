@@ -183,6 +183,8 @@ private extension SharedVideoEditViewController {
         let dataSource = setupDataSource()
         self.videoTimelineDataSource = dataSource
         videoTimelineCollectionView.dataSource = dataSource
+        videoTimelineCollectionView.dragDelegate = self
+        videoTimelineCollectionView.dragInteractionEnabled = true
 
         videoTimelineCollectionView.register(
             VideoTimelineCollectionViewCell.self,
@@ -354,3 +356,16 @@ private extension SharedVideoEditViewController {
 }
 
 // MARK: - UICollectionViewDelegate
+
+extension SharedVideoEditViewController: UICollectionViewDragDelegate {
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        itemsForBeginning session: any UIDragSession,
+        at indexPath: IndexPath
+    ) -> [UIDragItem] {
+        guard let item = videoTimelineDataSource.itemIdentifier(for: indexPath),
+              let jsonString = item.toJSONString() else { return [] }
+        let itemProvider = NSItemProvider(object: jsonString as NSString)
+        return [UIDragItem(itemProvider: itemProvider)]
+    }
+}
