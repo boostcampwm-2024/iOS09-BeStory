@@ -19,6 +19,7 @@ final public class ConnectionViewModel {
     // MARK: - Properties
 
     private let browsingUserUseCase: BrowsingUserUseCaseInterface
+    private let openSharedContainerUseCase: OpenSharedContainerUseCaseInterface
     private var output = PassthroughSubject<Output, Never>()
     private var cancellables: Set<AnyCancellable> = []
 
@@ -32,6 +33,7 @@ final public class ConnectionViewModel {
     public init(browsingUserUseCase: BrowsingUserUseCaseInterface,
                 openSharedContainerUseCase: OpenSharedContainerUseCaseInterface) {
         self.browsingUserUseCase = browsingUserUseCase
+        self.openSharedContainerUseCase = openSharedContainerUseCase
         setupBind()
     }
 
@@ -74,7 +76,7 @@ extension ConnectionViewModel {
             case .rejectInvitation:
                 browsingUserUseCase.rejectInvitation()
             case .nextButtonDidTapped:
-                output.send(.openSharedVideoList)
+                openSharedContainerUseCase.noticeOpening()
             }
         }
         .store(in: &cancellables)
@@ -139,6 +141,13 @@ private extension ConnectionViewModel {
 
                 output.send(.invitationTimeout)
                 browsingUserUseCase.rejectInvitation()
+            }
+            .store(in: &cancellables)
+        
+        openSharedContainerUseCase.openEvent
+            .sink { [weak self] in
+                guard let self else { return }
+                output.send(.openSharedVideoList)
             }
             .store(in: &cancellables)
     }
