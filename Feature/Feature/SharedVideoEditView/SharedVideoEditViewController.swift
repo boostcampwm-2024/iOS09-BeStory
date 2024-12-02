@@ -392,20 +392,25 @@ extension SharedVideoEditViewController: UICollectionViewDropDelegate {
         performDropWith coordinator: any UICollectionViewDropCoordinator
     ) {
         guard let destinationIndexPath = coordinator.destinationIndexPath else { return }
+        var snapshot = videoTimelineDataSource.snapshot()
+        
+        let draggedItems: [VideoTimelineItem] = coordinator.items.compactMap { item in
+            if let sourceIndexPath = item.sourceIndexPath {
+                return snapshot.itemIdentifiers[sourceIndexPath.item]
+            }
+            return nil
+        }
+        
+        snapshot.deleteItems(draggedItems)
+        let targetIndex = destinationIndexPath.item
+        let currentItems = snapshot.itemIdentifiers
+        var updatedItems = currentItems
+        updatedItems.insert(contentsOf: draggedItems, at: targetIndex)
+        
+        applySnapShot(with: updatedItems)
         
         coordinator.items.forEach { item in
-            if let sourceIndexPath = item.sourceIndexPath {
-                collectionView.performBatchUpdates({
-                    var items = viewModel.items
-                    let movedItem = items.remove(at: sourceIndexPath.item)
-                    items.insert(movedItem, at: destinationIndexPath.item)
-                    viewModel.items = items
-                })
-                
-                reload(with: viewModel.items)
-                
-                coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
-            }
+            coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
         }
     }
 }
