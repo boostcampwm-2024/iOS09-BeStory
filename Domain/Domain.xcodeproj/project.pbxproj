@@ -17,26 +17,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		FE820B6E2CF00D5300307694 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FEF7793F2CDC936900FFE089;
-			remoteInfo = Entity;
-		};
 		FE820B722CF00D5300307694 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = FEF778DB2CDB21B500FFE089;
 			remoteInfo = Interfaces;
-		};
-		FE820B772CF00D5E00307694 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FE6EF3032CD8B015005DC39D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FEF7793F2CDC936900FFE089;
-			remoteInfo = Entity;
 		};
 		FE820B7C2CF00D6800307694 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -123,7 +109,6 @@
 				BrowsingUserUseCase.swift,
 				ConnectedUserUseCase.swift,
 				VideoUseCase.swift,
-
 			);
 			target = FE6EF3C62CD8B5CA005DC39D /* UseCase */;
 		};
@@ -283,7 +268,6 @@
 			);
 			dependencies = (
 				FEF7796C2CDCB32800FFE089 /* PBXTargetDependency */,
-				FE820B782CF00D5E00307694 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				FEF778DD2CDB21B500FFE089 /* Interfaces */,
@@ -332,7 +316,6 @@
 				FEC7C1C42CE7449C002D5C0F /* PBXTargetDependency */,
 				FEC7C1C62CE7449C002D5C0F /* PBXTargetDependency */,
 				FEF779872CDCB44E00FFE089 /* PBXTargetDependency */,
-				FE820B6F2CF00D5300307694 /* PBXTargetDependency */,
 				FE820B732CF00D5300307694 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
@@ -488,20 +471,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		FE820B6F2CF00D5300307694 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FEF7793F2CDC936900FFE089 /* Entity */;
-			targetProxy = FE820B6E2CF00D5300307694 /* PBXContainerItemProxy */;
-		};
 		FE820B732CF00D5300307694 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FEF778DB2CDB21B500FFE089 /* Interfaces */;
 			targetProxy = FE820B722CF00D5300307694 /* PBXContainerItemProxy */;
-		};
-		FE820B782CF00D5E00307694 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FEF7793F2CDC936900FFE089 /* Entity */;
-			targetProxy = FE820B772CF00D5E00307694 /* PBXContainerItemProxy */;
 		};
 		FE820B7D2CF00D6800307694 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
