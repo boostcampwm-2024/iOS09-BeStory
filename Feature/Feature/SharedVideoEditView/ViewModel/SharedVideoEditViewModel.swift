@@ -27,6 +27,8 @@ public final class SharedVideoEditViewModel {
             guard let self else { return }
             switch input {
             case .initialize:
+            // 테스트 셋업으로 초기화합니다.
+            case .setInitialState:
                 let initialItems = [
                     VideoTimelineItem(
                         thumbnailImage: Data(),

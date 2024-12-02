@@ -8,5 +8,5 @@
 import Foundation
 
 enum SharedVideoEditViewInput {
-    case initialize
+    case setInitialState
 }
