@@ -21,8 +21,7 @@ public final class SharedVideoEditViewModel {
     }
     
     func transform(_ input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
-        input.sink { [weak self] input in
-            guard let self else { return }
+        input.sink(with: self) { owner, input in
             switch input {
             // 테스트 셋업으로 초기화합니다.
             case .setInitialState:
@@ -48,7 +47,7 @@ public final class SharedVideoEditViewModel {
                         duration: "40:0"
                     )
                 ]
-                output.send(.timeLineDidChanged(items: initialItems))
+                owner.output.send(.timeLineDidChanged(items: initialItems))
             }
         }
         .store(in: &cancellables)
