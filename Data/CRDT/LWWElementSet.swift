@@ -109,18 +109,14 @@ private extension LWWElementSet {
     }
     
     func add(element: T, remoteClock: VectorClock) {
-        if let clock = additions[element],
-              remoteClock <= clock
-        { return }
+        if let clock = additions[element], remoteClock <= clock { return }
         
         additions.removeValue(forKey: element)
         additions.updateValue(remoteClock, forKey: element)
     }
     
     func remove(element: T, remoteClock: VectorClock) {
-        if let clock = removals[element],
-              remoteClock <= clock
-        { return }
+        if let clock = removals[element], remoteClock <= clock { return }
         
         removals.removeValue(forKey: element)
         removals.updateValue(remoteClock, forKey: element)
@@ -172,7 +168,7 @@ extension LWWElementSetState: Codable {
         case id, vectorClock, additions, removals
     }
     
-    public init(from decoder: Decoder) throws{
+    public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         id = try values.decode(Int.self, forKey: .id)
         vectorClock = try values.decode(VectorClock.self, forKey: .vectorClock)
