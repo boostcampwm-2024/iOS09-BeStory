@@ -9,7 +9,7 @@ import Combine
 import Core
 import MultipeerConnectivity
 
-public final class SocketProvider: NSObject, SocketProvidable {
+public final class SocketProvider: NSObject {
 	fileprivate enum Constant {
 		static let serviceType = "bestory"
 	}
@@ -17,9 +17,9 @@ public final class SocketProvider: NSObject, SocketProvidable {
 	// MARK: - Properties
 	public let updatedPeer = PassthroughSubject<SocketPeer, Never>()
 	public let invitationReceived = PassthroughSubject<SocketPeer, Never>()
-    public let resourceShared = PassthroughSubject<SharedResource, Never>()
-    public let dataShared = PassthroughSubject<(Data, String), Never>()
-    
+	public let resourceShared = PassthroughSubject<SharedResource, Never>()
+	public let dataShared = PassthroughSubject<(Data, SocketPeer), Never>()
+	
 	private var isAllowedInvitation: Bool = true
 	private var invitationHandler: ((Bool, MCSession?) -> Void)?
 	
@@ -27,9 +27,7 @@ public final class SocketProvider: NSObject, SocketProvidable {
 	private let browser: MCNearbyServiceBrowser
 	private let advertiser: MCNearbyServiceAdvertiser
 	private let session: MCSession
-    private var sharingTasks = [Task<(), Never>]()
-    private var sharedResources = [SharedResource]()
-    
+	
 	// MARK: - Initializers
 	public override init() {
 		self.browser = .init(peer: peerID, serviceType: Constant.serviceType)
@@ -49,42 +47,23 @@ public final class SocketProvider: NSObject, SocketProvidable {
 	deinit {
 		stopBrowsing()
 		stopAdvertising()
-        sharingTasks.forEach {
-            $0.cancel()
-        }
 	}
 }
 
-// MARK: - Public Methods
-public extension SocketProvider {
-	func startAdvertising() {
+// MARK: - SocketInvitable
+extension SocketProvider: SocketAdvertiseable {
+	public func startAdvertising() {
 		advertiser.startAdvertisingPeer()
 	}
 	
-	func stopAdvertising() {
+	public func stopAdvertising() {
 		advertiser.stopAdvertisingPeer()
 	}
-	
-	func startBrowsing() {
-		browser.startBrowsingForPeers()
-	}
-	
-	func stopBrowsing() {
-		browser.stopBrowsingForPeers()
-	}
-	
-	func connectedPeers() -> [SocketPeer] {
-		return MCPeerIDStorage.shared
-			.peerIDByIdentifier
-			.filter { $0.value.state == .connected }
-			.map {
-				let name = $0.value.id.displayName
-				let id = $0.key
-				return SocketPeer(id: id, name: name, state: .connected)
-			}
-	}
-	
-	func browsingPeers() -> [SocketPeer] {
+}
+
+// MARK: - SocketBrowsable
+extension SocketProvider: SocketBrowsable {
+	public func browsingPeers() -> [SocketPeer] {
 		return MCPeerIDStorage.shared
 			.peerIDByIdentifier
 			.filter { $0.value.state == .found }
@@ -95,7 +74,29 @@ public extension SocketProvider {
 			}
 	}
 	
-	func invite(peer id: String, timeout: Double) {
+	public func connectedPeers() -> [SocketPeer] {
+		return MCPeerIDStorage.shared
+			.peerIDByIdentifier
+			.filter { $0.value.state == .connected || $0.value.state == .pending }
+			.map {
+				let name = $0.value.id.displayName
+				let id = $0.key
+				return SocketPeer(id: id, name: name, state: .connected)
+			}
+	}
+	
+	public func startBrowsing() {
+		browser.startBrowsingForPeers()
+	}
+	
+	public func stopBrowsing() {
+		browser.stopBrowsingForPeers()
+	}
+}
+
+// MARK: - SocketInvitable
+extension SocketProvider: SocketInvitable {
+	public func invite(peer id: String, timeout: Double) {
 		guard let peer = MCPeerIDStorage.shared.peerIDByIdentifier[id] else { return }
 		
 		browser.invitePeer(
@@ -106,109 +107,72 @@ public extension SocketProvider {
 		)
 	}
 	
-	func startReceiveInvitation() {
+	public func startReceiveInvitation() {
 		isAllowedInvitation = true
 	}
 	
-	func stopReceiveInvitation() {
+	public func stopReceiveInvitation() {
 		isAllowedInvitation = false
 	}
 	
-	func acceptInvitation() {
+	public func acceptInvitation() {
 		invitationHandler?(true, session)
 		
 		invitationHandler = nil
 	}
 	
-	func rejectInvitation() {
+	public func rejectInvitation() {
 		invitationHandler?(false, session)
 		
 		invitationHandler = nil
 	}
-    
-    func disconnectAllUser() {
-        session.connectedPeers.forEach { peerID in
-            session.cancelConnectPeer(peerID)
-        }
-    }
-    
-    func send(data: Data, to peerID: String) {
-        guard let mcPeerID = MCPeerIDStorage.shared.peerIDByIdentifier[peerID]?.id else { return }
-        try? session.send(data, toPeers: [mcPeerID], with: .reliable)
-    }
-    
-    func sendAll(data: Data) {
-        try? session.send(data, toPeers: session.connectedPeers, with: .reliable)
-    }
-    
-    func sendResource(
-        url localURL: URL,
-        resourceName: String,
-        to peerID: String) async {
-        let uuid = UUID()
-        let nameWithUUID = [resourceName, uuid.uuidString].joined(separator: "/")
-        guard let mcPeerID = MCPeerIDStorage.shared.peerIDByIdentifier[peerID]?.id else { return }
-        
-        session.sendResource(at: localURL,
-                             withName: nameWithUUID,
-                             toPeer: mcPeerID)
-    }
-	  
-    func sendResourceToAll(url localUrl: URL, resourceName: String) async throws {
-            let uuid = UUID()
-            let nameWithUUID = [resourceName, uuid.uuidString].joined(separator: "/")
-            
-            let recievers = session.connectedPeers
-            recievers.forEach { peer in
-                session.sendResource(at: localUrl, withName: nameWithUUID, toPeer: peer)
-            }
-        let sharedResource = SharedResource(
-            localUrl: localUrl,
-            name: resourceName,
-            uuid: uuid,
-            sender: session.myPeerID.displayName
-        )
-        resourceShared.send(sharedResource)
-        
-        /// 이 부분에서 continuation leak이 나는 것 같습니다.
-        /// 리소스를 공유한 뒤 최종적으로 동기화를 시키기 때문에
-        /// 현재는 주석 처리 해두었습니다.
-//        return try await withCheckedThrowingContinuation { resourceUrlContinuation in
-//            let recieverCount = recievers.count
-//            let counter = Counter(targetCount: recieverCount)
-            
-//            let sharedResource = SharedResource(
-//                localUrl: localUrl,
-//                name: resourceName,
-//                uuid: uuid,
-//                sender: session.myPeerID.displayName
-//            )
-//            
-//            let handler = continuedCountableResouceHandler(
-//                counter: counter,
-//                sharedResource: sharedResource,
-//                continuation: resourceUrlContinuation
-//            )
-//            
-//            recievers.forEach { peer in
-//                let progress = session.sendResource(
-//                    at: localUrl,
-//                    withName: nameWithUUID,
-//                    toPeer: peer,
-//                    withCompletionHandler: handler
-//                )
-//                
-//                guard progress == nil else { return }
-//                
-//                let error = ShareResourceError.peerFailedDownload(id: peerID.displayName)
-//                resourceUrlContinuation.resume(throwing: error)
-//            }
-//        }
-    }
-    
-    func sharedAllResources() -> [SharedResource] {
-        return sharedResources
-    }
+}
+
+// MARK: - SocketDisconnectable
+extension SocketProvider: SocketDisconnectable {
+	// TODO: - 이거 가능한지 확인해볼 것
+	public func disconnect() {
+		session.disconnect()
+	}
+}
+
+// MARK: - SocketResourceSendable
+extension SocketProvider: SocketResourceSendable {
+	public func sendResource(
+		url localURL: URL,
+		resourceName: String,
+		to peerID: String
+	) {
+		guard let mcPeerID = MCPeerIDStorage.shared.peerIDByIdentifier[peerID]?.id else { return }
+		
+		session.sendResource(
+			at: localURL,
+			withName: resourceName,
+			toPeer: mcPeerID
+		)
+	}
+	
+	public func broadcastResource(url localUrl: URL, resourceName: String) {
+		session.connectedPeers.forEach { peer in
+			session.sendResource(
+				at: localUrl,
+				withName: resourceName,
+				toPeer: peer
+			)
+		}
+	}
+}
+
+// MARK: - SocketDataSendable
+extension SocketProvider: SocketDataSendable {
+	public func send(data: Data, to peerID: String) {
+		guard let mcPeerID = MCPeerIDStorage.shared.peerIDByIdentifier[peerID]?.id else { return }
+		try? session.send(data, toPeers: [mcPeerID], with: .reliable)
+	}
+	
+	public func broadcast(data: Data) {
+		try? session.send(data, toPeers: session.connectedPeers, with: .reliable)
+	}
 }
 
 // MARK: - MCSessionDelegate
@@ -218,13 +182,13 @@ extension SocketProvider: MCSessionDelegate {
 		peer peerID: MCPeerID,
 		didChange state: MCSessionState
 	) {
-        guard let socketPeer = mapToSocketPeer(peerID) else { return }
-
+		guard let socketPeer = mapToSocketPeer(peerID) else { return }
+		
 		var willRemovedAtStorage: Bool = false
-
+		
 		switch state {
 			case .connected:
-				MCPeerIDStorage.shared.update(state: .connected, id: peerID) 
+				MCPeerIDStorage.shared.update(state: .connected, id: peerID)
 			case .notConnected:
 				willRemovedAtStorage = socketPeer.state == .connected
 				MCPeerIDStorage.shared.update(state: .disconnected, id: peerID)
@@ -245,10 +209,33 @@ extension SocketProvider: MCSessionDelegate {
 		didReceive data: Data,
 		fromPeer peerID: MCPeerID
 	) {
-        guard let peerID = MCPeerIDStorage.shared.findPeer(for: peerID)?.key else { return }
-        
-        dataShared.send((data, peerID))
-    }
+		guard let socketPeer = mapToSocketPeer(peerID) else { return }
+		
+		dataShared.send((data, socketPeer))
+	}
+	
+	public func session(
+		_ session: MCSession,
+		didFinishReceivingResourceWithName resourceName: String,
+		fromPeer peerID: MCPeerID,
+		at localURL: URL?,
+		withError error: (any Error)?
+	) {
+		let fileSystemManager = FileSystemManager.shared
+		guard
+			let localURL,
+			let url = fileSystemManager.copyToFileSystem(tempURL: localURL, resourceName: resourceName),
+			let socketPeer = mapToSocketPeer(peerID)
+		else { return }
+		
+		let resource = SharedResource(
+			url: url,
+			name: resourceName,
+			sender: socketPeer
+		)
+
+		resourceShared.send(resource)
+	}
 	
 	public func session(
 		_ session: MCSession,
@@ -263,29 +250,6 @@ extension SocketProvider: MCSessionDelegate {
 		fromPeer peerID: MCPeerID,
 		with progress: Progress
 	) { }
-	
-	public func session(
-		_ session: MCSession,
-		didFinishReceivingResourceWithName resourceName: String,
-		fromPeer peerID: MCPeerID,
-		at localURL: URL?,
-		withError error: (any Error)?
-	) {
-        let fileSystemManager = FileSystemManager.shared
-        guard let localURL,
-              let (resourceName, uuid) = ResourceValidator.extractInformation(name: resourceName),
-              let url = fileSystemManager.copyToFileSystem(tempURL: localURL, resourceName: resourceName)
-        else { return }
-        
-        let resource = SharedResource(
-            localUrl: url,
-            name: resourceName,
-            uuid: uuid,
-            sender: peerID.displayName
-        )
-        sharedResources.append(resource)
-        resourceShared.send(resource)
-    }
 }
 
 // MARK: - MCNearbyServiceBrowserDelegate
@@ -359,26 +323,9 @@ private extension SocketProvider {
 		
 		return .init(id: id, name: name, state: state)
 	}
-    
-    func continuedCountableResouceHandler(
-        counter: Counter,
-        sharedResource resource: SharedResource,
-        continuation: CheckedContinuation<SharedResource, any Error>
-    ) -> ((any Error)?) -> Void {
-        return { [weak self] error in
-            let task = Task {
-                if let error {
-                    return continuation.resume(throwing: error)
-                }
-                await counter.increaseNumber()
-                if await counter.didReachedTargetNumber() {
-                    self?.sharedResources.append(resource)
-                    self?.resourceShared.send(resource)
-                    
-                    return continuation.resume(returning: resource)
-                }
-            }
-            self?.sharingTasks.append(task)
-        }
-    }
+	
+	/// 자신의 `SocketPeer`를 리턴합니다.
+	func socketPeer() -> SocketPeer {
+		.init(id: "0", name: peerID.displayName, state: .connected)
+	}
 }
