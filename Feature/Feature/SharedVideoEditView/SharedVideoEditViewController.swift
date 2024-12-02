@@ -184,6 +184,7 @@ private extension SharedVideoEditViewController {
         self.videoTimelineDataSource = dataSource
         videoTimelineCollectionView.dataSource = dataSource
         videoTimelineCollectionView.dragDelegate = self
+        videoTimelineCollectionView.dropDelegate = self
         videoTimelineCollectionView.dragInteractionEnabled = true
 
         videoTimelineCollectionView.register(
@@ -367,5 +368,44 @@ extension SharedVideoEditViewController: UICollectionViewDragDelegate {
               let jsonString = item.toJSONString() else { return [] }
         let itemProvider = NSItemProvider(object: jsonString as NSString)
         return [UIDragItem(itemProvider: itemProvider)]
+    }
+}
+
+extension SharedVideoEditViewController: UICollectionViewDropDelegate {
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        canHandle session: any UIDropSession
+    ) -> Bool {
+        return session.canLoadObjects(ofClass: NSString.self)
+    }
+    
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        dropSessionDidUpdate session: any UIDropSession,
+        withDestinationIndexPath destinationIndexPath: IndexPath?
+    ) -> UICollectionViewDropProposal {
+        return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+    }
+    
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        performDropWith coordinator: any UICollectionViewDropCoordinator
+    ) {
+        guard let destinationIndexPath = coordinator.destinationIndexPath else { return }
+        
+        coordinator.items.forEach { item in
+            if let sourceIndexPath = item.sourceIndexPath {
+                collectionView.performBatchUpdates({
+                    var items = viewModel.items
+                    let movedItem = items.remove(at: sourceIndexPath.item)
+                    items.insert(movedItem, at: destinationIndexPath.item)
+                    viewModel.items = items
+                })
+                
+                reload(with: viewModel.items)
+                
+                coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
+            }
+        }
     }
 }
