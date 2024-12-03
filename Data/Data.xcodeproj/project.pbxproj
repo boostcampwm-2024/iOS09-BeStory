@@ -76,6 +76,10 @@
 				BrowsingUserRepository.swift,
 				ConnectedUserRepository.swift,
 				DataMapper/DataMapper.swift,
+				DTO/EditingType.swift,
+				DTO/EditVideoElement.swift,
+				DTO/EditVideoRequestDTO.swift,
+				EditVideoRepository.swift,
 				SharingVideoRepository.swift,
 			);
 			target = FED968292CD9094300CD445C /* Data */;
