@@ -8,15 +8,15 @@
 import Foundation
 
 struct VectorClock {
-    var clock = [Int: Int]()
+    var clock = [String: Int]()
     
     init(replicaCount: Int) {
-        clock = (0..<replicaCount).reduce(into: [Int: Int]()) { clock, replicaId in
-            clock[replicaId] = 0
+        clock = (0..<replicaCount).reduce(into: [String: Int]()) { clock, replicaId in
+            clock["\(replicaId)"] = 0
         }
     }
     
-    subscript(replicaId replica: Int) -> Int {
+    subscript(replicaId replica: String) -> Int {
         get {
             return clock[replica, default: 0]
         }
@@ -32,7 +32,7 @@ extension VectorClock {
     /// upstream 레플리카가 전송한 시계가 하기 두 사항을 만족해야 병합 가능
     /// - upstream의 레플리카에 대한 count - 1 == downstream의 벡터시계 중 해당 레플리카에 대한 count
     /// - upstream의 나머지 레플리카에 대한 count  <= downstream의 벡터 시계 중 나머지 레플리카에 대한 count
-    func isPaasable(to vectorClock: VectorClock, replicaId replica: Int) -> Bool {
+    func isPaasable(to vectorClock: VectorClock, replicaId replica: String) -> Bool {
         guard self[replicaId: replica] == vectorClock.clock[replica]! - 1 else { return false }
         
         for (replicaId, remoteCount) in vectorClock.clock {
@@ -46,7 +46,7 @@ extension VectorClock {
     
     /// 레플리카ID에 대한 시계눈금을 1만큼 증가
     @discardableResult
-    mutating func increase(replicaId: Int) -> VectorClock {
+    mutating func increase(replicaId: String) -> VectorClock {
         clock[replicaId, default: 0] += 1
         return self
     }

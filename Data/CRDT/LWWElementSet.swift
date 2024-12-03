@@ -8,7 +8,7 @@
 import Combine
 
 public actor LWWElementSet<T: Codable & Hashable> {
-    private let id: Int
+    private let id: String
     private var vectorClock: VectorClock
     
     private var additions: [T: VectorClock] = [:]
@@ -17,13 +17,13 @@ public actor LWWElementSet<T: Codable & Hashable> {
     
     public let updatedElements = PassthroughSubject<[T], Never>()
     
-    public init(id: Int, peerCount: Int) {
+    public init(id: String, peerCount: Int) {
         self.id = id
         vectorClock = VectorClock(replicaCount: peerCount)
     }
     
     fileprivate init(
-        id: Int,
+        id: String,
         clock: VectorClock,
         additions: [T: VectorClock],
         removals: [T: VectorClock]
@@ -133,14 +133,14 @@ private extension LWWElementSet {
 }
 
 public struct LWWElementSetState <T: Codable & Hashable> {
-    fileprivate let id: Int
+    fileprivate let id: String
     fileprivate var vectorClock: VectorClock
     
     fileprivate var additions: [T: VectorClock] = [:]
     fileprivate var removals: [T: VectorClock] = [:]
     
     fileprivate init(
-        id: Int,
+        id: String,
         clock: VectorClock,
         additions: [T: VectorClock],
         removals: [T: VectorClock]
@@ -170,7 +170,7 @@ extension LWWElementSetState: Codable {
     
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        id = try values.decode(Int.self, forKey: .id)
+        id = try values.decode(String.self, forKey: .id)
         vectorClock = try values.decode(VectorClock.self, forKey: .vectorClock)
         additions = try values.decode([T: VectorClock].self, forKey: .additions)
         removals = try values.decode([T: VectorClock].self, forKey: .removals)
