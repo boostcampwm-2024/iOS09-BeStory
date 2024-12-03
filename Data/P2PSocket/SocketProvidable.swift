@@ -13,12 +13,12 @@ public typealias SocketProvidable =
 SocketAdvertiseable & SocketBrowsable & SocketInvitable & SocketDisconnectable & SocketResourceSendable & SocketDataSendable
 // swiftlint:enable line_length
 
-public protocol SocketAdvertiseable {
+public protocol SocketAdvertiseable: SocketIdentifiable {
     func startAdvertising()
     func stopAdvertising()
 }
 
-public protocol SocketBrowsable {
+public protocol SocketBrowsable: SocketIdentifiable {
     var updatedPeer: PassthroughSubject<SocketPeer, Never> { get }
     /// Browsing된 Peer를 리턴합니다.
     func browsingPeers() -> [SocketPeer]
@@ -29,7 +29,7 @@ public protocol SocketBrowsable {
     func stopBrowsing()
 }
 
-public protocol SocketInvitable {
+public protocol SocketInvitable: SocketIdentifiable {
     var invitationReceived: PassthroughSubject<SocketPeer, Never> { get }
     
     /// 유저를 초대합니다.
@@ -42,11 +42,11 @@ public protocol SocketInvitable {
     func stopReceiveInvitation()
 }
 
-public protocol SocketDisconnectable {
+public protocol SocketDisconnectable: SocketIdentifiable {
     func disconnect()
 }
 
-public protocol SocketResourceSendable {
+public protocol SocketResourceSendable: SocketIdentifiable {
     var resourceShared: PassthroughSubject<SharedResource, Never> { get }
     
     func unicastResource(
@@ -58,9 +58,13 @@ public protocol SocketResourceSendable {
     func broadcastResource(url: URL, resourceName: String)
 }
 
-public protocol SocketDataSendable {
+public protocol SocketDataSendable: SocketIdentifiable {
     var dataShared: PassthroughSubject<(Data, SocketPeer), Never> { get }
     
     func unicast(data: Data, to peerID: String)
     func broadcast(data: Data)
+}
+
+public protocol SocketIdentifiable {
+    var displayName: String { get }
 }

@@ -15,6 +15,7 @@ public final class SocketProvider: NSObject {
     }
     
     // MARK: - Properties
+    public var displayName: String { peerID.displayName }
     public let updatedPeer = PassthroughSubject<SocketPeer, Never>()
     public let invitationReceived = PassthroughSubject<SocketPeer, Never>()
     public let resourceShared = PassthroughSubject<SharedResource, Never>()
@@ -22,7 +23,6 @@ public final class SocketProvider: NSObject {
     
     private var isAllowedInvitation: Bool = true
     private var invitationHandler: ((Bool, MCSession?) -> Void)?
-    
     private let peerID = MCPeerID(displayName: UIDevice.current.name)
     private let browser: MCNearbyServiceBrowser
     private let advertiser: MCNearbyServiceAdvertiser
