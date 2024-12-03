@@ -11,47 +11,74 @@ import Entity
 import Foundation
 import Interfaces
 
-public final class VideoUseCase: VideoUseCaseInterface {
+public final class VideoUseCase {
 	private var cancellables: Set<AnyCancellable> = []
 	private var sharedVideos: [SharedVideo] = []
-	private let repository: SharingVideoRepositoryInterface
-	
+	private let sharingVideoRepository: SharingVideoRepositoryInterface
+    private let editVideoRepository: EditVideoRepositoryInterface
+
 	public let updatedVideo = PassthroughSubject<SharedVideo, Never>()
 	public let isSynchronized = PassthroughSubject<Void, Never>()
+    
+    public let updatedTrimmingVideo = PassthroughSubject<[Video], Never>()
+    public let updatedReArrangingVideo = PassthroughSubject<[Video], Never>()
 	
-	public init(repository: SharingVideoRepositoryInterface) {
-		self.repository = repository
+    public init(
+        sharingVideoRepository: SharingVideoRepositoryInterface,
+        editVideoRepository: EditVideoRepositoryInterface
+    ) {
+		self.sharingVideoRepository = sharingVideoRepository
+        self.editVideoRepository = editVideoRepository
 		bind()
 	}
 }
 
-// MARK: - Public Methods
-public extension VideoUseCase {
-	func fetchVideos() -> [SharedVideo] {
+// MARK: - VideoUseCaseInterface
+extension VideoUseCase: VideoUseCaseInterface {    
+    public func fetchVideos() -> [SharedVideo] {
 		return sharedVideos.sorted { $0.localUrl.path < $1.localUrl.path }
 	}
 	
-	func shareVideo(_ url: URL, resourceName: String) {
-		repository.shareVideo(url: url, resourceName: resourceName)
+	public func shareVideo(_ url: URL, resourceName: String) {
+		sharingVideoRepository.shareVideo(url: url, resourceName: resourceName)
 	}
 	
-	func synchronizeVideos() {
-		repository.broadcastHashes()
+	public func synchronizeVideos() {
+		sharingVideoRepository.broadcastHashes()
 	}
+}
+
+// MARK: - EditVideoUseCase
+extension VideoUseCase: EditVideoUseCaseInterface {
+    public func trimmingVideo(_ video: Video) {
+        editVideoRepository.trimmingVideo(video)
+    }
+    
+    public func reArrangingVideo(_ video: Video) {
+        editVideoRepository.reArrangingVideo(video)
+    }
 }
 
 // MARK: - Private Methods
 private extension VideoUseCase {
 	func bind() {
-		repository.updatedSharedVideo
+		sharingVideoRepository.updatedSharedVideo
 			.sink(with: self) { owner, video in
 				owner.sharedVideos.append(video)
 				owner.updatedVideo.send(video)
 			}
 			.store(in: &cancellables)
 		
-		repository.isSynchronized
+		sharingVideoRepository.isSynchronized
 			.subscribe(isSynchronized)
 			.store(in: &cancellables)
+        
+        editVideoRepository.trimmingVideo
+            .subscribe(updatedTrimmingVideo)
+            .store(in: &cancellables)
+        
+        editVideoRepository.reArrangingVideo
+            .subscribe(updatedReArrangingVideo)
+            .store(in: &cancellables)
 	}
 }
