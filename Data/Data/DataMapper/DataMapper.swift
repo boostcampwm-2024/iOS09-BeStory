@@ -43,8 +43,6 @@ enum DataMapper {
 	}
 	
 	static func mappingToSharedVideo(_ resource: SharedResource) -> SharedVideo? {
-		guard let connectedUser = DataMapper.mappingToConnectedUser(resource.sender) else { return nil }
-		
-		return .init(localUrl: resource.url, author: connectedUser)
+        return .init(localUrl: resource.url, author: resource.owner)
 	}
 }
