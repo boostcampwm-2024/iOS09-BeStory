@@ -20,8 +20,6 @@ public protocol BrowsingUserUseCaseInterface {
     /// 공유 컨테이너로 화면 전환을 알리는 이벤트를 방출합니다.
     var openingEvent: PassthroughSubject<Void, Never> { get }
 	
-	init(repository: BrowsingUserRepositoryInterface, invitationTimeout: Double)
-	
 	func fetchBrowsedUsers() -> [BrowsedUser]
 	func inviteUser(with id: String)
 	func acceptInvitation()

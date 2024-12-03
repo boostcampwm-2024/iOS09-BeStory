@@ -13,8 +13,6 @@ public protocol VideoUseCaseInterface {
     var updatedVideo: PassthroughSubject<SharedVideo, Never> { get }
     var isSynchronized: PassthroughSubject<Void, Never> { get }
     
-    init(repository: SharingVideoRepositoryInterface)
-    
     func fetchVideos() -> [SharedVideo]
     func shareVideo(_ url: URL, resourceName: String)
     func synchronizeVideos()
