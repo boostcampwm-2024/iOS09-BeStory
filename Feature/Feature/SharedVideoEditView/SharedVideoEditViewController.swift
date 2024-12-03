@@ -7,6 +7,7 @@
 
 import Combine
 import Core
+import Entity
 import SnapKit
 import UIKit
 
@@ -84,6 +85,8 @@ private extension SharedVideoEditViewController {
                 switch output {
                 case .timelineDidChanged(let items):
                     owner.reload(with: items)
+                case .sliderDidChanged(let item):
+                    owner.videoTrimmingSliderBar.configure(with: item)
                 }
             })
             .store(in: &cancellables)
@@ -393,6 +396,7 @@ extension SharedVideoEditViewController: UICollectionViewDelegate {
     ) {
         guard let selectedItem = videoTimelineDataSource.itemIdentifier(for: indexPath) else { return }
         videoPlayerView.replaceVideo(url: selectedItem.url)
+        input.send(.setCurrentVideo(url: selectedItem.url))
     }
 }
 

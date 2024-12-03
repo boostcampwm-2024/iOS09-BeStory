@@ -20,9 +20,11 @@ public final class SharedVideoEditViewModel {
 
     private var videoItems: [Video] = []
     private var videoTimelineItems: [VideoTimelineItem] = []
-//    private let usecase: EditUseCaseInterface
+    private var currentVideo: Video?
+    private let usecase: EditVideoUseCaseInterface
 
-    public init() {
+    public init(usecase: EditVideoUseCaseInterface) {
+        self.usecase = usecase
         self.setupBind()
     }
 }
@@ -32,45 +34,25 @@ extension SharedVideoEditViewModel {
     func transform(_ input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink(with: self) { owner, input in
             switch input {
-            // 테스트 셋업으로 초기화합니다.
             case .setInitialState:
-                let videos = [
-                    Video(
-                        url: URL(string: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")!,
-                        duration: 5,
-                        author: "test1",
-                        editor: ConnectedUser(id: "a", state: .connected, name: "a"),
-                        startTime: 0,
-                        endTime: 5
-                    ),
-                    Video(
-                        url: URL(string: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")!,
-                        duration: 10,
-                        author: "test2",
-                        editor: ConnectedUser(id: "a", state: .connected, name: "a"),
-                        startTime: 0,
-                        endTime: 10
-                    ),
-                    Video(
-                        url: URL(string: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4")!,
-                        duration: 20,
-                        author: "test3",
-                        editor: ConnectedUser(id: "a", state: .connected, name: "a"),
-                        startTime: 0,
-                        endTime: 20
-                    )
-                ]
-                
+                let sharedVideos = owner.usecase.fetchVideos()
+
                 Task {
-                    for video in videos {
-                        let asset = AVAsset(url: video.url)
-                        await self.appendVideoTimelineItem(with: video.url, asset: asset)
+                    for sharedVideo in sharedVideos {
+                        let asset = AVAsset(url: sharedVideo.localUrl)
+                        await self.appendVideoTimelineItem(with: sharedVideo.localUrl, asset: asset)
+                        guard let duration = await asset.totalSeconds else { return }
+
+                        let video = Video(
+                            url: sharedVideo.localUrl,
+                            name: asset.title ?? "",
+                            index: owner.videoItems.count,
+                            author: sharedVideo.author,
+                            duration: Double(duration)
+                        )
+                        owner.videoItems.append(video)
                     }
                 }
-
-//                owner.output.send(.timelineDidChanged(items: self.videoTimelineItems))
-            }
-        }
         .store(in: &cancellables)
 
         return output.eraseToAnyPublisher()
@@ -84,6 +66,30 @@ private extension SharedVideoEditViewModel {
 
 // MARK: - Private Methods for Slider
 private extension SharedVideoEditViewModel {
+    func setCurrentVideo(url: URL) {
+        guard let currentVideo = videoItems.first(where: { $0.url == url }) else { return }
+        self.currentVideo = currentVideo
+        guard let index = videoItems.firstIndex(where: { $0.url == url }) else { return }
+
+        Task {
+            let asset = AVAsset(url: currentVideo.url)
+            guard let frameImage = await frameImage(
+                from: asset,
+                frameCount: Int(currentVideo.duration)
+            ) else { return }
+
+            let item = VideoPresentationModel(
+                url: currentVideo.url,
+                index: index,
+                duration: currentVideo.duration,
+                startTime: currentVideo.startTime,
+                endTime: currentVideo.endTime,
+                frameImage: frameImage
+            )
+
+            output.send(.sliderDidChanged(item: item))
+        }
+    }
 	/// `frameCount` 만큼의  frame Image들을 단일 frameImage로 리턴해줍니다.
 	func frameImage(from video: AVAsset, frameCount: Int) async -> UIImageWrapper? {
 		guard let cmTimeDuration = try? await video.load(.duration) else { return nil }

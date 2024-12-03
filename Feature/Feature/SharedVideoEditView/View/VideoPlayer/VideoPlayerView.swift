@@ -56,15 +56,25 @@ extension VideoPlayerView {
         let videoItem = AVPlayerItem(asset: video)
         replaceVideo(playerItem: videoItem)
     }
-    
+
     func replaceVideo(url: URL) {
         let videoItem = AVPlayerItem(url: url)
         replaceVideo(playerItem: videoItem)
     }
-    
+
     func replaceVideo(playerItem: AVPlayerItem) {
         player.pause()
         player.replaceCurrentItem(with: playerItem)
+    }
+
+    func updateVideoTime(with value: Double) {
+        let time = CMTime(seconds: value, preferredTimescale: 600)
+        guard let playerDuration = self.player.currentItem?.duration else { return }
+        let currentTime = CMTimeGetSeconds(time)
+        let duration = CMTimeGetSeconds(playerDuration)
+        let progress = Float(currentTime / duration)
+        self.seekingSlider.value = progress * 100
+        self.updateVideoTime(to: self.seekingSlider.value)
     }
 }
 
