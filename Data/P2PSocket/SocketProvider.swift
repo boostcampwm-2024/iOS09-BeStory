@@ -143,18 +143,31 @@ extension SocketProvider: SocketResourceSendable {
         to peerID: String
     ) {
         guard let mcPeerID = MCPeerIDStorage.shared.peerIDByIdentifier[peerID]?.id else { return }
+        var url = localURL
+        
+        if url.author().isEmpty {
+            url = localURL.append(author: self.peerID.displayName)
+        }
         
         session.sendResource(
-            at: localURL,
+            at: url,
             withName: resourceName,
             toPeer: mcPeerID
         )
     }
     
-    public func broadcastResource(url localUrl: URL, resourceName: String) {
+    public func broadcastResource(url localURL: URL, resourceName: String) {
+        var url = localURL
+        
+        if url.author().isEmpty {
+            url = localURL.append(author: self.peerID.displayName)
+        }
+        print(url)
+        print(url.author())
+        
         session.connectedPeers.forEach { peer in
             session.sendResource(
-                at: localUrl,
+                at: url,
                 withName: resourceName,
                 toPeer: peer
             )
@@ -230,6 +243,7 @@ extension SocketProvider: MCSessionDelegate {
         let resource = SharedResource(
             url: url,
             name: resourceName,
+            owner: url.author(),
             sender: socketPeer
         )
         
