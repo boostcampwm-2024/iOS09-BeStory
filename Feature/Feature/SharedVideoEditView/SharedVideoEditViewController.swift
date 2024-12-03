@@ -342,16 +342,16 @@ extension SharedVideoEditViewController: VideoTrimmingSliderBarDelegate {
 // MARK: - Private Methods
 private extension SharedVideoEditViewController {
 	func presentCancelAlertViewController() {
-		let yesAction = UIAlertController.ActionType.custom(title: "네", style: .default) { [weak self] in
-			self?.mode = .default
-		}
-		let cancelAction = UIAlertController.ActionType.custom(title: "아니오", style: .destructive, handler: nil)
-		let alertMessage = "편집을 취소하게 되면, 편집된 내용은 삭제됩니다. 그래도 취소하시겠습니까?"
-		let alertController = UIAlertController(
-			type: .custom(title: "Cancel Editing", message: alertMessage),
-			actions: [cancelAction, yesAction]
-		)
-		present(alertController, animated: true)
+        present(UIAlertController(
+            type: .custom(
+                title: "Cancel Editing",
+                message: "편집을 취소하게 되면, 편집된 내용은 삭제됩니다. 그래도 취소하시겠습니까?"),
+            actions: [
+                .confirm(handler: { [weak self] in
+                    self?.mode = .default
+                }),
+                .cancel()]
+        ), animated: true)
 	}
 }
 
@@ -399,7 +399,7 @@ extension SharedVideoEditViewController: UICollectionViewDropDelegate {
             }
             return nil
         }
-        
+
         snapshot.deleteItems(draggedItems)
         let targetIndex = destinationIndexPath.item
         let currentItems = snapshot.itemIdentifiers
