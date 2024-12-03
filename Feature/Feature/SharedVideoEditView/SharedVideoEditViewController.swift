@@ -101,14 +101,14 @@ private extension SharedVideoEditViewController {
 		
 		editSaveButton.bs.tap
 			.sink(with: self) { owner, _ in
-				// TODO: - ViewModel로 저장 정보 전송
+                owner.input.send(.editSaveButtonDidTapped)
 				owner.mode = .default
 			}
 			.store(in: &cancellables)
 		
 		editCancelButton.bs.tap
 			.sink(with: self) { owner, _ in
-				// TODO: - ViewModel로 저장 정보 전송
+                owner.input.send(.editCancelButtonDidTapped)
 				owner.presentCancelAlertViewController()
 			}
 			.store(in: &cancellables)
@@ -146,7 +146,7 @@ private extension SharedVideoEditViewController {
             alpha: 1
         )
         static let spacing: CGFloat = 10
-        static let topMargin: CGFloat = 14
+        static let topMargin: CGFloat = 22
         static let height: CGFloat = 120
         static let itemSize: CGSize = .init(width: 160, height: 90)
     }
@@ -171,6 +171,7 @@ private extension SharedVideoEditViewController {
 		setupEditSaveButton()
 		setupEditCancelButton()
         setupVideoTimelineCollectionView()
+        setupVideoTrimmingSliderBar()
         setupNextButton()
     }
 	
@@ -204,6 +205,10 @@ private extension SharedVideoEditViewController {
             VideoTimelineCollectionViewCell.self,
             forCellWithReuseIdentifier: VideoTimelineCollectionViewCell.reuseIdentifier
         )
+    }
+
+    func setupVideoTrimmingSliderBar() {
+        videoTrimmingSliderBar.delegate = self
     }
 
     func setupNextButton() {
@@ -364,11 +369,17 @@ private extension SharedVideoEditViewController {
 
 // MARK: - VideoTrimmingSliderBarDelegate
 extension SharedVideoEditViewController: VideoTrimmingSliderBarDelegate {
-	func lowerValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double) { }
+	func lowerValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double) {
+        input.send(.lowerValueDidChanged(value: value))
+    }
 	
-	func upperValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double) { }
+	func upperValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double) {
+        input.send(.upperValueDidChanged(value: value))
+    }
 	
-	func playerValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double) { }
+    func playerValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double) {
+        videoPlayerView.updateVideoTime(with: value)
+    }
 }
 
 // MARK: - Private Methods

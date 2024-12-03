@@ -53,6 +53,24 @@ extension SharedVideoEditViewModel {
                         owner.videoItems.append(video)
                     }
                 }
+            case .setCurrentVideo(let url):
+                owner.setCurrentVideo(url: url)
+            case .lowerValueDidChanged(let value):
+                owner.currentVideo?.startTime = value
+                owner.setCurrentVideo()
+            case .upperValueDidChanged(let value):
+                owner.currentVideo?.endTime = value
+                owner.setCurrentVideo()
+            case .editSaveButtonDidTapped:
+                guard let currentVideo = owner.currentVideo else { return }
+                guard let index = owner.videoItems.firstIndex(where: { $0.url == currentVideo.url }) else { return }
+                owner.videoItems[index] = currentVideo
+                owner.usecase.trimmingVideo(currentVideo)
+            case .editCancelButtonDidTapped:
+                guard let currentVideo = owner.currentVideo else { return }
+                owner.currentVideo = owner.videoItems.first(where: { $0.url == currentVideo.url })
+            }
+        }
         .store(in: &cancellables)
 
         return output.eraseToAnyPublisher()
@@ -61,7 +79,22 @@ extension SharedVideoEditViewModel {
 
 // MARK: - Binding
 private extension SharedVideoEditViewModel {
-    func setupBind() { }
+    func setupBind() {
+        usecase.updatedReArrangingVideo
+            .sink(with: self) { owner, video in
+            }
+            .store(in: &cancellables)
+
+        usecase.updatedTrimmingVideo
+            .sink(with: self) { owner, videos in
+                owner.videoItems = videos
+                if videos.contains(where: { $0.url == owner.currentVideo?.url }) {
+                    guard let url = owner.currentVideo?.url else { return }
+                    owner.setCurrentVideo(url: url)
+                }
+            }
+            .store(in: &cancellables)
+    }
 }
 
 // MARK: - Private Methods for Slider
@@ -90,6 +123,30 @@ private extension SharedVideoEditViewModel {
             output.send(.sliderDidChanged(item: item))
         }
     }
+
+    func setCurrentVideo() {
+        guard let currentVideo = currentVideo else { return }
+
+        Task {
+            let asset = AVAsset(url: currentVideo.url)
+            guard let frameImage = await frameImage(
+                from: asset,
+                frameCount: Int(currentVideo.duration)
+            ) else { return }
+
+            let item = VideoPresentationModel(
+                url: currentVideo.url,
+                index: currentVideo.index,
+                duration: currentVideo.duration,
+                startTime: currentVideo.startTime,
+                endTime: currentVideo.endTime,
+                frameImage: frameImage
+            )
+
+            output.send(.sliderDidChanged(item: item))
+        }
+    }
+
 	/// `frameCount` 만큼의  frame Image들을 단일 frameImage로 리턴해줍니다.
 	func frameImage(from video: AVAsset, frameCount: Int) async -> UIImageWrapper? {
 		guard let cmTimeDuration = try? await video.load(.duration) else { return nil }
