@@ -10,57 +10,57 @@ import Foundation
 
 // swiftlint:disable line_length
 public typealias SocketProvidable =
-	SocketAdvertiseable & SocketBrowsable & SocketInvitable & SocketDisconnectable & SocketResourceSendable & SocketDataSendable
+SocketAdvertiseable & SocketBrowsable & SocketInvitable & SocketDisconnectable & SocketResourceSendable & SocketDataSendable
 // swiftlint:enable line_length
 
 public protocol SocketAdvertiseable {
-	func startAdvertising()
-	func stopAdvertising()
+    func startAdvertising()
+    func stopAdvertising()
 }
 
 public protocol SocketBrowsable {
-	var updatedPeer: PassthroughSubject<SocketPeer, Never> { get }
-	/// Browsing된 Peer를 리턴합니다.
-	func browsingPeers() -> [SocketPeer]
-	/// Session에 연결된 Peer를 리턴합니다.
-	func connectedPeers() -> [SocketPeer]
-	
-	func startBrowsing()
-	func stopBrowsing()
+    var updatedPeer: PassthroughSubject<SocketPeer, Never> { get }
+    /// Browsing된 Peer를 리턴합니다.
+    func browsingPeers() -> [SocketPeer]
+    /// Session에 연결된 Peer를 리턴합니다.
+    func connectedPeers() -> [SocketPeer]
+    
+    func startBrowsing()
+    func stopBrowsing()
 }
 
 public protocol SocketInvitable {
-	var invitationReceived: PassthroughSubject<SocketPeer, Never> { get }
-
-	/// 유저를 초대합니다.
-	func invite(peer id: String, timeout: Double)
-	
-	func acceptInvitation()
-	func rejectInvitation()
-	
-	func startReceiveInvitation()
-	func stopReceiveInvitation()
+    var invitationReceived: PassthroughSubject<SocketPeer, Never> { get }
+    
+    /// 유저를 초대합니다.
+    func invite(peer id: String, timeout: Double)
+    
+    func acceptInvitation()
+    func rejectInvitation()
+    
+    func startReceiveInvitation()
+    func stopReceiveInvitation()
 }
 
 public protocol SocketDisconnectable {
-	func disconnect()
+    func disconnect()
 }
 
 public protocol SocketResourceSendable {
-	var resourceShared: PassthroughSubject<SharedResource, Never> { get }
-	
-	func unicastResource(
-		url localURL: URL,
-		resourceName: String,
-		to peerID: String
-	)
-	/// 연결된 모든 Peer들에게 리소스를 전송합니다.
-	func broadcastResource(url: URL, resourceName: String)
+    var resourceShared: PassthroughSubject<SharedResource, Never> { get }
+    
+    func unicastResource(
+        url localURL: URL,
+        resourceName: String,
+        to peerID: String
+    )
+    /// 연결된 모든 Peer들에게 리소스를 전송합니다.
+    func broadcastResource(url: URL, resourceName: String)
 }
 
 public protocol SocketDataSendable {
-	var dataShared: PassthroughSubject<(Data, SocketPeer), Never> { get }
-	
-	func unicast(data: Data, to peerID: String)
-	func broadcast(data: Data)
+    var dataShared: PassthroughSubject<(Data, SocketPeer), Never> { get }
+    
+    func unicast(data: Data, to peerID: String)
+    func broadcast(data: Data)
 }
