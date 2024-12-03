@@ -57,8 +57,8 @@ public final class SharedVideoEditViewController: UIViewController {
 
 		setupUI()
         setupViewBinding()
-
-        loadInitialData()
+        
+        input.send(.setInitialState)
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -79,7 +79,12 @@ private extension SharedVideoEditViewController {
 
         output
             .receive(on: DispatchQueue.main)
-            .sink { _ in }
+            .sink(with: self, onReceive: { (owner, output) in
+                switch output {
+                case .timeLineDidChanged(let items):
+                    owner.reload(with: items)
+                }
+            })
             .store(in: &cancellables)
     }
 	
@@ -177,6 +182,9 @@ private extension SharedVideoEditViewController {
         let dataSource = setupDataSource()
         self.videoTimelineDataSource = dataSource
         videoTimelineCollectionView.dataSource = dataSource
+        videoTimelineCollectionView.dragDelegate = self
+        videoTimelineCollectionView.dropDelegate = self
+        videoTimelineCollectionView.dragInteractionEnabled = true
 
         videoTimelineCollectionView.register(
             VideoTimelineCollectionViewCell.self,
@@ -320,34 +328,6 @@ private extension SharedVideoEditViewController {
     func reload(with videos: [VideoTimelineItem]) {
         applySnapShot(with: videos)
     }
-
-    // TEST 용 메서드 입니다.
-    func loadInitialData() {
-        let items = [
-            VideoTimelineItem(
-                thumbnailImage: Data(),
-                duration: "0:0"
-            ),
-            VideoTimelineItem(
-                thumbnailImage: Data(),
-                duration: "10:0"
-            ),
-            VideoTimelineItem(
-                thumbnailImage: Data(),
-                duration: "20:0"
-            ),
-            VideoTimelineItem(
-                thumbnailImage: Data(),
-                duration: "30:0"
-            ),
-            VideoTimelineItem(
-                thumbnailImage: Data(),
-                duration: "40:0"
-            )
-        ]
-
-        applySnapShot(with: items)
-    }
 }
 
 // MARK: - VideoTrimmingSliderBarDelegate
@@ -376,3 +356,60 @@ private extension SharedVideoEditViewController {
 }
 
 // MARK: - UICollectionViewDelegate
+
+extension SharedVideoEditViewController: UICollectionViewDragDelegate {
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        itemsForBeginning session: any UIDragSession,
+        at indexPath: IndexPath
+    ) -> [UIDragItem] {
+        guard let item = videoTimelineDataSource.itemIdentifier(for: indexPath),
+              let jsonString = item.toJSONString() else { return [] }
+        let itemProvider = NSItemProvider(object: jsonString as NSString)
+        return [UIDragItem(itemProvider: itemProvider)]
+    }
+}
+
+extension SharedVideoEditViewController: UICollectionViewDropDelegate {
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        canHandle session: any UIDropSession
+    ) -> Bool {
+        return session.canLoadObjects(ofClass: NSString.self)
+    }
+    
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        dropSessionDidUpdate session: any UIDropSession,
+        withDestinationIndexPath destinationIndexPath: IndexPath?
+    ) -> UICollectionViewDropProposal {
+        return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+    }
+    
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        performDropWith coordinator: any UICollectionViewDropCoordinator
+    ) {
+        guard let destinationIndexPath = coordinator.destinationIndexPath else { return }
+        var snapshot = videoTimelineDataSource.snapshot()
+        
+        let draggedItems: [VideoTimelineItem] = coordinator.items.compactMap { item in
+            if let sourceIndexPath = item.sourceIndexPath {
+                return snapshot.itemIdentifiers[sourceIndexPath.item]
+            }
+            return nil
+        }
+        
+        snapshot.deleteItems(draggedItems)
+        let targetIndex = destinationIndexPath.item
+        let currentItems = snapshot.itemIdentifiers
+        var updatedItems = currentItems
+        updatedItems.insert(contentsOf: draggedItems, at: targetIndex)
+        
+        applySnapShot(with: updatedItems)
+        
+        coordinator.items.forEach { item in
+            coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
+        }
+    }
+}

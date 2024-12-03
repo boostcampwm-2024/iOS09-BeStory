@@ -7,4 +7,6 @@
 
 import Foundation
 
-enum SharedVideoEditViewOutput { }
+enum SharedVideoEditViewOutput {
+    case timeLineDidChanged(items: [VideoTimelineItem])
+}
