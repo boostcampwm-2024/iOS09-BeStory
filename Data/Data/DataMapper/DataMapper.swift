@@ -5,8 +5,9 @@
 //  Created by jung on 12/2/24.
 //
 
-import P2PSocket
+import Core
 import Entity
+import P2PSocket
 
 enum DataMapper {
 	static func mappingToBrowsingUser(_ peer: SocketPeer) -> BrowsedUser? {
@@ -45,4 +46,81 @@ enum DataMapper {
 	static func mappingToSharedVideo(_ resource: SharedResource) -> SharedVideo? {
         return .init(localUrl: resource.url, author: resource.owner)
 	}
+
+    static func mappingToEditVideoElement(
+        _ video: Video,
+        editor: String,
+        editingType: EditingType
+    ) -> EditVideoElement {
+        let user = User(id: "-1", name: editor, state: .connected)
+        
+        return .init(
+            editingType: editingType,
+            url: video.url,
+            name: video.name,
+            index: video.index,
+            editor: user,
+            author: video.author,
+            duration: video.duration,
+            startTime: video.startTime,
+            endTime: video.endTime
+        )
+    }
+    
+    static func mappingToEditVideoElement(_ dto: EditVideoDTO, from peer: SocketPeer) -> EditVideoElement? {
+        guard
+            let user = DataMapper.mappingToUser(peer),
+            let url = FileSystemManager.shared.mappingToLocalURL(url: dto.url, resourceName: dto.name)
+        else { return nil }
+        
+        return .init(
+            editingType: dto.editingType,
+            url: url,
+            name: dto.name,
+            index: dto.index,
+            editor: user,
+            author: dto.author,
+            duration: dto.duration,
+            startTime: dto.startTime,
+            endTime: dto.endTime
+        )
+    }
+    
+    static func mappingToVideo(_ element: EditVideoElement) -> Video {
+        let user = DataMapper.mappingToConnectedUser(element.editor)
+        
+        return .init(
+            url: element.url,
+            name: element.name,
+            index: element.index,
+            duration: element.duration,
+            author: element.author,
+            editor: user,
+            startTime: element.startTime,
+            endTime: element.endTime
+        )
+    }
+    
+    static func mappingToConnectedUser(_ user: User) -> ConnectedUser {
+        switch user.state {
+            case .connected:
+                return .init(id: user.id, state: .connected, name: user.name)
+            case .disconnected:
+                return .init(id: user.id, state: .disconnected, name: user.name)
+            case .pending:
+                return .init(id: user.id, state: .pending, name: user.name)
+        }
+    }
+    
+    static func mappingToUser(_ peer: SocketPeer) -> User? {
+        switch peer.state {
+            case .connected:
+                return .init(id: peer.id, name: peer.name, state: .connected)
+            case .disconnected:
+                return .init(id: peer.id, name: peer.name, state: .disconnected)
+            case .pending:
+                return .init(id: peer.id, name: peer.name, state: .pending)
+            default: return nil
+        }
+    }
 }
