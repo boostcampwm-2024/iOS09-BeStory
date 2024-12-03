@@ -37,7 +37,8 @@ public final class SharedVideoEditViewController: UIViewController {
 	private let middleContainerView = UIView()
 	private let optionButtonStackView = OptionButtonStackView()
 	private let videoTrimmingSliderBar = VideoTrimmingSliderBar()
-	
+    private var nextButton = UIButton(type: .system)
+
 	private var videoTimelineDataSource: VideoTimelineDataSource!
 	
     // MARK: - Initializer
@@ -146,7 +147,15 @@ private extension SharedVideoEditViewController {
         static let height: CGFloat = 120
         static let itemSize: CGSize = .init(width: 160, height: 90)
     }
-	
+
+    enum NextButtonConstants {
+        static let fontSize: CGFloat = 20
+        static let cornerRadius: CGFloat = 25
+        static let bottomOffset: CGFloat = -50
+        static let width: CGFloat = 160
+        static let height: CGFloat = 50
+    }
+
 	func setupUI() {
 		setupViewAttributes()
 		setupViewHierarchies()
@@ -159,6 +168,7 @@ private extension SharedVideoEditViewController {
 		setupEditSaveButton()
 		setupEditCancelButton()
         setupVideoTimelineCollectionView()
+        setupNextButton()
     }
 	
 	func setupEditCancelButton() {
@@ -192,13 +202,22 @@ private extension SharedVideoEditViewController {
         )
     }
 
+    func setupNextButton() {
+        nextButton.backgroundColor = .white
+        nextButton.setTitle("미리보기", for: .normal)
+        nextButton.setTitleColor(.black, for: .normal)
+        nextButton.titleLabel?.font = .systemFont(ofSize: NextButtonConstants.fontSize)
+        nextButton.layer.cornerRadius = NextButtonConstants.cornerRadius
+    }
+
     func setupViewHierarchies() {
 		view.addSubviews(
 			editButtonView,
 			videoPlayerView,
 			videoTimelineCollectionView,
 			editButtonView,
-			middleContainerView
+			middleContainerView,
+            nextButton
 		)
 		editButtonView.addSubviews(editCancelButton, editSaveButton)
 		middleContainerView.addSubviews(optionButtonStackView, videoTrimmingSliderBar)
@@ -250,6 +269,13 @@ private extension SharedVideoEditViewController {
             $0.trailing.equalToSuperview()
             $0.height.equalTo(VideoTimelineCollectionViewConstants.height)
         }
+
+        nextButton.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(NextButtonConstants.bottomOffset)
+            $0.width.equalTo(NextButtonConstants.width)
+            $0.height.equalTo(NextButtonConstants.height)
+        }
     }
 	
 	func setupUI(for mode: Mode) {
@@ -264,7 +290,8 @@ private extension SharedVideoEditViewController {
 		optionButtonStackView.isHidden = false
 		videoTrimmingSliderBar.isHidden = true
 		editButtonView.isHidden = true
-		
+        nextButton.isHidden = false
+
 		videoPlayerView.snp.updateConstraints {
 			$0.top.equalTo(view.safeAreaLayoutGuide).offset(VideoPlayerViewConstants.topMargin)
 		}
@@ -274,7 +301,8 @@ private extension SharedVideoEditViewController {
 		videoPlayerView.isHiddenSliderBar = true
 		optionButtonStackView.isHidden = true
 		editButtonView.isHidden = false
-		
+        nextButton.isHidden = true
+
 		let topMargin = VideoPlayerViewConstants.topMargin + EditButtonViewConstants.height
 		videoPlayerView.snp.updateConstraints {
 			$0.top.equalTo(view.safeAreaLayoutGuide).offset(topMargin)
