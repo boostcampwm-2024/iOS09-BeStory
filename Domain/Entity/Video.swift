@@ -9,6 +9,8 @@ import Foundation
 
 public struct Video {
     public let url: URL
+    public let name: String
+    public let index: Int
     public let author: String
     public let editor: ConnectedUser?
     public let duration: Double
@@ -17,6 +19,8 @@ public struct Video {
     
     public init(
         url: URL,
+        name: String,
+        index: Int,
         duration: Double,
         author: String,
         editor: ConnectedUser,
@@ -24,6 +28,8 @@ public struct Video {
         endTime: Double
     ) {
         self.url = url
+        self.name = name
+        self.index = index
         self.author = author
         self.editor = editor
         self.duration = duration
@@ -33,11 +39,15 @@ public struct Video {
     
     public init(
         url: URL,
-        authore: String,
+        name: String,
+        index: Int,
+        author: String,
         duration: Double
     ) {
         self.url = url
-        self.author = authore
+        self.name = name
+        self.index = index
+        self.author = author
         self.duration = duration
         self.startTime = 0
         self.endTime = duration
