@@ -9,4 +9,9 @@ import Foundation
 
 enum SharedVideoEditViewInput {
     case setInitialState
+    case setCurrentVideo(url: URL)
+    case lowerValueDidChanged(value: Double)
+    case upperValueDidChanged(value: Double)
+    case editSaveButtonDidTapped
+    case editCancelButtonDidTapped
 }

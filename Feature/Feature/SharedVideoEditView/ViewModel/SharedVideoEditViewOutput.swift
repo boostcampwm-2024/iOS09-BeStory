@@ -9,4 +9,5 @@ import Foundation
 
 enum SharedVideoEditViewOutput {
     case timelineDidChanged(items: [VideoTimelineItem])
+    case sliderDidChanged(item: VideoPresentationModel)
 }
