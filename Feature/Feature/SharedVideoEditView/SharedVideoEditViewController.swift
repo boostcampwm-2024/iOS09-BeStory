@@ -82,7 +82,7 @@ private extension SharedVideoEditViewController {
             .receive(on: DispatchQueue.main)
             .sink(with: self, onReceive: { (owner, output) in
                 switch output {
-                case .timeLineDidChanged(let items):
+                case .timelineDidChanged(let items):
                     owner.reload(with: items)
                 }
             })
@@ -192,6 +192,7 @@ private extension SharedVideoEditViewController {
         let dataSource = setupDataSource()
         self.videoTimelineDataSource = dataSource
         videoTimelineCollectionView.dataSource = dataSource
+        videoTimelineCollectionView.delegate = self
         videoTimelineCollectionView.dragDelegate = self
         videoTimelineCollectionView.dropDelegate = self
         videoTimelineCollectionView.dragInteractionEnabled = true
@@ -384,6 +385,16 @@ private extension SharedVideoEditViewController {
 }
 
 // MARK: - UICollectionViewDelegate
+
+extension SharedVideoEditViewController: UICollectionViewDelegate {
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        didSelectItemAt indexPath: IndexPath
+    ) {
+        guard let selectedItem = videoTimelineDataSource.itemIdentifier(for: indexPath) else { return }
+        videoPlayerView.replaceVideo(url: selectedItem.url)
+    }
+}
 
 extension SharedVideoEditViewController: UICollectionViewDragDelegate {
     public func collectionView(
