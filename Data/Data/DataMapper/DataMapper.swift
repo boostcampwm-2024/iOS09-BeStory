@@ -44,7 +44,11 @@ enum DataMapper {
 	}
 	
 	static func mappingToSharedVideo(_ resource: SharedResource) -> SharedVideo? {
-        return .init(localUrl: resource.url, author: resource.owner)
+        return .init(
+            localUrl: resource.url,
+            name: resource.name,
+            author: resource.owner
+        )
 	}
 
     static func mappingToEditVideoElement(
