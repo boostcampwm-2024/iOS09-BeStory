@@ -14,6 +14,17 @@ enum VideoMerger {
         static let defaultFrameRate: Int32 = 30
     }
 
+    /// 전달받은 비디오 목록을 병합한 결과에 대한 AVPlayerItem을 반환합니다.
+    static func preview(
+        videos: [Video],
+        size previewSize: CGSize
+    ) async throws -> AVPlayerItem {
+        let (composition, videoComposition) = try await merge(videos, size: previewSize)
+        let avItem = await AVPlayerItem(asset: composition)
+        avItem.videoComposition = videoComposition
+        return avItem
+    }
+
     private static func merge(
         _ videos: [Video],
         size resultSize: CGSize,
