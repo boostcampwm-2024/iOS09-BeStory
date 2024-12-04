@@ -80,14 +80,14 @@ private extension SharedVideoEditViewController {
 
         output
             .receive(on: DispatchQueue.main)
-            .sink(with: self, onReceive: { (owner, output) in
+            .sink(with: self) { (owner, output) in
                 switch output {
                 case .timelineDidChanged(let items):
                     owner.reload(with: items)
                 case .sliderDidChanged(let item):
                     owner.videoTrimmingSliderBar.configure(with: item)
                 }
-            })
+            }
             .store(in: &cancellables)
     }
 	
