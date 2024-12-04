@@ -13,12 +13,12 @@ import Interfaces
 /// 비디오 리스트를 테스트하기 위한 Mock View Model
 public final class MockVideoListViewModel {
     private var videoItems: [VideoListItem] = []
-    private let usecase: VideoUseCaseInterface
+    private let usecase: SharingVideoUseCaseInterface
     
     var output = PassthroughSubject<Output, Never>()
     var cancellables: Set<AnyCancellable> = []
     
-    public init(usecase: VideoUseCaseInterface) {
+    public init(usecase: SharingVideoUseCaseInterface) {
         self.usecase = usecase
         setupBind()
     }

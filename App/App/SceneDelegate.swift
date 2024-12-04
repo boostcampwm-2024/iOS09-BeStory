@@ -90,7 +90,7 @@ extension SceneDelegate {
         )
         
         DIContainer.shared.register(
-            type: VideoUseCaseInterface.self,
+            type: SharingVideoUseCaseInterface.self,
             instance: VideoUseCase(
                 sharingVideoRepository: DIContainer.shared.resolve(type: SharingVideoRepositoryInterface.self),
                 editVideoRepository: DIContainer.shared.resolve(type: EditVideoRepositoryInterface.self)
@@ -116,7 +116,7 @@ extension SceneDelegate {
         DIContainer.shared.register(
             type: MultipeerVideoListViewModel.self,
             instance: MultipeerVideoListViewModel(
-                usecase: DIContainer.shared.resolve(type: VideoUseCaseInterface.self)
+                usecase: DIContainer.shared.resolve(type: SharingVideoUseCaseInterface.self)
             )
         )
 

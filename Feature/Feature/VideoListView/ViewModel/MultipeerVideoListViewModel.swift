@@ -13,12 +13,12 @@ import Interfaces
 
 public final class MultipeerVideoListViewModel {
     private var videoItems: [VideoListItem] = []
-    private let usecase: VideoUseCaseInterface
+    private let usecase: SharingVideoUseCaseInterface
     
     var output = PassthroughSubject<Output, Never>()
     var cancellables: Set<AnyCancellable> = []
     
-    public init(usecase: VideoUseCaseInterface) {
+    public init(usecase: SharingVideoUseCaseInterface) {
         self.usecase = usecase
         setupBind()
     }

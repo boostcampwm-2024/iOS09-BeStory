@@ -34,7 +34,7 @@ public final class VideoUseCase {
 }
 
 // MARK: - VideoUseCaseInterface
-extension VideoUseCase: VideoUseCaseInterface {    
+extension VideoUseCase: SharingVideoUseCaseInterface {    
     public func fetchVideos() -> [SharedVideo] {
 		return sharedVideos.sorted { $0.localUrl.path < $1.localUrl.path }
 	}
