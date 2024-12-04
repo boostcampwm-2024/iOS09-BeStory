@@ -59,7 +59,7 @@ public final class SharedVideoEditViewController: UIViewController {
 		setupUI()
         setupViewBinding()
         
-        input.send(.setInitialState)
+        input.send(.viewDidLoad)
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -82,10 +82,10 @@ private extension SharedVideoEditViewController {
             .receive(on: DispatchQueue.main)
             .sink(with: self) { (owner, output) in
                 switch output {
-                case .timelineDidChanged(let items):
+                case .timelineItemsDidChanged(let items):
                     owner.reload(with: items)
-                case .sliderDidChanged(let item):
-                    owner.videoTrimmingSliderBar.configure(with: item)
+                case .sliderModelDidChanged(let model):
+                    owner.videoTrimmingSliderBar.configure(with: model)
                 }
             }
             .store(in: &cancellables)
@@ -100,7 +100,7 @@ private extension SharedVideoEditViewController {
 		
 		editSaveButton.bs.tap
 			.sink(with: self) { owner, _ in
-                owner.input.send(.editSaveButtonDidTapped)
+                owner.input.send(.sliderEditSaveButtonDidTapped)
 				owner.mode = .default
 			}
 			.store(in: &cancellables)
@@ -368,11 +368,11 @@ private extension SharedVideoEditViewController {
 // MARK: - VideoTrimmingSliderBarDelegate
 extension SharedVideoEditViewController: VideoTrimmingSliderBarDelegate {
 	func lowerValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double) {
-        input.send(.lowerValueDidChanged(value: value))
+        input.send(.sliderModelLowerValueDidChanged(value: value))
     }
 	
 	func upperValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double) {
-        input.send(.upperValueDidChanged(value: value))
+        input.send(.sliderModelUpperValueDidChanged(value: value))
     }
 	
     func playerValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double) {
@@ -389,7 +389,6 @@ private extension SharedVideoEditViewController {
                 message: "편집을 취소하게 되면, 편집된 내용은 삭제됩니다. 그래도 취소하시겠습니까?"),
             actions: [
                 .confirm(handler: { [weak self] in
-                    self?.input.send(.editCancelButtonDidTapped)
                     self?.mode = .default
                 }),
                 .cancel()]
@@ -406,7 +405,7 @@ extension SharedVideoEditViewController: UICollectionViewDelegate {
     ) {
         guard let selectedItem = videoTimelineDataSource.itemIdentifier(for: indexPath) else { return }
         videoPlayerView.replaceVideo(url: selectedItem.url)
-        input.send(.setCurrentVideo(url: selectedItem.url))
+        input.send(.timelineCellDidTap(url: selectedItem.url))
     }
 }
 
@@ -460,7 +459,7 @@ extension SharedVideoEditViewController: UICollectionViewDropDelegate {
         updatedItems.insert(contentsOf: draggedItems, at: targetIndex)
         
         applySnapShot(with: updatedItems)
-        
+
         coordinator.items.forEach { item in
             coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
         }
