@@ -107,7 +107,6 @@ private extension SharedVideoEditViewController {
 		
 		editCancelButton.bs.tap
 			.sink(with: self) { owner, _ in
-                owner.input.send(.editCancelButtonDidTapped)
 				owner.presentCancelAlertViewController()
 			}
 			.store(in: &cancellables)
@@ -390,6 +389,7 @@ private extension SharedVideoEditViewController {
                 message: "편집을 취소하게 되면, 편집된 내용은 삭제됩니다. 그래도 취소하시겠습니까?"),
             actions: [
                 .confirm(handler: { [weak self] in
+                    self?.input.send(.editCancelButtonDidTapped)
                     self?.mode = .default
                 }),
                 .cancel()]
