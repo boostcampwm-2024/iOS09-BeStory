@@ -7,7 +7,7 @@
 
 import Combine
 
-public actor LWWElementSet<T: Codable & Hashable> {
+public actor LWWElementSet<T: Codable & Hashable> { 
     private let id: String
     private var vectorClock: VectorClock
     
@@ -17,9 +17,9 @@ public actor LWWElementSet<T: Codable & Hashable> {
     
     public let updatedElements = PassthroughSubject<[T], Never>()
     
-    public init(id: String, peerCount: Int) {
+    public init(id: String, peerIDs: [String]) {
         self.id = id
-        vectorClock = VectorClock(replicaCount: peerCount)
+        vectorClock = VectorClock(replicaIDs: peerIDs + [id])
     }
     
     fileprivate init(
@@ -40,6 +40,16 @@ public extension LWWElementSet {
         let clock = vectorClock.increase(replicaId: id)
         additions.removeValue(forKey: element)
         additions.updateValue(clock, forKey: element)
+        return payloading()
+    }
+    
+    func localAdd(elements: [T]) -> LWWElementSetState<T> {
+        let clock = vectorClock.increase(replicaId: id)
+        elements.forEach {
+            additions.removeValue(forKey: $0)
+            additions.updateValue(clock, forKey: $0)
+        }
+        
         return payloading()
     }
     

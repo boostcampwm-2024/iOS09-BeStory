@@ -10,9 +10,9 @@ import Foundation
 struct VectorClock {
     var clock = [String: Int]()
     
-    init(replicaCount: Int) {
-        clock = (0..<replicaCount).reduce(into: [String: Int]()) { clock, replicaId in
-            clock["\(replicaId)"] = 0
+    init(replicaIDs: [String]) {
+        clock = replicaIDs.reduce(into: [String: Int]()) { clock, replicaId in
+            clock[replicaId] = 0
         }
     }
     
