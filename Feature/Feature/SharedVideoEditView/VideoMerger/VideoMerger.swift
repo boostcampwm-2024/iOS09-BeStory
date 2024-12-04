@@ -9,6 +9,17 @@ import AVFoundation
 import Entity
 
 enum VideoMerger {
+    private static func addTrack(
+        to composition: AVMutableComposition,
+        withMediaType mediaType: AVMediaType
+    ) async throws -> AVMutableCompositionTrack {
+        guard let track = composition.addMutableTrack(withMediaType: mediaType, preferredTrackID: kCMPersistentTrackID_Invalid)
+        else {
+            throw NSError(domain: "CannotCreateVideoTrack", code: -2, userInfo: nil)
+        }
+        return track
+    }
+
     private static func loadTrack(
         from asset: AVAsset,
         withMediaType mediaType: AVMediaType
