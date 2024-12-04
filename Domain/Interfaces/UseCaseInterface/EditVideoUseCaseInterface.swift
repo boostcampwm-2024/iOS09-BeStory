@@ -7,13 +7,14 @@
 
 import Combine
 import Entity
+import Foundation
 
 public protocol EditVideoUseCaseInterface {
-    var updatedTrimmingVideo: PassthroughSubject<[Video], Never> { get }
-    var updatedReArrangingVideo: PassthroughSubject<[Video], Never> { get }
+    var updatedTrimmingVideos: PassthroughSubject<[Video], Never> { get }
+    var updatedReArrangingVideos: PassthroughSubject<[Video], Never> { get }
     
-    func fetchVideos() -> [SharedVideo]
+    func fetchVideos() -> [Video]
     
-    func trimmingVideo(_ video: Video)
-    func reArrangingVideo(_ video: Video)
+    func trimmingVideo(url: URL, startTime: Double, endTime: Double)
+    func reArrangingVideo(url: URL, index: Int)
 }

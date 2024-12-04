@@ -75,9 +75,8 @@
 			membershipExceptions = (
 				BrowsingUserRepository.swift,
 				ConnectedUserRepository.swift,
+				CRDTElement/EditVideoElement.swift,
 				DataMapper/DataMapper.swift,
-				DTO/EditingType.swift,
-				DTO/EditVideoElement.swift,
 				EditVideoRepository.swift,
 				SharingVideoRepository.swift,
 			);
