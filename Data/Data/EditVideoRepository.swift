@@ -72,7 +72,6 @@ private extension EditVideoRepository {
             editingType: editingType
         )
         let elementSet = await crdt.localAdd(element: element)
-        await crdt.merge(with: elementSet)
         
         guard let elementData = try? JSONEncoder().encode(elementSet) else { return }
         
@@ -82,12 +81,10 @@ private extension EditVideoRepository {
     // socket을 통해 데이터가 들어온 경우, crdt를 통해 merge
     func merge(data: Data, from user: SocketPeer) {
         guard
-            let dto = try? JSONDecoder().decode(EditVideoDTO.self, from: data),
-            let element = DataMapper.mappingToEditVideoElement(dto, from: user)
+            let elementSet = try? JSONDecoder().decode(LWWElementSetState<EditVideoElement>.self, from: data)
         else { return }
         
         Task {
-            let elementSet = await crdt.localAdd(element: element)
             await crdt.merge(with: elementSet)
         }
     }

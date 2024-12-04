@@ -67,25 +67,6 @@ enum DataMapper {
         )
     }
     
-    static func mappingToEditVideoElement(_ dto: EditVideoDTO, from peer: SocketPeer) -> EditVideoElement? {
-        guard
-            let user = DataMapper.mappingToUser(peer),
-            let url = FileSystemManager.shared.mappingToLocalURL(url: dto.url, resourceName: dto.name)
-        else { return nil }
-        
-        return .init(
-            editingType: dto.editingType,
-            url: url,
-            name: dto.name,
-            index: dto.index,
-            editor: user,
-            author: dto.author,
-            duration: dto.duration,
-            startTime: dto.startTime,
-            endTime: dto.endTime
-        )
-    }
-    
     static func mappingToVideo(_ element: EditVideoElement) -> Video {
         let user = DataMapper.mappingToConnectedUser(element.editor)
         
