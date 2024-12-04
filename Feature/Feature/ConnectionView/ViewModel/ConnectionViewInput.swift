@@ -5,7 +5,6 @@
 //  Created by 이숲 on 12/3/24.
 //
 
-import Foundation
 import Entity
 
 // MARK: - Input
