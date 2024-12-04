@@ -10,9 +10,10 @@ import XCTest
 
 final class CRDTTest: XCTestCase {
     func testIsLWWElementSetStateCodable() async throws {
-        let peerCount = 2
-        let peer0 = LWWElementSet<Int>(id: "0", peerCount: peerCount)
-        let peer1 = LWWElementSet<Int>(id: "1", peerCount: peerCount)
+        let peer0ID = UUID().uuidString
+        let peer1ID = UUID().uuidString
+        let peer0 = LWWElementSet<Int>(id: peer0ID, peerIDs: [peer1ID])
+        let peer1 = LWWElementSet<Int>(id: peer1ID, peerIDs: [peer0ID])
         
         let encoder = JSONEncoder()
         let peer0event = await peer0.localAdd(element: 0)
@@ -31,9 +32,13 @@ final class CRDTTest: XCTestCase {
     
     func testIsMergeCompletWhenEventArrivedRandomly() async {
         let peerCount = 3
-        let peer0 = LWWElementSet<Int>(id: "0", peerCount: peerCount)
-        let peer1 = LWWElementSet<Int>(id: "1", peerCount: peerCount)
-        let peer2 = LWWElementSet<Int>(id: "2", peerCount: peerCount)
+        let peer0ID = UUID().uuidString
+        let peer1ID = UUID().uuidString
+        let peer2ID = UUID().uuidString
+
+        let peer0 = LWWElementSet<Int>(id: peer0ID, peerIDs: [peer1ID, peer2ID])
+        let peer1 = LWWElementSet<Int>(id: peer1ID, peerIDs: [peer0ID, peer2ID])
+        let peer2 = LWWElementSet<Int>(id: peer2ID, peerIDs: [peer0ID, peer1ID])
         
         let peer0event0 = await peer0.localAdd(element: 0)
         let peer0event1 = await peer0.localAdd(element: 4)
@@ -71,9 +76,10 @@ final class CRDTTest: XCTestCase {
     }
     
     func testIsMergeLastWriterWins() async throws {
-        let peerCount = 2
-        let peer0 = LWWElementSet<LWWDummy>(id: "0", peerCount: peerCount)
-        let peer1 = LWWElementSet<LWWDummy>(id: "1", peerCount: peerCount)
+        let peer0ID = UUID().uuidString
+        let peer1ID = UUID().uuidString
+        let peer0 = LWWElementSet<LWWDummy>(id: peer0ID, peerIDs: [peer1ID])
+        let peer1 = LWWElementSet<LWWDummy>(id: peer1ID, peerIDs: [peer0ID])
         
         let peer0data = LWWDummy(data: 1, author: "p0")
         let peer1data = LWWDummy(data: 1, author: "p1")
