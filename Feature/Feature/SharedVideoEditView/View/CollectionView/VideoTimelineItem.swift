@@ -8,13 +8,12 @@
 import Foundation
 
 struct VideoTimelineItem: Codable, Hashable {
-    let identifier = UUID()
     let url: URL
     let thumbnailImage: Data
     let duration: String
 
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(identifier)
+        hasher.combine(url)
     }
 }
 
