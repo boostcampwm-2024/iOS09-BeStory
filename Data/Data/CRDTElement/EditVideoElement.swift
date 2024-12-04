@@ -8,7 +8,6 @@
 import Foundation
 
 struct EditVideoElement: Codable, Hashable {
-    let editingType: EditingType
     let url: URL
     let name: String
     let index: Int
@@ -20,7 +19,6 @@ struct EditVideoElement: Codable, Hashable {
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(url)
-        hasher.combine(editingType)
         hasher.combine(name)
     }
 }
