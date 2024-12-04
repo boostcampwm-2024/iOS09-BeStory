@@ -9,6 +9,19 @@ import AVFoundation
 import Entity
 
 enum VideoMerger {
+    private static func moveToCenter(
+        with videoSize: CGSize,
+        to resultVideoSize: CGSize,
+        scale: CGFloat
+    ) -> CGPoint {
+        let scaledWidth = videoSize.width * scale
+        let scaledHeight = videoSize.height * scale
+        let translationX = (resultVideoSize.width - scaledWidth) / 2
+        let translationY = (resultVideoSize.height - scaledHeight) / 2
+        
+        return CGPoint(x: translationX, y: translationY)
+    }
+    
     private static func adoptAlphaInstruction(
         _ layerInstruction: AVMutableVideoCompositionLayerInstruction,
         currentTime: CMTime,
