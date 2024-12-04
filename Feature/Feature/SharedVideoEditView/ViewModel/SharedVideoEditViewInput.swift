@@ -8,10 +8,9 @@
 import Foundation
 
 enum SharedVideoEditViewInput {
-    case setInitialState
-    case setCurrentVideo(url: URL)
-    case lowerValueDidChanged(value: Double)
-    case upperValueDidChanged(value: Double)
-    case editSaveButtonDidTapped
-    case editCancelButtonDidTapped
+    case viewDidLoad
+    case timelineCellDidTap(url: URL)
+    case sliderModelLowerValueDidChanged(value: Double)
+    case sliderModelUpperValueDidChanged(value: Double)
+    case sliderEditSaveButtonDidTapped
 }
