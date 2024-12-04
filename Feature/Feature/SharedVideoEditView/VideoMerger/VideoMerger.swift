@@ -9,6 +9,40 @@ import AVFoundation
 import Entity
 
 enum VideoMerger {
+    private static func export(
+        composition: AVMutableComposition,
+        videoComposition: AVMutableVideoComposition,
+        outputURL: URL
+    ) async throws {
+        guard let exporter = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetHighestQuality)
+        else {
+            throw NSError(domain: "CannotInitExporter", code: -2, userInfo: nil)
+        }
+        
+        exporter.videoComposition = videoComposition
+
+        if #available(iOS 18, *) {
+            return try await exporter.export(to: outputURL, as: .mp4)
+        } else {
+            exporter.outputURL = outputURL
+            exporter.outputFileType = .mp4
+            return try await withCheckedThrowingContinuation { continuation in
+                exporter.exportAsynchronously {
+                    switch exporter.status {
+                    case .completed:
+                        continuation.resume(returning: ())
+                    case .failed:
+                        continuation.resume(throwing: NSError(domain: "UnknownError", code: -1, userInfo: nil))
+                    case .cancelled:
+                        continuation.resume(with: .failure(NSError(domain: "ExportCancelled", code: -2, userInfo: nil)))
+                    default:
+                        break
+                    }
+                }
+            }
+        }
+    }
+
     private static func addTrack(
         to composition: AVMutableComposition,
         withMediaType mediaType: AVMediaType
