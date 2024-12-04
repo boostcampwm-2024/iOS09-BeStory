@@ -67,4 +67,5 @@ public protocol SocketDataSendable: SocketIdentifiable {
 
 public protocol SocketIdentifiable {
     var displayName: String { get }
+    var id: String { get }
 }
