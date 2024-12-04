@@ -18,11 +18,9 @@ public final class VideoUseCase {
 	private let sharingVideoRepository: SharingVideoRepositoryInterface
     private let editVideoRepository: EditVideoRepositoryInterface
 
-	public let updatedVideo = PassthroughSubject<SharedVideo, Never>()
 	public let isSynchronized = PassthroughSubject<Void, Never>()
-    
-    public let updatedTrimmingVideos = PassthroughSubject<[Video], Never>()
-    public let updatedReArrangingVideos = PassthroughSubject<[Video], Never>()
+    public let updatedSharedVideo = PassthroughSubject<SharedVideo, Never>()
+    public let editedVideos = PassthroughSubject<[Video], Never>()
 	
     public init(
         sharingVideoRepository: SharingVideoRepositoryInterface,
@@ -87,7 +85,7 @@ private extension VideoUseCase {
 		sharingVideoRepository.updatedSharedVideo
 			.sink(with: self) { owner, video in
 				owner.sharedVideos.append(video)
-				owner.updatedVideo.send(video)
+                owner.updatedSharedVideo.send(video)
 			}
 			.store(in: &cancellables)
 		
@@ -95,56 +93,10 @@ private extension VideoUseCase {
 			.subscribe(isSynchronized)
 			.store(in: &cancellables)
         
-        editVideoRepository.updatedVideos // 여기서
-            .subscribe(updatedTrimmingVideos)
+        editVideoRepository.editedVideos
+            .subscribe(editedVideos)
             .store(in: &cancellables)
 	}
-    
-    func sendVideos(_ videos: [Video]) {
-        let updatedTrimmingVideo = filteredUpdatedTrimmingVideo(videos)
-        let updatedReArrangingVideo = filteredUpdatedReArrangingVideo(videos)
-        
-        if !updatedTrimmingVideo.isEmpty {
-            updatedTrimmingVideos.send(updatedTrimmingVideo)
-        }
-        
-        if !updatedReArrangingVideo.isEmpty {
-            updatedReArrangingVideos.send(updatedReArrangingVideo)
-        }
-        updatedTrimmingVideo.forEach { editingVideos[$0.url.path] = $0 }
-        updatedReArrangingVideo.forEach { editingVideos[$0.url.path] = $0 }
-    }
-    
-    func filteredUpdatedTrimmingVideo(_ videos: [Video]) -> [Video] {
-        var updatedVideos = [Video]()
-        
-        videos.forEach {
-            guard let editingVideo = editingVideos[$0.url.path] else {
-                updatedVideos.append($0)
-                return
-            }
-            
-            (editingVideo.endTime != $0.endTime || editingVideo.startTime != $0.startTime) ?
-            updatedVideos.append($0) : ()
-        }
-        
-        return updatedVideos
-    }
-    
-    func filteredUpdatedReArrangingVideo(_ videos: [Video]) -> [Video] {
-        var updatedVideos = [Video]()
-        
-        videos.forEach {
-            guard let editingVideo = editingVideos[$0.url.path] else {
-                updatedVideos.append($0)
-                return
-            }
-            
-            (editingVideo.index != $0.index) ?  updatedVideos.append($0) : ()
-        }
-        
-        return updatedVideos
-    }
     
     func updatedVideo(url: URL, startTime: Double, endTime: Double) -> Video? {
         guard let video = editingVideos[url.path] else { return nil }

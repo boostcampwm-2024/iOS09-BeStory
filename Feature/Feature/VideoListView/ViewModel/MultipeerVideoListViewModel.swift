@@ -26,7 +26,7 @@ public final class MultipeerVideoListViewModel {
 
 private extension MultipeerVideoListViewModel {
     func setupBind() {
-        usecase.updatedVideo
+        usecase.updatedSharedVideo
             .sink { [weak self] updatedVideo in
                 guard let self else { return }
                 Task {

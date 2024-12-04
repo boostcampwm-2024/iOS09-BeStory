@@ -10,7 +10,7 @@ import Entity
 import Foundation
 
 public protocol SharingVideoUseCaseInterface {
-    var updatedVideo: PassthroughSubject<SharedVideo, Never> { get }
+    var updatedSharedVideo: PassthroughSubject<SharedVideo, Never> { get }
     var isSynchronized: PassthroughSubject<Void, Never> { get }
     
     func fetchVideos() -> [SharedVideo]

@@ -10,8 +10,7 @@ import Entity
 import Foundation
 
 public protocol EditVideoUseCaseInterface {
-    var updatedTrimmingVideos: PassthroughSubject<[Video], Never> { get }
-    var updatedReArrangingVideos: PassthroughSubject<[Video], Never> { get }
+    var editedVideos: PassthroughSubject<[Video], Never> { get }
     
     func fetchVideos() -> [Video]
     
