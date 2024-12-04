@@ -52,13 +52,14 @@ private extension VideoMerger {
         _ videos: [Video],
         size resultSize: CGSize,
         frameRate: Int32 = Constants.defaultFrameRate
-    ) async throws -> (AVMutableComposition, AVMutableVideoComposition){
+    ) async throws -> (AVMutableComposition, AVMutableVideoComposition) {
+        let orderdVideos = videosvideos.sorted { $0.index < $0.index }
         let composition = AVMutableComposition()
         var currentTime = CMTime.zero
         
         var layerInstructions: [AVMutableVideoCompositionInstruction] = []
         
-        for video in videos {
+        for video in orderdVideos {
             let asset = AVURLAsset(url: video.url)
             
             let assetVideoTrack = try await loadTrack(from: asset, withMediaType: .video)
@@ -159,7 +160,6 @@ private extension VideoMerger {
         }
         return track
     }
-    
     
     static func scaleToAspectFit(with videoSize: CGSize, to resultVideoSize: CGSize) -> CGFloat {
         let scaleX = resultVideoSize.width / videoSize.width
