@@ -7,8 +7,8 @@
 
 import Combine
 
-public actor LWWElementSet<T: Codable & Hashable> {
-    private let id: Int
+public actor LWWElementSet<T: Codable & Hashable> { 
+    private let id: String
     private var vectorClock: VectorClock
     
     private var additions: [T: VectorClock] = [:]
@@ -17,13 +17,13 @@ public actor LWWElementSet<T: Codable & Hashable> {
     
     public let updatedElements = PassthroughSubject<[T], Never>()
     
-    public init(id: Int, peerCount: Int) {
+    public init(id: String, peerIDs: [String]) {
         self.id = id
-        vectorClock = VectorClock(replicaCount: peerCount)
+        vectorClock = VectorClock(replicaIDs: peerIDs + [id])
     }
     
     fileprivate init(
-        id: Int,
+        id: String,
         clock: VectorClock,
         additions: [T: VectorClock],
         removals: [T: VectorClock]
@@ -40,6 +40,16 @@ public extension LWWElementSet {
         let clock = vectorClock.increase(replicaId: id)
         additions.removeValue(forKey: element)
         additions.updateValue(clock, forKey: element)
+        return payloading()
+    }
+    
+    func localAdd(elements: [T]) -> LWWElementSetState<T> {
+        let clock = vectorClock.increase(replicaId: id)
+        elements.forEach {
+            additions.removeValue(forKey: $0)
+            additions.updateValue(clock, forKey: $0)
+        }
+        
         return payloading()
     }
     
@@ -109,18 +119,14 @@ private extension LWWElementSet {
     }
     
     func add(element: T, remoteClock: VectorClock) {
-        if let clock = additions[element],
-              remoteClock <= clock
-        { return }
+        if let clock = additions[element], remoteClock <= clock { return }
         
         additions.removeValue(forKey: element)
         additions.updateValue(remoteClock, forKey: element)
     }
     
     func remove(element: T, remoteClock: VectorClock) {
-        if let clock = removals[element],
-              remoteClock <= clock
-        { return }
+        if let clock = removals[element], remoteClock <= clock { return }
         
         removals.removeValue(forKey: element)
         removals.updateValue(remoteClock, forKey: element)
@@ -137,14 +143,14 @@ private extension LWWElementSet {
 }
 
 public struct LWWElementSetState <T: Codable & Hashable> {
-    fileprivate let id: Int
+    fileprivate let id: String
     fileprivate var vectorClock: VectorClock
     
     fileprivate var additions: [T: VectorClock] = [:]
     fileprivate var removals: [T: VectorClock] = [:]
     
     fileprivate init(
-        id: Int,
+        id: String,
         clock: VectorClock,
         additions: [T: VectorClock],
         removals: [T: VectorClock]
@@ -172,9 +178,9 @@ extension LWWElementSetState: Codable {
         case id, vectorClock, additions, removals
     }
     
-    public init(from decoder: Decoder) throws{
+    public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        id = try values.decode(Int.self, forKey: .id)
+        id = try values.decode(String.self, forKey: .id)
         vectorClock = try values.decode(VectorClock.self, forKey: .vectorClock)
         additions = try values.decode([T: VectorClock].self, forKey: .additions)
         removals = try values.decode([T: VectorClock].self, forKey: .removals)

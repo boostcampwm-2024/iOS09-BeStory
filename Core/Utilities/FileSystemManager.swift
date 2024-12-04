@@ -24,6 +24,17 @@ public final class FileSystemManager {
             try? fileManager.createDirectory(at: folder, withIntermediateDirectories: true)
         }
     }
+  
+    public func mappingToLocalURL(url: URL, resourceName: String? = nil) -> URL? {
+        var originalFileName = resourceName ?? url.lastPathComponent
+        if !originalFileName.hasSuffix(".mp4") {
+            originalFileName += ".mp4"
+        }
+        let destinationURL = folder.appending(path: originalFileName)
+        
+        guard !fileManager.fileExists(atPath: destinationURL.path) else { return nil }
+        return destinationURL
+    }
     
     public func copyToFileSystem(tempURL: URL, resourceName: String? = nil) -> URL? {
         var originalFileName = resourceName ?? tempURL.lastPathComponent
