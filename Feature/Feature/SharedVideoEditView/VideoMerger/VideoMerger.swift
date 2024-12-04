@@ -9,6 +9,14 @@ import AVFoundation
 import Entity
 
 enum VideoMerger {
+private static func scaleToAspectFit(with videoSize: CGSize, to resultVideoSize: CGSize) -> CGFloat {
+    let scaleX = resultVideoSize.width / videoSize.width
+    let scaleY = resultVideoSize.height / videoSize.height
+    let scale = min(scaleX, scaleY)
+    
+    return scale
+}
+
     private static func moveToCenter(
         with videoSize: CGSize,
         to resultVideoSize: CGSize,
