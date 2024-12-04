@@ -162,8 +162,6 @@ extension SocketProvider: SocketResourceSendable {
         if url.author().isEmpty {
             url = localURL.append(author: self.peerID.displayName)
         }
-        print(url)
-        print(url.author())
         
         session.connectedPeers.forEach { peer in
             session.sendResource(
