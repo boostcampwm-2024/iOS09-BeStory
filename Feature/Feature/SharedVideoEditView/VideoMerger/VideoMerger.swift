@@ -9,6 +9,18 @@ import AVFoundation
 import Entity
 
 enum VideoMerger {
+    private static func loadTrack(
+        from asset: AVAsset,
+        withMediaType mediaType: AVMediaType
+    ) async throws -> AVAssetTrack {
+        guard let track = try await asset.loadTracks(withMediaType: mediaType).first
+        else {
+            throw NSError(domain: "InvalidVideoTracks", code: -2, userInfo: nil)
+        }
+        return track
+    }
+
+
 private static func scaleToAspectFit(with videoSize: CGSize, to resultVideoSize: CGSize) -> CGFloat {
     let scaleX = resultVideoSize.width / videoSize.width
     let scaleY = resultVideoSize.height / videoSize.height
