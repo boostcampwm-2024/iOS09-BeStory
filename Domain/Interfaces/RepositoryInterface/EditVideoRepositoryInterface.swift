@@ -9,9 +9,8 @@ import Combine
 import Entity
 
 public protocol EditVideoRepositoryInterface {
-    var trimmingVideo: PassthroughSubject<[Video], Never> { get }
-    var reArrangingVideo: PassthroughSubject<[Video], Never> { get }
+    var updatedVideos: PassthroughSubject<[Video], Never> { get }
     
     func trimmingVideo(_ video: Video)
-    func reArrangingVideo(_ video: Video)
+    func reArrangingVideo(_ videos: [Video])
 }

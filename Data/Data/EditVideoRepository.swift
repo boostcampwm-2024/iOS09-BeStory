@@ -14,15 +14,14 @@ import Interfaces
 import P2PSocket
 
 public final class EditVideoRepository: EditVideoRepositoryInterface {
-    public typealias EditVideoSocketProvidable = SocketDataSendable & SocketBrowsable
+   public typealias EditVideoSocketProvidable = SocketDataSendable & SocketBrowsable
     
     // MARK: - Properties
     private var cancellables: Set<AnyCancellable> = []
     private let socketProvider: EditVideoSocketProvidable
     private let crdt: LWWElementSet<EditVideoElement>
     
-    public let trimmingVideo = PassthroughSubject<[Video], Never>()
-    public let reArrangingVideo = PassthroughSubject<[Video], Never>()
+    public let updatedVideos = PassthroughSubject<[Video], Never>()
     
     // MARK: - Initalizers
     public init(socketProvider: EditVideoSocketProvidable) {
@@ -36,13 +35,15 @@ public final class EditVideoRepository: EditVideoRepositoryInterface {
 public extension EditVideoRepository {
     func trimmingVideo(_ video: Video) {
         Task {
-            await editVideo(video, editingType: .trimming)
+            await editVideo(video)
         }
     }
     
-    func reArrangingVideo(_ video: Video) {
+    func reArrangingVideo(_ videos: [Video]) {
         Task {
-            await editVideo(video, editingType: .rearraring)
+            for video in videos {
+                await editVideo(video)
+            }
         }
     }
 }
@@ -65,11 +66,10 @@ private extension EditVideoRepository {
         }
     }
     
-    func editVideo(_ video: Video, editingType: EditingType) async {
+    func editVideo(_ video: Video) async {
         let element = DataMapper.mappingToEditVideoElement(
             video,
-            editor: socketProvider.displayName,
-            editingType: editingType
+            editor: socketProvider.displayName
         )
         let elementSet = await crdt.localAdd(element: element)
         
@@ -90,22 +90,9 @@ private extension EditVideoRepository {
     }
     
     // crdt에서 업데이트가 온 경우, editingType에 따라 매핑하여 방출
-    func sendVideo(elements: [EditVideoElement]) {
-        var trimmingVidoes: [Video] = []
-        var reArrangingVideos: [Video] = []
+    func sendVideo(elements: [EditVideoElement]) {        
+        let videos = elements.map { DataMapper.mappingToVideo($0) }
         
-        elements.forEach {
-            let video = DataMapper.mappingToVideo($0)
-            
-            switch $0.editingType {
-                case .trimming:
-                    trimmingVidoes.append(video)
-                case .rearraring:
-                    reArrangingVideos.append(video)
-            }
-        }
-        
-        if !trimmingVidoes.isEmpty { trimmingVideo.send(trimmingVidoes) }
-        if !reArrangingVideos.isEmpty { reArrangingVideo.send(reArrangingVideos) }
+        if !videos.isEmpty { updatedVideos.send(videos) }
     }
 }
