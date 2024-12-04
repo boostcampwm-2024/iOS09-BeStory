@@ -8,7 +8,7 @@
 import AVFoundation
 import Entity
 
-enum VideoMerger {
+public enum VideoMerger {
     private enum Constants {
         static let scaleSecond: Int32 = 600
         static let defaultFrameRate: Int32 = 30
@@ -30,10 +30,10 @@ enum VideoMerger {
         let resultVideoSize = try await firstVideoTrack.load(.naturalSize)
         
         let (composition, videoComposition) = try await merge(videos, size: resultVideoSize)
-
+        
         return try await export(composition: composition, videoComposition: videoComposition, outputURL: outputURL)
     }
-
+    
     /// 전달받은 비디오 목록을 병합한 결과에 대한 AVPlayerItem을 반환합니다.
     static func preview(
         videos: [Video],
@@ -44,7 +44,10 @@ enum VideoMerger {
         avItem.videoComposition = videoComposition
         return avItem
     }
+}
 
+// MARK: - Private Methods
+private extension VideoMerger {
     private static func merge(
         _ videos: [Video],
         size resultSize: CGSize,
@@ -81,7 +84,7 @@ enum VideoMerger {
                 .concatenating(CGAffineTransform(scaleX: scale, y: scale))
                 .concatenating(CGAffineTransform(translationX: center.x, y: center.y))
             layerInstruction.setTransform(transform, at: .zero)
-
+            
             let instruction = adoptAlphaInstruction(
                 layerInstruction,
                 currentTime: currentTime,
@@ -100,8 +103,8 @@ enum VideoMerger {
         
         return (composition, videoComposition)
     }
-
-    private static func export(
+    
+    static func export(
         composition: AVMutableComposition,
         videoComposition: AVMutableVideoComposition,
         outputURL: URL
@@ -112,7 +115,7 @@ enum VideoMerger {
         }
         
         exporter.videoComposition = videoComposition
-
+        
         if #available(iOS 18, *) {
             return try await exporter.export(to: outputURL, as: .mp4)
         } else {
@@ -134,8 +137,8 @@ enum VideoMerger {
             }
         }
     }
-
-    private static func addTrack(
+    
+    static func addTrack(
         to composition: AVMutableComposition,
         withMediaType mediaType: AVMediaType
     ) async throws -> AVMutableCompositionTrack {
@@ -145,8 +148,8 @@ enum VideoMerger {
         }
         return track
     }
-
-    private static func loadTrack(
+    
+    static func loadTrack(
         from asset: AVAsset,
         withMediaType mediaType: AVMediaType
     ) async throws -> AVAssetTrack {
@@ -156,17 +159,17 @@ enum VideoMerger {
         }
         return track
     }
-
-
-private static func scaleToAspectFit(with videoSize: CGSize, to resultVideoSize: CGSize) -> CGFloat {
-    let scaleX = resultVideoSize.width / videoSize.width
-    let scaleY = resultVideoSize.height / videoSize.height
-    let scale = min(scaleX, scaleY)
     
-    return scale
-}
-
-    private static func moveToCenter(
+    
+    static func scaleToAspectFit(with videoSize: CGSize, to resultVideoSize: CGSize) -> CGFloat {
+        let scaleX = resultVideoSize.width / videoSize.width
+        let scaleY = resultVideoSize.height / videoSize.height
+        let scale = min(scaleX, scaleY)
+        
+        return scale
+    }
+    
+    static func moveToCenter(
         with videoSize: CGSize,
         to resultVideoSize: CGSize,
         scale: CGFloat
@@ -179,7 +182,7 @@ private static func scaleToAspectFit(with videoSize: CGSize, to resultVideoSize:
         return CGPoint(x: translationX, y: translationY)
     }
     
-    private static func adoptAlphaInstruction(
+    static func adoptAlphaInstruction(
         _ layerInstruction: AVMutableVideoCompositionLayerInstruction,
         currentTime: CMTime,
         duration: CMTime
