@@ -13,6 +13,26 @@ enum VideoMerger {
         static let scaleSecond: Int32 = 600
         static let defaultFrameRate: Int32 = 30
     }
+    
+    /// 전달받은 URL로 비디오 목록을 병합한 결과를 저장합니다.
+    static func mergeWithSave(
+        _ videos: [Video],
+        outputURL: URL,
+        frameRate: Int32 = Constants.defaultFrameRate
+    ) async throws {
+        guard let firstVideo = videos.first
+        else {
+            throw NSError(domain: "NoVideos", code: -1, userInfo: nil)
+        }
+        
+        let firstAsset = AVURLAsset(url: firstVideo.url)
+        let firstVideoTrack = try await loadTrack(from: firstAsset, withMediaType: .video)
+        let resultVideoSize = try await firstVideoTrack.load(.naturalSize)
+        
+        let (composition, videoComposition) = try await merge(videos, size: resultVideoSize)
+
+        return try await export(composition: composition, videoComposition: videoComposition, outputURL: outputURL)
+    }
 
     /// 전달받은 비디오 목록을 병합한 결과에 대한 AVPlayerItem을 반환합니다.
     static func preview(
