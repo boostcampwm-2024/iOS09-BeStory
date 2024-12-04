@@ -64,6 +64,7 @@ extension VideoUseCase: EditVideoUseCaseInterface {
             }
 
         videos.forEach { editingVideos[$0.url.path] = $0 }
+        editVideoRepository.updateVideo(videos)
         
         return videos
     }
