@@ -66,11 +66,12 @@ enum DataMapper {
         )
     }
     
-    static func mappingToVideo(_ element: EditVideoElement) -> Video {
+    static func mappingToVideo(_ element: EditVideoElement) -> Video? {
+        guard let url = FileSystemManager.shared.mappingToLocalURL(url: element.url) else { return nil }
+
         let user = DataMapper.mappingToConnectedUser(element.editor)
-        
         return .init(
-            url: element.url,
+            url: url,
             name: element.name,
             index: element.index,
             duration: element.duration,

@@ -19,15 +19,16 @@ public final class EditVideoRepository: EditVideoRepositoryInterface {
     // MARK: - Properties
     private var cancellables: Set<AnyCancellable> = []
     private let socketProvider: EditVideoSocketProvidable
-    private let crdt: LWWElementSet<EditVideoElement>
+    private var elementSet: LWWElementSet<EditVideoElement>
     
-    public let updatedVideos = PassthroughSubject<[Video], Never>()
+    public let editedVideos = PassthroughSubject<[Video], Never>()
     
     // MARK: - Initalizers
     public init(socketProvider: EditVideoSocketProvidable) {
         self.socketProvider = socketProvider
-        let peerCount = socketProvider.connectedPeers().count
-        self.crdt = LWWElementSet(id: UUID().uuidString, peerCount: peerCount)
+        let id = socketProvider.id
+        let peerIDs = socketProvider.connectedPeers().map { $0.id }
+        self.elementSet = .init(id: id, peerIDs: peerIDs)
     }
 }
 
@@ -46,9 +47,10 @@ public extension EditVideoRepository {
             }
         }
     }
+    func updateVideo(_ video: [Entity.Video]) { }
 }
 
-// MARK: - Private Methods
+// MARK: - Binding
 private extension EditVideoRepository {
     func binding() {
         socketProvider.dataShared
@@ -57,42 +59,43 @@ private extension EditVideoRepository {
             }
             .store(in: &cancellables)
         
-        Task {
-            await crdt.updatedElements
-                .sink(with: self) { owner, elements in
-                    owner.sendVideo(elements: elements)
-                }
-                .store(in: &cancellables)
-        }
+//        Task {
+//            await crdt.updatedElements
+//                .sink(with: self) { owner, elements in
+//                    owner.sendVideo(elements: elements)
+//                }
+//                .store(in: &cancellables)
+//        }
     }
-    
+}
+
+// MARK: - Private Methods
+private extension EditVideoRepository {
     func editVideo(_ video: Video) async {
         let element = DataMapper.mappingToEditVideoElement(
             video,
             editor: socketProvider.displayName
         )
-        let elementSet = await crdt.localAdd(element: element)
         
-        guard let elementData = try? JSONEncoder().encode(elementSet) else { return }
+        let elementSetState = await elementSet.localAdd(element: element)
+        
+        guard let elementData = try? JSONEncoder().encode(elementSetState) else { return }
         
         socketProvider.broadcast(data: elementData)
     }
     
-    // socket을 통해 데이터가 들어온 경우, crdt를 통해 merge
     func merge(data: Data, from user: SocketPeer) {
         guard
-            let elementSet = try? JSONDecoder().decode(LWWElementSetState<EditVideoElement>.self, from: data)
+            let elementSetState = try? JSONDecoder().decode(LWWElementSetState<EditVideoElement>.self, from: data)
         else { return }
-        
         Task {
-            await crdt.merge(with: elementSet)
+            await elementSet.merge(with: elementSetState)
         }
     }
-    
-    // crdt에서 업데이트가 온 경우, editingType에 따라 매핑하여 방출
-    func sendVideo(elements: [EditVideoElement]) {        
-        let videos = elements.map { DataMapper.mappingToVideo($0) }
+
+    func sendVideo(elements: [EditVideoElement]) {
+        let videos = elements.compactMap { DataMapper.mappingToVideo($0) }
         
-        if !videos.isEmpty { updatedVideos.send(videos) }
+        if !videos.isEmpty { editedVideos.send(videos) }
     }
 }
