@@ -23,7 +23,7 @@ public struct Video {
         index: Int,
         duration: Double,
         author: String,
-        editor: ConnectedUser,
+        editor: ConnectedUser?,
         startTime: Double,
         endTime: Double
     ) {
