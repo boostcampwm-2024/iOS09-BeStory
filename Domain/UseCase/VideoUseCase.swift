@@ -20,8 +20,13 @@ public final class VideoUseCase {
     private let editVideoRepository: EditVideoRepositoryInterface
 
 	public let isSynchronized = PassthroughSubject<Void, Never>()
+    public let startSynchronize = PassthroughSubject<Void, Never>()
     public let updatedSharedVideo = PassthroughSubject<SharedVideo, Never>()
     public let editedVideos = PassthroughSubject<[Video], Never>()
+    
+    public var videos: [Video] {
+        editingVideos.values.sorted(by: { $0.index < $1.index })
+    }
 	
     public init(
         sharingVideoRepository: SharingVideoRepositoryInterface,
@@ -106,6 +111,10 @@ private extension VideoUseCase {
 			.subscribe(isSynchronized)
 			.store(in: &cancellables)
         
+        sharingVideoRepository.startSynchronize
+            .subscribe(startSynchronize)
+            .store(in: &cancellables)
+        
         editVideoRepository.editedVideos
             .sink(with: self) { (owner, videos) in
                 owner.editingVideos = videos
@@ -113,6 +122,12 @@ private extension VideoUseCase {
             }
             .store(in: &cancellables)
 	}
+    
+    func updateEditingVideos(_ videos: [Video]) {
+        videos.forEach {
+            editingVideos[$0.url.path] = $0
+        }
+    }
     
     func updatedVideo(url: URL, startTime: Double, endTime: Double) -> Video? {
         guard let video = editingVideos.first(where: { $0.url.path == url.path })

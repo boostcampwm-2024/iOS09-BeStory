@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>동영상을 갤러리에 저장하기 위해 권한이 필요합니다.</string>
 	<key>UIUserInterfaceStyle</key>
 	<string>Dark</string>
 	<key>CFBundleDisplayName</key>

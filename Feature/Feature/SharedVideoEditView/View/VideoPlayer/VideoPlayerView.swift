@@ -63,6 +63,12 @@ extension VideoPlayerView {
     }
 
     func replaceVideo(playerItem: AVPlayerItem) {
+        //hdr무시
+        let videoComposition = AVMutableVideoComposition(propertiesOf: playerItem.asset)
+        videoComposition.colorPrimaries = AVVideoColorPrimaries_ITU_R_709_2
+        videoComposition.colorTransferFunction = AVVideoTransferFunction_ITU_R_709_2
+        videoComposition.colorYCbCrMatrix = AVVideoYCbCrMatrix_ITU_R_709_2
+        playerItem.videoComposition = videoComposition
         player.pause()
         player.replaceCurrentItem(with: playerItem)
     }

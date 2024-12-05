@@ -41,6 +41,13 @@ private extension MultipeerVideoListViewModel {
                 output.send(.readyForNextScreen)
             }
             .store(in: &cancellables)
+        
+        usecase.startSynchronize
+            .sink { [weak self] _ in
+                guard let self else { return }
+                output.send(.startSynchronize)
+            }
+            .store(in: &cancellables)
     }
 }
 

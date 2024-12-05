@@ -102,7 +102,10 @@ private extension VideoListViewController {
                 case .videoListDidChanged(let videos):
                     self?.items = videos
                 case .readyForNextScreen:
+                    self?.view.hideToast()
                     self?.navigateToEditor()
+                case .startSynchronize:
+                    self?.pause()
                 }
             }
             .store(in: &cancellables)
@@ -118,6 +121,7 @@ private extension VideoListViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.input.send(.validateSynchronization)
+                self?.pause()
             }
             .store(in: &cancellables)
     }
@@ -194,6 +198,11 @@ private extension VideoListViewController {
             viewModel: DIContainer.shared.resolve(type: SharedVideoEditViewModel.self)
         )
         navigationController?.pushViewController(sharedVideoEditViewController, animated: true)
+    }
+    
+    func pause() {
+        view.showToast(message: "동기화 중입니다...")
+        nextButton.isEnabled = false
     }
 }
 

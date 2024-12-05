@@ -34,7 +34,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		FE8208012CED782500307694 /* Exceptions for "Feature" folder in "Feature" target */ = {
+		D95A3B062D01D7500007A71A /* Exceptions for "Feature" folder in "Feature" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				ConnectionView/ConnectionViewController.swift,
@@ -57,6 +57,7 @@
 				Helper/EventPublisher.swift,
 				Helper/RoundButton.swift,
 				"Helper/Sequence+AsyncCompactMap.swift",
+				Helper/Toast.swift,
 				"Helper/UIAlertController+Types.swift",
 				"Helper/UIColor+HexInitialization.swift",
 				"Helper/UIImage+Concat.swift",
@@ -65,6 +66,11 @@
 				"Helper/UIView+Extension.swift",
 				MainViewController.swift,
 				PresentationModel/VideoPresentationModel.swift,
+				PreviewView/PreviewViewController.swift,
+				PreviewView/ViewModel/PreviewViewInput.swift,
+				PreviewView/ViewModel/PreviewViewModel.swift,
+				PreviewView/ViewModel/PreviewViewOutput.swift,
+				ResultView/ResultViewController.swift,
 				SharedVideoEditView/SharedVideoEditViewController.swift,
 				SharedVideoEditView/VideoMerger/VideoMerger.swift,
 				SharedVideoEditView/View/CollectionView/VideoTimelineCollectionViewCell.swift,
@@ -102,10 +108,10 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		FE6EF3F12CD8B71E005DC39D /* Feature */ = {
+		D95A3AC62D01D7500007A71A /* Feature */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				FE8208012CED782500307694 /* Exceptions for "Feature" folder in "Feature" target */,
+				D95A3B062D01D7500007A71A /* Exceptions for "Feature" folder in "Feature" target */,
 			);
 			path = Feature;
 			sourceTree = "<group>";
@@ -130,7 +136,7 @@
 		FE6EF3E62CD8B71E005DC39D = {
 			isa = PBXGroup;
 			children = (
-				FE6EF3F12CD8B71E005DC39D /* Feature */,
+				D95A3AC62D01D7500007A71A /* Feature */,
 				FE6EF4272CD8B843005DC39D /* Frameworks */,
 				FE6EF3F02CD8B71E005DC39D /* Products */,
 			);
