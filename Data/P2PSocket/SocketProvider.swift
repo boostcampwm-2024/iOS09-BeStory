@@ -77,7 +77,7 @@ extension SocketProvider: SocketBrowsable {
     public func connectedPeers() -> [SocketPeer] {
         return MCPeerIDStorage.shared
             .peerIDByIdentifier
-            .filter { $0.value.state == .connected || $0.value.state == .pending }
+            .filter { $0.value.state == .connected }
             .map {
                 let name = $0.value.peerId.displayName
                 let id = $0.key
@@ -270,35 +270,33 @@ extension SocketProvider: MCNearbyServiceBrowserDelegate {
         foundPeer peerID: MCPeerID,
         withDiscoveryInfo info: [String: String]?
     ) {
-        if let peer = MCPeerIDStorage.shared.findPeer(for: peerID) {
-            if peer.state == .pending {
-                MCPeerIDStorage.shared.update(state: .connected, id: peerID)
-            }
-        } else {
-            if let info, let id = info["id"] {
-                MCPeerIDStorage.shared.append(peerId: peerID, id: id, state: .found)
-            }
+        // 없어지는 경우, disConnected / lost
+        if var peer = mapToSocketPeer(peerID) {
+            peer.state = .found
+            MCPeerIDStorage.shared.update(state: .found, id: peerID)
+            updatedPeer.send(peer)
+            
         }
         
+        guard
+            MCPeerIDStorage.shared.findPeer(for: peerID) == nil,
+            let info,
+            let id = info["id"]
+        else { return }
+        MCPeerIDStorage.shared.append(peerId: peerID, id: id, state: .found)
+        // 여기 까진 잘되는 거 아냐? MCPeerID가 달라..?
         guard let peer = mapToSocketPeer(peerID) else { return }
         updatedPeer.send(peer)
     }
     
     public func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
-        guard var peer = mapToSocketPeer(peerID) else { return }
-        
-        if peer.state == .connected {
-            MCPeerIDStorage.shared.update(state: .pending, id: peerID)
-            peer.state = .pending
-        } else if peer.state == .found {
-            peer.state = .lost
-        }
-        
+        guard
+            var peer = mapToSocketPeer(peerID),
+            peer.state == .found
+        else { return }
+        peer.state = .lost
+        MCPeerIDStorage.shared.update(state: .lost, id: peerID)
         updatedPeer.send(peer)
-        
-        if peer.state == .lost {
-            MCPeerIDStorage.shared.remove(peerId: peerID)
-        }
     }
 }
 
