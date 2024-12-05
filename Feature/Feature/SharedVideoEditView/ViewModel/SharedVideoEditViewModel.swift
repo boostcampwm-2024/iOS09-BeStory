@@ -45,7 +45,6 @@ extension SharedVideoEditViewModel {
             case .timelineCellDidTap(let url):
                 let videos = owner.usecase.fetchVideos()
                 guard let tappedVideo = videos.first(where: { $0.url == url }) else { return }
-                print(url, tappedVideo)
                 owner.setTappedVideoPresentationModel(video: tappedVideo)
             case .sliderModelLowerValueDidChanged(let value):
                 owner.updateTappedVideoPresentationModel(lowerValue: value)
