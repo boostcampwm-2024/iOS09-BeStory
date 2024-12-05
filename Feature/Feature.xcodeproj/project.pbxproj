@@ -66,6 +66,7 @@
 				MainViewController.swift,
 				PresentationModel/VideoPresentationModel.swift,
 				SharedVideoEditView/SharedVideoEditViewController.swift,
+				SharedVideoEditView/VideoMerger/VideoMerger.swift,
 				SharedVideoEditView/View/CollectionView/VideoTimelineCollectionViewCell.swift,
 				SharedVideoEditView/View/CollectionView/VideoTimelineDataSource.swift,
 				SharedVideoEditView/View/CollectionView/VideoTimelineItem.swift,
