@@ -23,6 +23,10 @@ public final class VideoUseCase {
     public let startSynchronize = PassthroughSubject<Void, Never>()
     public let updatedSharedVideo = PassthroughSubject<SharedVideo, Never>()
     public let editedVideos = PassthroughSubject<[Video], Never>()
+    
+    public var videos: [Video] {
+        editingVideos.values.sorted(by: { $0.index < $1.index })
+    }
 	
     public init(
         sharingVideoRepository: SharingVideoRepositoryInterface,

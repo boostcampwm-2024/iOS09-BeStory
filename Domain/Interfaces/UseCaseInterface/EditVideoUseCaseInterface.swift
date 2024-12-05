@@ -11,6 +11,7 @@ import Foundation
 
 public protocol EditVideoUseCaseInterface {
     var editedVideos: PassthroughSubject<[Video], Never> { get }
+    var videos: [Video] { get }
     
     func fetchVideos() async -> [Video]
     
