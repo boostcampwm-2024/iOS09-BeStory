@@ -22,9 +22,11 @@ public final class BrowsingUserRepository: BrowsingUserRepositoryInterface {
     public let updatedInvitedUser = PassthroughSubject<InvitedUser, Never>()
     public let invitationReceived = PassthroughSubject<BrowsedUser, Never>()
     public let receivedEvent = PassthroughSubject<OpeningEvent, Never>()
+    public let isInGroup: CurrentValueSubject<Bool, Never>
     
     public init(socketProvider: BrowsingUserSocketProvidable) {
         self.socketProvider = socketProvider
+        self.isInGroup = socketProvider.isInGroup
         
         bind()
     }
@@ -35,6 +37,14 @@ public extension BrowsingUserRepository {
     func fetchBrowsingUsers() -> [BrowsedUser] {
         return socketProvider.browsingPeers()
             .compactMap { DataMapper.mappingToBrowsingUser($0) }
+    }
+    
+    func startAdvertising() {
+        socketProvider.startAdvertising()
+    }
+    
+    func stopAdvertising() {
+        socketProvider.stopAdvertising()
     }
     
     func inviteUser(with id: String, timeout: Double) {
@@ -68,31 +78,26 @@ public extension BrowsingUserRepository {
 private extension BrowsingUserRepository {
     func bind() {
         socketProvider.updatedPeer
-            .compactMap { peer in
-                DataMapper.mappingToBrowsingUser(peer)
-            }
+            .compactMap { DataMapper.mappingToBrowsingUser($0) }
             .subscribe(updatedBrowsingUser)
             .store(in: &cancellables)
         
         socketProvider.updatedPeer
-            .compactMap { peer in
-                DataMapper.mappingToInvitedUser(peer)
-            }
+            .compactMap { DataMapper.mappingToInvitedUser($0) }
             .subscribe(updatedInvitedUser)
             .store(in: &cancellables)
         
         socketProvider.invitationReceived
-            .compactMap { peer in
-                DataMapper.mappingToBrowsingUser(peer)
-            }
+            .compactMap { DataMapper.mappingToBrowsingUser($0) }
             .subscribe(invitationReceived)
             .store(in: &cancellables)
         
         socketProvider.dataShared
             .compactMap { (data, _) in
                 try? JSONDecoder().decode(OpeningEvent.self, from: data)
-            }.sink { [weak self] event in
-                self?.receivedEvent.send(event)
+            }
+            .sink(with: self) { owner, event in
+                owner.receivedEvent.send(event)
             }.store(in: &cancellables)
     }
 }
