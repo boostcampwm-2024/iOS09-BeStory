@@ -116,16 +116,17 @@ private extension ConnectionViewModel {
                 switch invitedUser.state {
                 case .accept:
                     owner.removeCurrentPosition(id: invitedUser.id)
-                    owner.output.send(.invitationAcceptedBy(
-                        user: BrowsedUser(
-                            id: invitedUser.id,
-                            state: .found,
-                            name: invitedUser.name
-                        )
-                    ))
+                    owner.output.send(.invitationAcceptedBy(user: invitedUser))
                 case .reject:
                     owner.output.send(.invitationRejectedBy(name: invitedUser.name))
                 }
+            }
+            .store(in: &cancellables)
+        
+        usecase.connectedUser
+            .sink(with: self) { owner, invitedUser in
+                guard invitedUser.state == .accept else { return }
+                owner.output.send(.connected(user: invitedUser))
             }
             .store(in: &cancellables)
 

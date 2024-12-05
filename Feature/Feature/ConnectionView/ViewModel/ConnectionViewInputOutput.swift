@@ -34,7 +34,8 @@ enum ConnectionViewOutput {
     // Invitation Output
 
     case invitationReceivedBy(user: BrowsedUser)
-    case invitationAcceptedBy(user: BrowsedUser)
+    case invitationAcceptedBy(user: InvitedUser)
+    case connected(user: InvitedUser)
     case invitationRejectedBy(name: String)
     case invitationTimeout
     case openSharedVideoList
