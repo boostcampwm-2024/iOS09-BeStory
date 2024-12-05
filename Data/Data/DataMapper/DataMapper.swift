@@ -52,8 +52,8 @@ enum DataMapper {
 	}
 
     static func mappingToEditVideoElement(_ video: Video, editor: String) -> EditVideoElement {
-        let user = User(id: "-1", name: editor, state: .connected)
-        
+        let user = User(id: "kkk", name: editor, state: .connected)
+
         return .init(
             url: video.url,
             name: video.name,
