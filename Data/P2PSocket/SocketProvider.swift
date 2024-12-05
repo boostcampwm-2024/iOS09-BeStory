@@ -215,10 +215,6 @@ extension SocketProvider: MCSessionDelegate {
         didReceive data: Data,
         fromPeer peerID: MCPeerID
     ) {
-        if let message = try? JSONDecoder().decode(SocketMessage.self, from: data) {
-            print(message)
-        }
-        
         guard let socketPeer = mapToSocketPeer(peerID) else { return }
         
         dataShared.send((data, socketPeer))
