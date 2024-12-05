@@ -34,7 +34,7 @@ extension VectorClock {
     /// - upstream의 나머지 레플리카에 대한 count  <= downstream의 벡터 시계 중 나머지 레플리카에 대한 count
     func isPaasable(to vectorClock: VectorClock, replicaId replica: String) -> Bool {
         guard self[replicaId: replica] == vectorClock.clock[replica]! - 1 else { return false }
-        
+
         for (replicaId, remoteCount) in vectorClock.clock {
              let localClockCont = self[replicaId: replicaId]
             if replica != replicaId && remoteCount > localClockCont {

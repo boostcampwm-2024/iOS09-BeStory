@@ -96,6 +96,14 @@ extension SceneDelegate {
                 editVideoRepository: DIContainer.shared.resolve(type: EditVideoRepositoryInterface.self)
             )
         )
+
+        DIContainer.shared.register(
+            type: EditVideoUseCaseInterface.self,
+            instance: VideoUseCase(
+                sharingVideoRepository: DIContainer.shared.resolve(type: SharingVideoRepositoryInterface.self),
+                editVideoRepository: DIContainer.shared.resolve(type: EditVideoRepositoryInterface.self)
+            )
+        )
     }
 
     func registerViewModel() {
@@ -122,7 +130,9 @@ extension SceneDelegate {
 
         DIContainer.shared.register(
             type: SharedVideoEditViewModel.self,
-            instance: SharedVideoEditViewModel()
+            instance: SharedVideoEditViewModel(
+                usecase: DIContainer.shared.resolve(type: EditVideoUseCaseInterface.self)
+            )
         )
     }
 }

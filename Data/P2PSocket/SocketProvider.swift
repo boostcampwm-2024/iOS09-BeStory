@@ -159,9 +159,9 @@ extension SocketProvider: SocketResourceSendable {
     public func broadcastResource(url localURL: URL, resourceName: String) {
         var url = localURL
         
-        if url.author().isEmpty {
-            url = localURL.append(author: self.peerID.displayName)
-        }
+//        if url.author().isEmpty {
+//            url = localURL.append(author: self.peerID.displayName)
+//        }
         
         session.connectedPeers.forEach { peer in
             session.sendResource(

@@ -52,7 +52,16 @@ public extension LWWElementSet {
         
         return payloading()
     }
-    
+
+    @discardableResult
+    func initializer(elements: [T]) -> LWWElementSetState<T> {
+        elements.forEach {
+            additions.removeValue(forKey: $0)
+            additions.updateValue(vectorClock, forKey: $0)
+        }
+        return payloading()
+    }
+
     func localRemove(element: T) -> LWWElementSetState<T> {
         let clock = vectorClock.increase(replicaId: id)
         removals.removeValue(forKey: element)
@@ -112,12 +121,12 @@ private extension LWWElementSet {
         
         otherAdditions.forEach { add(element: $0, remoteClock: $1) }
         otherRemovals.forEach { remove(element: $0, remoteClock: $1) }
-        
+
         updatedElements.send(elements())
         vectorClock.increase(replicaId: otherSet.id)
         return true
     }
-    
+
     func add(element: T, remoteClock: VectorClock) {
         if let clock = additions[element], remoteClock <= clock { return }
         

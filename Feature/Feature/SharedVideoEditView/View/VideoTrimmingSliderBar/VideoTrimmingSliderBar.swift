@@ -12,7 +12,7 @@ import SnapKit
 protocol VideoTrimmingSliderBarDelegate: AnyObject {
 	func lowerValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double)
 	func upperValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double)
-	func playerValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double)
+    func playerValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double)
 }
 
 final class VideoTrimmingSliderBar: UIControl {
@@ -66,7 +66,7 @@ final class VideoTrimmingSliderBar: UIControl {
 	private(set) var seekValue: Double = 0 {
 		didSet {
 			updateSeekThumbFrame()
-			delegate?.playerValueDidChanged(self, value: seekValue)
+            delegate?.playerValueDidChanged(self, value: seekValue)
 		}
 	}
 	

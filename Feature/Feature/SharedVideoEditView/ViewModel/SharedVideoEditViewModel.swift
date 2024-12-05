@@ -8,6 +8,8 @@
 import AVFoundation
 import Combine
 import Core
+import Entity
+import Interfaces
 
 public final class SharedVideoEditViewModel {
     typealias Input = SharedVideoEditViewInput
@@ -16,38 +18,37 @@ public final class SharedVideoEditViewModel {
     private var output = PassthroughSubject<Output, Never>()
     private var cancellables: Set<AnyCancellable> = []
 
-    public init() {
-        setupBind()
+    private var videoPresentationModels: [VideoPresentationModel] = []
+    private var tappedVideoPresentationModel: VideoPresentationModel?
+    private let usecase: EditVideoUseCaseInterface
+
+    public init(usecase: EditVideoUseCaseInterface) {
+        self.usecase = usecase
+        self.setupBind()
     }
-    
+}
+
+// MARK: - Transform
+extension SharedVideoEditViewModel {
     func transform(_ input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink(with: self) { owner, input in
             switch input {
-            // 테스트 셋업으로 초기화합니다.
-            case .setInitialState:
-                let initialItems = [
-                    VideoTimelineItem(
-                        thumbnailImage: Data(),
-                        duration: "0:0"
-                    ),
-                    VideoTimelineItem(
-                        thumbnailImage: Data(),
-                        duration: "10:0"
-                    ),
-                    VideoTimelineItem(
-                        thumbnailImage: Data(),
-                        duration: "20:0"
-                    ),
-                    VideoTimelineItem(
-                        thumbnailImage: Data(),
-                        duration: "30:0"
-                    ),
-                    VideoTimelineItem(
-                        thumbnailImage: Data(),
-                        duration: "40:0"
-                    )
-                ]
-                owner.output.send(.timeLineDidChanged(items: initialItems))
+            case .viewDidLoad:
+                owner.viewDidLoad()
+            case .timelineCellDidTap(let url):
+                owner.timelineCellDidTap(with: url)
+            case .sliderModelLowerValueDidChanged(let value):
+                owner.updateTappedVideoPresentationModel(lowerValue: value)
+            case .sliderModelUpperValueDidChanged(let value):
+                owner.updateTappedVideoPresentationModel(upperValue: value)
+            case .sliderEditSaveButtonDidTapped:
+                guard let currentTappedVideoPresentationModel = owner.tappedVideoPresentationModel else { return }
+
+                owner.usecase.trimmingVideo(
+                    url: currentTappedVideoPresentationModel.url,
+                    startTime: currentTappedVideoPresentationModel.startTime,
+                    endTime: currentTappedVideoPresentationModel.endTime
+                )
             }
         }
         .store(in: &cancellables)
@@ -56,10 +57,98 @@ public final class SharedVideoEditViewModel {
     }
 }
 
-// MARK: - Private Methods
+// MARK: - Binding
 private extension SharedVideoEditViewModel {
-    func setupBind() { }
-	
+    func setupBind() {
+        usecase.editedVideos
+            .sink(with: self) { owner, videos in
+                Task {
+                    owner.videoPresentationModels.removeAll()
+
+                    // Slider 길이 편집 처리
+                    if let currentTappedVideoPresentationModel = owner.tappedVideoPresentationModel {
+                        guard
+                            let tappedVideo = videos.first(
+                                where: { $0.url == currentTappedVideoPresentationModel.url }),
+                            let model = await owner.makeVideoPresentationModel(video: tappedVideo)
+                        else { return }
+                        owner.setTappedVideoPresentationModel(model: model)
+                    }
+
+                    // Timeline 순서 편집 처리
+                    let newTimelineItems = await videos.asyncCompactMap { video in
+                        let asset = AVAsset(url: video.url)
+                        owner.appendVideoPresentationModels(video: video)
+                        return await owner.makeVideoTimelineItem(with: video.url, asset: asset)
+                    }
+                    owner.output.send(.timelineItemsDidChanged(items: newTimelineItems))
+                }
+            }
+            .store(in: &cancellables)
+    }
+}
+
+// MARK: - Private Methods for Slider
+private extension SharedVideoEditViewModel {
+    func appendVideoPresentationModels(video: Video) {
+        Task {
+            guard let model = await makeVideoPresentationModel(video: video) else { return }
+            videoPresentationModels.append(model)
+        }
+    }
+
+    func setTappedVideoPresentationModel(model: VideoPresentationModel) {
+        tappedVideoPresentationModel = model
+        output.send(.sliderModelDidChanged(model: model))
+    }
+
+    func updateTappedVideoPresentationModel(lowerValue: Double) {
+        guard let currentTappedVideoPresentationModel = tappedVideoPresentationModel else { return }
+        let newModel = VideoPresentationModel(
+            url: currentTappedVideoPresentationModel.url,
+            index: currentTappedVideoPresentationModel.index,
+            duration: currentTappedVideoPresentationModel.duration,
+            startTime: lowerValue,
+            endTime: currentTappedVideoPresentationModel.endTime,
+            frameImage: currentTappedVideoPresentationModel.frameImage
+        )
+
+        tappedVideoPresentationModel = newModel
+    }
+
+    func updateTappedVideoPresentationModel(upperValue: Double) {
+        guard let currentTappedVideoPresentationModel = tappedVideoPresentationModel else { return }
+        let newModel = VideoPresentationModel(
+            url: currentTappedVideoPresentationModel.url,
+            index: currentTappedVideoPresentationModel.index,
+            duration: currentTappedVideoPresentationModel.duration,
+            startTime: currentTappedVideoPresentationModel.startTime,
+            endTime: upperValue,
+            frameImage: currentTappedVideoPresentationModel.frameImage
+        )
+
+        tappedVideoPresentationModel = newModel
+    }
+
+    func makeVideoPresentationModel(video: Video) async -> VideoPresentationModel? {
+        let asset = AVAsset(url: video.url)
+        guard let frameImage = await frameImage(
+            from: asset,
+            frameCount: Int(video.duration)
+        ) else { return nil }
+
+        let model = VideoPresentationModel(
+            url: video.url,
+            index: video.index,
+            duration: video.duration,
+            startTime: video.startTime,
+            endTime: video.endTime,
+            frameImage: frameImage
+        )
+
+        return model
+    }
+
 	/// `frameCount` 만큼의  frame Image들을 단일 frameImage로 리턴해줍니다.
 	func frameImage(from video: AVAsset, frameCount: Int) async -> UIImageWrapper? {
 		guard let cmTimeDuration = try? await video.load(.duration) else { return nil }
@@ -102,4 +191,49 @@ private extension SharedVideoEditViewModel {
 		
 		return .init(image: concatImage)
 	}
+}
+
+// MARK: - Private Methods for Timeline
+private extension SharedVideoEditViewModel {
+    func makeVideoTimelineItem(with url: URL, asset: AVAsset) async -> VideoTimelineItem {
+        let thumbnailImage = asset.generateThumbnail()
+        let thumbnailData = thumbnailImage?.jpegData(compressionQuality: 0.8)
+        let durationString = convertToDurationString(with: await asset.totalSeconds)
+
+        return VideoTimelineItem(
+            date: Date.now,
+            url: url,
+            thumbnailImage: thumbnailData ?? Data(),
+            duration: durationString
+        )
+    }
+
+    func convertToDurationString(with totalSeconds: Float64?) -> String {
+        guard let totalSeconds else { return "--:--" }
+        let minutes = Int(totalSeconds) / 60
+        let seconds = Int(totalSeconds) % 60
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
+}
+
+// MARK: - Private Methods
+private extension SharedVideoEditViewModel {
+    func viewDidLoad() {
+        Task {
+            let videos = await usecase.fetchVideos()
+            let timelineItems = await videos.asyncCompactMap { video in
+                let asset = AVAsset(url: video.url)
+                appendVideoPresentationModels(video: video)
+                return await makeVideoTimelineItem(with: video.url, asset: asset)
+            }
+            output.send(.timelineItemsDidChanged(items: timelineItems))
+        }
+    }
+    
+    func timelineCellDidTap(with url: URL) {
+        Task {
+            guard let tappedModel = videoPresentationModels.first(where: { $0.url == url }) else { return }
+            setTappedVideoPresentationModel(model: tappedModel)
+        }
+    }
 }
