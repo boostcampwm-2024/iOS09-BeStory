@@ -107,9 +107,18 @@ private extension VideoUseCase {
 			.store(in: &cancellables)
         
         editVideoRepository.editedVideos
-            .subscribe(editedVideos)
+            .sink(with: self) { owner, videos in
+                owner.updateEditingVideos(videos)
+                owner.editedVideos.send(videos)
+            }
             .store(in: &cancellables)
 	}
+    
+    func updateEditingVideos(_ videos: [Video]) {
+        videos.forEach {
+            editingVideos[$0.url.path] = $0
+        }
+    }
     
     func updatedVideo(url: URL, startTime: Double, endTime: Double) -> Video? {
         guard let video = editingVideos[url.path] else { return nil }
