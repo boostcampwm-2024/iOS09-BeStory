@@ -43,12 +43,18 @@ extension SharedVideoEditViewModel {
                 owner.updateTappedVideoPresentationModel(upperValue: value)
             case .sliderEditSaveButtonDidTapped:
                 guard let currentTappedVideoPresentationModel = owner.tappedVideoPresentationModel else { return }
-
+                if let index = owner.videoPresentationModels.firstIndex(where: {
+                    $0 == currentTappedVideoPresentationModel
+                }) {
+                    owner.videoPresentationModels[index] = currentTappedVideoPresentationModel
+                }
                 owner.usecase.trimmingVideo(
                     url: currentTappedVideoPresentationModel.url,
                     startTime: currentTappedVideoPresentationModel.startTime,
                     endTime: currentTappedVideoPresentationModel.endTime
                 )
+            case .timelineCellOrderDidChanged(let to, let url):
+                owner.videoOrderChanged(to: to, url: url)
             }
         }
         .store(in: &cancellables)
@@ -69,19 +75,24 @@ private extension SharedVideoEditViewModel {
                     if let currentTappedVideoPresentationModel = owner.tappedVideoPresentationModel {
                         guard
                             let tappedVideo = videos.first(
-                                where: { $0.url == currentTappedVideoPresentationModel.url }),
+                                where: { $0.url.path == currentTappedVideoPresentationModel.url.path }),
                             let model = await owner.makeVideoPresentationModel(video: tappedVideo)
                         else { return }
                         owner.setTappedVideoPresentationModel(model: model)
                     }
-
                     // Timeline 순서 편집 처리
-                    let newTimelineItems = await videos.asyncCompactMap { video in
+                    let orderdVideos = videos.sorted { $0.index < $1.index }
+                    var timeLineItem: [VideoTimelineItem] = []
+                    for video in orderdVideos {
                         let asset = AVAsset(url: video.url)
                         owner.appendVideoPresentationModels(video: video)
-                        return await owner.makeVideoTimelineItem(with: video.url, asset: asset)
+                        async let item = owner.makeVideoTimelineItem(with: video.url, asset: asset)
+                        await timeLineItem.append(item)
                     }
-                    owner.output.send(.timelineItemsDidChanged(items: newTimelineItems))
+//                    let newTimelineItems = await orderdVideos.asyncCompactMap { video in
+//                        return await
+//                    }
+                    owner.output.send(.timelineItemsDidChanged(items: timeLineItem))
                 }
             }
             .store(in: &cancellables)
@@ -235,5 +246,16 @@ private extension SharedVideoEditViewModel {
             guard let tappedModel = videoPresentationModels.first(where: { $0.url == url }) else { return }
             setTappedVideoPresentationModel(model: tappedModel)
         }
+    }
+    
+    func videoOrderChanged(
+        to: Int,
+        url: URL
+    ) {
+        guard let index = videoPresentationModels.firstIndex(where: { $0.url == url })
+                                                             else { return }
+        let video = videoPresentationModels.remove(at: index)
+        videoPresentationModels.insert(video, at: to)
+        usecase.reArrangingVideo(url: video.url, index: to)
     }
 }

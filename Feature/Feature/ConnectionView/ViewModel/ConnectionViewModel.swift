@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Core
 import Entity
 import Foundation
 import Interfaces
@@ -59,14 +60,11 @@ extension ConnectionViewModel {
 
             switch result {
             // Connection Input
-
             case .fetchUsers:
                 usecase.fetchBrowsedUsers().forEach({ self.found(user: $0) })
             case .inviteUser(let id):
                 usecase.inviteUser(with: id)
-
             // Invitation Input
-
             case .acceptInvitation(let user):
                 usecase.acceptInvitation()
                 removeCurrentPosition(id: user.id)
@@ -86,65 +84,65 @@ extension ConnectionViewModel {
 
 private extension ConnectionViewModel {
     func setupBind() {
+        // isInGroup
+        usecase.isInGroup
+            .sink(with: self) { owner, value in
+                value ? owner.usecase.stopAdvertising() : owner.usecase.startAdvertising()
+            }
+            .store(in: &cancellables)
+        
         // Broswed User (found, lost)
-
         usecase.browsedUser
-            .sink { [weak self] updatedUser in
-                guard let self else { return }
-
+            .sink(with: self) { owner, updatedUser in
                 switch updatedUser.state {
                 case .found:
-                    found(user: updatedUser)
+                    owner.found(user: updatedUser)
                 case .lost:
-                    lost(user: updatedUser)
+                    owner.lost(user: updatedUser)
                 }
             }
             .store(in: &cancellables)
 
         // Invitation Received (From Who)
-
         usecase.invitationReceived
-            .sink { [weak self] invitingUser in
-                guard let self else { return }
-                output.send(.invitationReceivedBy(user: invitingUser))
+            .sink(with: self) { owner, invitingUser in
+                owner.output.send(.invitationReceivedBy(user: invitingUser))
             }
             .store(in: &cancellables)
 
         // Invitation Result (when I invite other users)
-
         usecase.invitationResult
-            .sink { [weak self] invitedUser in
-                guard let self else { return }
-
+            .sink(with: self) { owner, invitedUser in
                 switch invitedUser.state {
                 case .accept:
-                    self.removeCurrentPosition(id: invitedUser.id)
-                    output.send(.invitationAcceptedBy(user: BrowsedUser(
-                        id: invitedUser.id,
-                        state: .found,
-                        name: invitedUser.name
-                    )))
+                    owner.removeCurrentPosition(id: invitedUser.id)
+                    owner.output.send(.invitationAcceptedBy(user: invitedUser))
                 case .reject:
-                    output.send(.invitationRejectedBy(name: invitedUser.name))
+                    owner.output.send(.invitationRejectedBy(name: invitedUser.name))
                 }
+            }
+            .store(in: &cancellables)
+        
+        usecase.connectedUser
+            .sink(with: self) { owner, invitedUser in
+                guard invitedUser.state == .accept else { return }
+                owner.removeCurrentPosition(id: invitedUser.id)
+                owner.output.send(.connected(user: invitedUser))
             }
             .store(in: &cancellables)
 
         // Invitaion Fired Due to Timeout (invited user receive)
-
         usecase.invitationDidFired
-            .sink { [weak self] in
-                guard let self else { return }
-
-                output.send(.invitationTimeout)
-                usecase.rejectInvitation()
+            .sink(with: self) { owner, _ in
+                owner.output.send(.invitationTimeout)
+                owner.usecase.rejectInvitation()
             }
             .store(in: &cancellables)
         
         usecase.openingEvent
-            .sink { [weak self] in
-                guard let self else { return }
-                output.send(.openSharedVideoList)
+            .sink(with: self) { owner, _ in
+                owner.output.send(.openSharedVideoList)
+                owner.usecase.rejectInvitation()
             }
             .store(in: &cancellables)
     }

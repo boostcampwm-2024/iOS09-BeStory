@@ -19,6 +19,7 @@ public protocol SocketAdvertiseable: SocketIdentifiable {
 }
 
 public protocol SocketBrowsable: SocketIdentifiable {
+    var isInGroup: CurrentValueSubject<Bool, Never> { get }
     var updatedPeer: PassthroughSubject<SocketPeer, Never> { get }
     /// Browsing된 Peer를 리턴합니다.
     func browsingPeers() -> [SocketPeer]

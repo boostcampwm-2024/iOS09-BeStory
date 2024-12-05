@@ -18,14 +18,12 @@ struct EditVideoElement: Codable, Hashable {
     let endTime: Double
 
     func hash(into hasher: inout Hasher) {
-//        hasher.combine(url.lastPathComponent)
         hasher.combine(name)
     }
 
     static func == (lhs: EditVideoElement, rhs: EditVideoElement) -> Bool {
         return lhs.name == rhs.name
     }
-    // lhs.url.lastPathComponent == rhs.url.lastPathComponent &&
 }
 
 struct User: Codable, Hashable {
@@ -39,6 +37,4 @@ enum ConnectionState: Codable {
     case connected
     /// 연결이 끊긴 경우
     case disconnected
-    /// 연결 보류 중인 경우(ex 백그라운드 이동하여 lost상태에서 `disConnected`되기 전 단계)
-    case pending
 }

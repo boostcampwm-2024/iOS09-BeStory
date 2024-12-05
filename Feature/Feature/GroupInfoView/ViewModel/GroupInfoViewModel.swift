@@ -53,8 +53,6 @@ private extension GroupInfoViewModel {
                     userDidInvited(user: updatedUser)
                 case .disconnected:
                     userDidExit(user: updatedUser)
-                case .pending:
-                    userStateDidChanged(user: updatedUser)
                 }
             }
             .store(in: &cancellables)

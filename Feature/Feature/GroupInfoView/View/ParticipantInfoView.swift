@@ -87,8 +87,6 @@ private extension ParticipantInfoView {
             stateIndicatorView.backgroundColor = .systemGreen
         case .disconnected:
             stateIndicatorView.backgroundColor = .systemGray6
-        case .pending:
-            stateIndicatorView.backgroundColor = .systemRed
         }
     }
 }

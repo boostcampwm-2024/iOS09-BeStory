@@ -73,11 +73,15 @@ extension ConnectionViewController {
         output.receive(on: DispatchQueue.main)
             .sink(with: self) { owner, result in
                 switch result {
-                        // Connection Output
                     case .foundUser(let user, let position, let emoji):
-                        owner.addUserCircleView(user: user, position: position, emoji: emoji)
+                        owner.addUserCircleView(
+                            userID: user.id,
+                            userName: user.name,
+                            position: position,
+                            emoji: emoji
+                        )
                     case .lostUser(let user):
-                        owner.removeUserCircleView(user: user)
+                        owner.removeUserCircleView(userID: user.id)
                         owner.resetCurrentAlert()
                         if user.id == owner.currentUserId {
                             owner.resetCurrentUserId()
@@ -88,15 +92,16 @@ extension ConnectionViewController {
                         owner.presentInvitationReceivedAlert(by: user)
                     case .invitationAcceptedBy(let user):
                         owner.resetCurrentAlert()
-                        owner.removeUserCircleView(user: user)
-                        owner.presentInvitationAcceptedAlert(by: user)
+                        owner.removeUserCircleView(userID: user.id)
+                        owner.presentInvitationAcceptedAlert(by: user.name)
+                    case .connected(let user):
+                        owner.removeUserCircleView(userID: user.id)
                     case .invitationRejectedBy(let userName):
                         owner.resetCurrentAlert()
                         owner.presentInvitationRejectedAlert(by: userName)
                     case .invitationTimeout:
                         owner.resetCurrentAlert()
                         owner.invitationTimeoutAlert()
-                       
                     case .openSharedVideoList:
                         owner.openVideoList()
                 }
@@ -132,9 +137,14 @@ private extension ConnectionViewController {
 
 // MARK: - Private Methods
 private extension ConnectionViewController {
-    func addUserCircleView(user: BrowsedUser, position: CGPoint, emoji: String) {
-        let userCircleView = CircleView(id: user.id, style: .small)
-        userCircleView.configure(emoji: emoji, name: user.name)
+    func addUserCircleView(
+        userID: String,
+        userName: String,
+        position: CGPoint,
+        emoji: String
+    ) {
+        let userCircleView = CircleView(id: userID, style: .small)
+        userCircleView.configure(emoji: emoji, name: userName)
         
         userContainerView.addSubview(userCircleView)
         
@@ -148,15 +158,15 @@ private extension ConnectionViewController {
             action: #selector(userDidTapped(_:))
         )
         userCircleView.addGestureRecognizer(tapGesture)
-        userCircleView.accessibilityLabel = user.id
+        userCircleView.accessibilityLabel = userID
         
         userContainerView.layoutIfNeeded()
     }
     
-    func removeUserCircleView(user: BrowsedUser) {
+    func removeUserCircleView(userID: String) {
         userContainerView.subviews
             .compactMap { $0 as? CircleView }
-            .filter { $0.id == user.id }
+            .filter { $0.id == userID }
             .forEach { $0.removeFromSuperview() }
         
         userContainerView.layoutIfNeeded()
@@ -193,7 +203,7 @@ private extension ConnectionViewController {
                     self.input.send(.acceptInvitation(user: user))
                     self.resetCurrentAlert()
                     self.resetCurrentUserId()
-                    self.removeUserCircleView(user: user)}),
+                    self.removeUserCircleView(userID: user.id)}),
                 .cancel(handler: {
                     self.input.send(.rejectInvitation)
                     self.resetCurrentAlert()
@@ -203,9 +213,9 @@ private extension ConnectionViewController {
         present(alert, animated: true)
     }
     
-    func presentInvitationAcceptedAlert(by user: BrowsedUser) {
+    func presentInvitationAcceptedAlert(by userName: String) {
         present(UIAlertController(
-            type: .invitationAcceptedBy(name: user.name),
+            type: .invitationAcceptedBy(name: userName),
             actions: [.confirm(), .cancel()]), animated: true)
     }
     
