@@ -453,14 +453,24 @@ extension SharedVideoEditViewController: UICollectionViewDropDelegate {
 
         snapshot.deleteItems(draggedItems)
         let targetIndex = destinationIndexPath.item
+        
         let currentItems = snapshot.itemIdentifiers
         var updatedItems = currentItems
         updatedItems.insert(contentsOf: draggedItems, at: targetIndex)
-        
-        applySnapShot(with: updatedItems)
 
+        applySnapShot(with: updatedItems)
+        
+        guard let reorderItem = videoTimelineDataSource.itemIdentifier(for: destinationIndexPath) else { return }
+
+        collectionView.scrollToItem(
+            at: destinationIndexPath,
+            at: .centeredHorizontally,
+            animated: true
+        )
+        
         coordinator.items.forEach { item in
             coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
         }
+        input.send(.timelineCellOrderDidChanged(to: targetIndex, url: reorderItem.url))
     }
 }
