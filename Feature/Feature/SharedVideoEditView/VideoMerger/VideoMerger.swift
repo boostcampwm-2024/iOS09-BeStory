@@ -8,13 +8,12 @@
 import AVFoundation
 import Entity
 
-public enum VideoMerger {
+enum VideoMerger {
     private enum Constants {
         static let scaleSecond: Int32 = 600
         static let defaultFrameRate: Int32 = 30
     }
     
-    /// 전달받은 URL로 비디오 목록을 병합한 결과를 저장합니다.
     static func mergeWithSave(
         _ videos: [Video],
         outputURL: URL,
@@ -27,14 +26,13 @@ public enum VideoMerger {
         
         let firstAsset = AVURLAsset(url: firstVideo.url)
         let firstVideoTrack = try await loadTrack(from: firstAsset, withMediaType: .video)
-        let resultVideoSize = try await firstVideoTrack.load(.naturalSize)
-        
-        let (composition, videoComposition) = try await merge(videos, size: resultVideoSize)
-        
+        let renderSize = try await loadSize(of: firstVideoTrack)
+
+        let (composition, videoComposition) = try await merge(videos, size: renderSize)
+
         return try await export(composition: composition, videoComposition: videoComposition, outputURL: outputURL)
     }
     
-    /// 전달받은 비디오 목록을 병합한 결과에 대한 AVPlayerItem을 반환합니다.
     static func preview(
         videos: [Video],
         size previewSize: CGSize
@@ -44,22 +42,18 @@ public enum VideoMerger {
         avItem.videoComposition = videoComposition
         return avItem
     }
-}
-
-// MARK: - Private Methods
-private extension VideoMerger {
+    
     private static func merge(
         _ videos: [Video],
         size resultSize: CGSize,
         frameRate: Int32 = Constants.defaultFrameRate
-    ) async throws -> (AVMutableComposition, AVMutableVideoComposition) {
-        let orderdVideos = videos.sorted { $0.index < $1.index }
+    ) async throws -> (AVMutableComposition, AVMutableVideoComposition){
         let composition = AVMutableComposition()
         var currentTime = CMTime.zero
         
         var layerInstructions: [AVMutableVideoCompositionInstruction] = []
         
-        for video in orderdVideos {
+        for video in videos {
             let asset = AVURLAsset(url: video.url)
             
             let assetVideoTrack = try await loadTrack(from: asset, withMediaType: .video)
@@ -76,21 +70,25 @@ private extension VideoMerger {
             try audioTrack.insertTimeRange(timeRange, of: assetAudioTrack, at: currentTime)
             
             let layerInstruction = AVMutableVideoCompositionLayerInstruction(assetTrack: videoTrack)
-            let videoSize = try await assetVideoTrack.load(.naturalSize)
-            
-            let scale = scaleToAspectFit(with: videoSize, to: resultSize)
-            let center = moveToCenter(with: videoSize, to: resultSize, scale: scale)
-            
+
             let transform = try await assetVideoTrack.load(.preferredTransform)
+            
+            let adjustedSize = try await loadSize(of: assetVideoTrack)
+            let scale = scaleToAspectFit(with: adjustedSize, to: resultSize)
+            let center = moveToCenter(with: adjustedSize, to: resultSize, scale: scale)
+
+            let scaledTransform = transform
                 .concatenating(CGAffineTransform(scaleX: scale, y: scale))
                 .concatenating(CGAffineTransform(translationX: center.x, y: center.y))
-            layerInstruction.setTransform(transform, at: .zero)
-            
-            let instruction = adoptAlphaInstruction(
+
+            layerInstruction.setTransform(scaledTransform, at: currentTime)
+
+            let instruction = alphaInstruction(
                 layerInstruction,
                 currentTime: currentTime,
                 duration: duration
             )
+
             
             layerInstructions.append(instruction)
             currentTime = CMTimeAdd(currentTime, duration)
@@ -105,7 +103,7 @@ private extension VideoMerger {
         return (composition, videoComposition)
     }
     
-    static func export(
+    private static func export(
         composition: AVMutableComposition,
         videoComposition: AVMutableVideoComposition,
         outputURL: URL
@@ -114,9 +112,8 @@ private extension VideoMerger {
         else {
             throw NSError(domain: "CannotInitExporter", code: -2, userInfo: nil)
         }
-        
         exporter.videoComposition = videoComposition
-        
+
         if #available(iOS 18, *) {
             return try await exporter.export(to: outputURL, as: .mp4)
         } else {
@@ -139,21 +136,28 @@ private extension VideoMerger {
         }
     }
     
-    static func addTrack(
+    private static func loadSize(of track: AVAssetTrack) async throws -> CGSize {
+        let naturalSize = try await track.load(.naturalSize)
+        let transform = try await track.load(.preferredTransform)
+        let isPortrait = transform.a == 0 && abs(transform.b) == 1
+        let correctedSize = isPortrait
+        ? CGSize(width: naturalSize.height, height: naturalSize.width)
+        : naturalSize
+        return correctedSize
+    }
+    
+    private static func addTrack(
         to composition: AVMutableComposition,
         withMediaType mediaType: AVMediaType
     ) async throws -> AVMutableCompositionTrack {
-        guard let track = composition.addMutableTrack(
-            withMediaType: mediaType,
-            preferredTrackID: kCMPersistentTrackID_Invalid
-        )
+        guard let track = composition.addMutableTrack(withMediaType: mediaType, preferredTrackID: kCMPersistentTrackID_Invalid)
         else {
             throw NSError(domain: "CannotCreateVideoTrack", code: -2, userInfo: nil)
         }
         return track
     }
     
-    static func loadTrack(
+    private static func loadTrack(
         from asset: AVAsset,
         withMediaType mediaType: AVMediaType
     ) async throws -> AVAssetTrack {
@@ -164,15 +168,20 @@ private extension VideoMerger {
         return track
     }
     
-    static func scaleToAspectFit(with videoSize: CGSize, to resultVideoSize: CGSize) -> CGFloat {
-        let scaleX = resultVideoSize.width / videoSize.width
-        let scaleY = resultVideoSize.height / videoSize.height
-        let scale = min(scaleX, scaleY)
-        
+    private static func scaleToAspectFit(with videoSize: CGSize, to resultVideoSize: CGSize) -> CGFloat {
+        let widthScale = resultVideoSize.width / videoSize.width
+        let heightScale = resultVideoSize.height / videoSize.height
+        let scale = min(widthScale, heightScale) // 전체가 보여야 하므로 작은 값 사용
+      
         return scale
     }
     
-    static func moveToCenter(
+    private static func scalePortrait(with videoSize: CGSize, to resultVideoSize: CGSize) -> CGFloat {
+        let scaleToFitRatio = resultVideoSize.width / videoSize.height
+        return scaleToFitRatio
+    }
+    
+    private static func moveToCenter(
         with videoSize: CGSize,
         to resultVideoSize: CGSize,
         scale: CGFloat
@@ -185,7 +194,7 @@ private extension VideoMerger {
         return CGPoint(x: translationX, y: translationY)
     }
     
-    static func adoptAlphaInstruction(
+    private static func alphaInstruction(
         _ layerInstruction: AVMutableVideoCompositionLayerInstruction,
         currentTime: CMTime,
         duration: CMTime
@@ -202,4 +211,5 @@ private extension VideoMerger {
         
         return instruction
     }
+    
 }
