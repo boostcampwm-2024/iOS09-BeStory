@@ -61,11 +61,6 @@ public final class SharedVideoEditViewController: UIViewController {
         
         input.send(.viewDidLoad)
     }
-    
-    public override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: true)
-    }
 }
 
 // MARK: - Binding
@@ -403,7 +398,11 @@ extension SharedVideoEditViewController: UICollectionViewDelegate {
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        guard let selectedItem = videoTimelineDataSource.itemIdentifier(for: indexPath) else { return }
+        guard let selectedItem = videoTimelineDataSource.itemIdentifier(for: indexPath),
+              let selectedCell = collectionView.cellForItem(at: indexPath)
+        else { return }
+        
+        selectedCell.isSelected = true
         videoPlayerView.replaceVideo(url: selectedItem.url)
         input.send(.timelineCellDidTap(url: selectedItem.url))
     }

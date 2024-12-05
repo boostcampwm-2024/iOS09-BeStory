@@ -69,6 +69,8 @@ public extension SharingVideoRepository {
     }
     
     func broadcastHashes() {
+        guard !socketProvider.connectedPeers().isEmpty else { return isSynchronized.send(()) }
+        
         let collectedHashes = synchronizer.collectHashes()
         let hashMessage = SyncMessage.hash(collectedHashes)
         
@@ -83,6 +85,10 @@ public extension SharingVideoRepository {
             }
         
         hasMismatch = false
+    }
+    
+    func authorInformation() -> String {
+        socketProvider.displayName
     }
 }
 

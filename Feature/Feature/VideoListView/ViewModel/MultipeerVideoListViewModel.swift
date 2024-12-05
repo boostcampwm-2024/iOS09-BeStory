@@ -30,8 +30,7 @@ private extension MultipeerVideoListViewModel {
             .sink { [weak self] updatedVideo in
                 guard let self else { return }
                 Task {
-                    let asset = AVAsset(url: updatedVideo.localUrl)
-                    await self.appendItem(with: updatedVideo.localUrl, asset: asset)
+                    await self.appendItem(with: updatedVideo)
                 }
             }
             .store(in: &cancellables)
@@ -70,17 +69,27 @@ extension MultipeerVideoListViewModel: VideoListViewModel {
 
 private extension MultipeerVideoListViewModel {
     func shareItem(with url: URL) async {
-        let asset = AVAsset(url: url)
-        usecase.shareVideo(url, resourceName: asset.title ?? "temp.avi")
+        Task {
+            let asset = AVAsset(url: url)
+            await appendItem(with: url)
+            usecase.shareVideo(url, resourceName: asset.title ?? "temp.avi")
+        }
     }
     
-    func appendItem(with url: URL, asset: AVAsset) async {
-        let item = await makeVideoListItem(with: url, asset: asset)
+    func appendItem(with url: URL) async {
+        let item = await makeVideoListItem(with: url)
         videoItems.append(item)
         output.send(.videoListDidChanged(videos: videoItems))
     }
     
-    func makeVideoListItem(with url: URL, asset: AVAsset) async -> VideoListItem {
+    func appendItem(with sharedVideo: SharedVideo) async {
+        let item = await makeVideoListItem(with: sharedVideo)
+        videoItems.append(item)
+        output.send(.videoListDidChanged(videos: videoItems))
+    }
+    
+    func makeVideoListItem(with localUrl: URL) async -> VideoListItem {
+        let asset = AVURLAsset(url: localUrl)
         let thumbnailImage = asset.generateThumbnail()
         let thumbnailData = thumbnailImage?.jpegData(compressionQuality: 0.8)
         let durationString = convertToDurationString(with: await asset.totalSeconds)
@@ -88,9 +97,26 @@ private extension MultipeerVideoListViewModel {
         
         return VideoListItem(
             title: asset.title ?? "제목 없음",
-            authorTitle: await asset.author ?? "알 수 없음",
+            authorTitle: "사용자",
             thumbnailImage: thumbnailData ?? Data(),
-            videoURL: url,
+            videoURL: localUrl,
+            duration: durationString,
+            date: formattedDate
+        )
+    }
+    
+    func makeVideoListItem(with sharedVideo: SharedVideo) async -> VideoListItem {
+        let asset = AVURLAsset(url: sharedVideo.localUrl)
+        let thumbnailImage = asset.generateThumbnail()
+        let thumbnailData = thumbnailImage?.jpegData(compressionQuality: 0.8)
+        let durationString = convertToDurationString(with: await asset.totalSeconds)
+        let formattedDate = convertToFormattedDate(with: await asset.creationDate)
+        
+        return VideoListItem(
+            title: asset.title ?? "제목 없음",
+            authorTitle: sharedVideo.author,
+            thumbnailImage: thumbnailData ?? Data(),
+            videoURL: sharedVideo.localUrl,
             duration: durationString,
             date: formattedDate
         )
