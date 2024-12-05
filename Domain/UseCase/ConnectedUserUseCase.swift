@@ -51,8 +51,6 @@ private extension ConnectedUserUseCase {
 			case .connected:
 				connectedUsersID.append(user.id)
 				updatedConnectedUser.send(user)
-			case .pending:
-				updatedConnectedUser.send(user)
 			case .disconnected:
 				guard let index = connectedUsersID.firstIndex(where: { $0 == user.id }) else { return }
 				connectedUsersID.remove(at: index)

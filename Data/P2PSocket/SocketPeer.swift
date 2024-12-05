@@ -8,7 +8,6 @@
 public enum SocketPeerState {
 	case connected
 	case disconnected
-	case pending
 	case found
 	case lost
 }

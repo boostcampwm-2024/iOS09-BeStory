@@ -22,15 +22,13 @@ public final class ConnectedUserRepository: ConnectedUserRepositoryInterface {
         self.socketProvider = socketProvider
 
         socketProvider.updatedPeer
-            .compactMap { peer in
-				DataMapper.mappingToConnectedUser(peer) }
+            .compactMap { DataMapper.mappingToConnectedUser($0) }
             .subscribe(updatedConnectedUser)
             .store(in: &cancellables)
     }
 }
 
 // MARK: - Public Methods
-
 public extension ConnectedUserRepository {
     func fetchConnectedUsers() -> [ConnectedUser] {
         return socketProvider.connectedPeers()

@@ -13,6 +13,7 @@ public protocol BrowsingUserRepositoryInterface {
 	var updatedInvitedUser: PassthroughSubject<InvitedUser, Never> { get }
 	var invitationReceived: PassthroughSubject<BrowsedUser, Never> { get }
     var receivedEvent: PassthroughSubject<OpeningEvent, Never> { get }
+    var isInGroup: CurrentValueSubject<Bool, Never> { get }
 
 	func fetchBrowsingUsers() -> [BrowsedUser]
 	func inviteUser(with id: String, timeout: Double)
@@ -21,4 +22,6 @@ public protocol BrowsingUserRepositoryInterface {
 	func startReceiveInvitation()
 	func stopReceiveInvitation()
     func notice(event: OpeningEvent)
+    func stopAdvertising()
+    func startAdvertising()
 }

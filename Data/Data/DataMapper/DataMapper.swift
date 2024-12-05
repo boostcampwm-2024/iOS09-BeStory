@@ -36,8 +36,6 @@ enum DataMapper {
 				return .init(id: peer.id, state: .connected, name: peer.name)
 			case .disconnected:
 				return .init(id: peer.id, state: .disconnected, name: peer.name)
-			case .pending:
-				return .init(id: peer.id, state: .pending, name: peer.name)
 			default:
 				return nil
 		}
@@ -92,8 +90,6 @@ enum DataMapper {
                 return .init(id: user.id, state: .connected, name: user.name)
             case .disconnected:
                 return .init(id: user.id, state: .disconnected, name: user.name)
-            case .pending:
-                return .init(id: user.id, state: .pending, name: user.name)
         }
     }
     
@@ -103,8 +99,6 @@ enum DataMapper {
                 return .init(id: peer.id, name: peer.name, state: .connected)
             case .disconnected:
                 return .init(id: peer.id, name: peer.name, state: .disconnected)
-            case .pending:
-                return .init(id: peer.id, name: peer.name, state: .pending)
             default: return nil
         }
     }
