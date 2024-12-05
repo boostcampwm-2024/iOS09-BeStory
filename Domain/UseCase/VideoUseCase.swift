@@ -5,6 +5,7 @@
 //  Created by 디해 on 11/21/24.
 //
 
+import AVFoundation
 import Combine
 import Core
 import Entity
@@ -49,20 +50,24 @@ extension VideoUseCase: SharingVideoUseCaseInterface {
 
 // MARK: - EditVideoUseCase
 extension VideoUseCase: EditVideoUseCaseInterface {
-    public func fetchVideos() -> [Video] {
-        let videos = sharedVideos
+    public func fetchVideos() async -> [Video] {
+        var videos = [Video]()
+        let sortedVideos = sharedVideos
             .sorted { $0.localUrl.path < $1.localUrl.path }
-            .enumerated()
-            .map {
-                Video(
-                    url: $0.element.localUrl,
-                    name: $0.element.name,
-                    index: $0.offset,
-                    author: $0.element.author,
-                    duration: 0
-                )
-            }
-
+        
+        for (index, video) in sortedVideos.enumerated() {
+            let duration = await duration(url: video.localUrl)
+            let video = Video(
+                url: video.localUrl,
+                name: video.name,
+                index: index,
+                author: video.author,
+                duration: duration
+            )
+            
+            videos.append(video)
+        }
+        
         videos.forEach { editingVideos[$0.url.path] = $0 }
         editVideoRepository.updateVideo(videos)
         
@@ -149,5 +154,12 @@ private extension VideoUseCase {
             startTime: video.startTime,
             endTime: video.endTime
         )
+    }
+    
+    func duration(url: URL) async -> Double {
+        let asset = AVAsset(url: url)
+        guard let cmTimeDuration = try? await asset.load(.duration) else { return 0 }
+        
+        return CMTimeGetSeconds(cmTimeDuration)
     }
 }
