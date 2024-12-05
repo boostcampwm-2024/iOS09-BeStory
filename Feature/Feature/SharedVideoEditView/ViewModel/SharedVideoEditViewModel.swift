@@ -34,18 +34,9 @@ extension SharedVideoEditViewModel {
         input.sink(with: self) { owner, input in
             switch input {
             case .viewDidLoad:
-                Task {
-                    let videos = owner.usecase.fetchVideos()
-                    let timelineItems = await videos.asyncCompactMap { video in
-                        let asset = AVAsset(url: video.url)
-                        return await owner.makeVideoTimelineItem(with: video.url, asset: asset)
-                    }
-                    owner.output.send(.timelineItemsDidChanged(items: timelineItems))
-                }
+                owner.viewDidLoad()
             case .timelineCellDidTap(let url):
-                let videos = owner.usecase.fetchVideos()
-                guard let tappedVideo = videos.first(where: { $0.url == url }) else { return }
-                owner.setTappedVideoPresentationModel(video: tappedVideo)
+                owner.timelineCellDidTap(with: url)
             case .sliderModelLowerValueDidChanged(let value):
                 owner.updateTappedVideoPresentationModel(lowerValue: value)
             case .sliderModelUpperValueDidChanged(let value):
@@ -206,5 +197,27 @@ private extension SharedVideoEditViewModel {
         let minutes = Int(totalSeconds) / 60
         let seconds = Int(totalSeconds) % 60
         return String(format: "%02d:%02d", minutes, seconds)
+    }
+}
+
+// MARK: - Private Methods
+private extension SharedVideoEditViewModel {
+    func viewDidLoad() {
+        Task {
+            let videos = await usecase.fetchVideos()
+            let timelineItems = await videos.asyncCompactMap { video in
+                let asset = AVAsset(url: video.url)
+                return await makeVideoTimelineItem(with: video.url, asset: asset)
+            }
+            output.send(.timelineItemsDidChanged(items: timelineItems))
+        }
+    }
+    
+    func timelineCellDidTap(with url: URL) {
+        Task {
+            let videos = await usecase.fetchVideos()
+            guard let tappedVideo = videos.first(where: { $0.url == url }) else { return }
+            setTappedVideoPresentationModel(video: tappedVideo)
+        }
     }
 }
