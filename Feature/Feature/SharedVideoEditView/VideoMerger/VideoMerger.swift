@@ -53,7 +53,7 @@ private extension VideoMerger {
         size resultSize: CGSize,
         frameRate: Int32 = Constants.defaultFrameRate
     ) async throws -> (AVMutableComposition, AVMutableVideoComposition) {
-        let orderdVideos = videosvideos.sorted { $0.index < $0.index }
+        let orderdVideos = videos.sorted { $0.index < $1.index }
         let composition = AVMutableComposition()
         var currentTime = CMTime.zero
         
@@ -143,7 +143,10 @@ private extension VideoMerger {
         to composition: AVMutableComposition,
         withMediaType mediaType: AVMediaType
     ) async throws -> AVMutableCompositionTrack {
-        guard let track = composition.addMutableTrack(withMediaType: mediaType, preferredTrackID: kCMPersistentTrackID_Invalid)
+        guard let track = composition.addMutableTrack(
+            withMediaType: mediaType,
+            preferredTrackID: kCMPersistentTrackID_Invalid
+        )
         else {
             throw NSError(domain: "CannotCreateVideoTrack", code: -2, userInfo: nil)
         }
