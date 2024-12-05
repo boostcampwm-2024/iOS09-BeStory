@@ -37,11 +37,15 @@
 		FE8208012CED782500307694 /* Exceptions for "Feature" folder in "Feature" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				ConnectionView/ConnectionCoordinator.swift,
+				ConnectionView/ConnectionViewContainer.swift,
 				ConnectionView/ConnectionViewController.swift,
 				ConnectionView/View/CustomCircleView.swift,
 				ConnectionView/ViewModel/ConnectionViewInput.swift,
 				ConnectionView/ViewModel/ConnectionViewModel.swift,
 				ConnectionView/ViewModel/ConnectionViewOutput.swift,
+				GroupInfoView/GroupInfoContainer.swift,
+				GroupInfoView/GroupInfoCoordinator.swift,
 				GroupInfoView/GroupInfoViewController.swift,
 				GroupInfoView/View/ParticipantCountView.swift,
 				GroupInfoView/View/ParticipantInfoView.swift,
