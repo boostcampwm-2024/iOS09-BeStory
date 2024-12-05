@@ -68,7 +68,6 @@ private extension GroupInfoViewController {
         view.addSubview(participantScrollView)
         view.addSubview(exitButton)
       
-//        exitButton.isEnabled = false
         participantScrollView.addSubview(participantStackView)
     }
     
