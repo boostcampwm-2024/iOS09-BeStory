@@ -75,7 +75,7 @@ private extension SharedVideoEditViewModel {
                     if let currentTappedVideoPresentationModel = owner.tappedVideoPresentationModel {
                         guard
                             let tappedVideo = videos.first(
-                                where: { $0.url == currentTappedVideoPresentationModel.url }),
+                                where: { $0.url.path == currentTappedVideoPresentationModel.url.path }),
                             let model = await owner.makeVideoPresentationModel(video: tappedVideo)
                         else { return }
                         owner.setTappedVideoPresentationModel(model: model)
