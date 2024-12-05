@@ -18,6 +18,12 @@ final class VideoTimelineCollectionViewCell: UICollectionViewCell {
     private let thumbnailImageView = UIImageView()
     private let durationView = UIView()
     private let durationLabel = UILabel()
+    
+    override var isSelected: Bool {
+        didSet {
+            updateBorder()
+        }
+    }
 
     // MARK: - Initializer
 
@@ -64,15 +70,16 @@ private extension VideoTimelineCollectionViewCell {
     }
 
     func setupViewAttributes() {
+        layer.cornerRadius = ThumbnailImageViewConstants.cornerRadius
+        layer.masksToBounds = true
+        
         setupThumbnailImageView()
         setupDurationView()
         setupDurationLabel()
     }
 
     func setupThumbnailImageView() {
-        thumbnailImageView.layer.cornerRadius = ThumbnailImageViewConstants.cornerRadius
         thumbnailImageView.backgroundColor = .systemGray6
-        thumbnailImageView.clipsToBounds = true
         thumbnailImageView.contentMode = .scaleAspectFill
     }
 
@@ -111,5 +118,12 @@ private extension VideoTimelineCollectionViewCell {
         durationLabel.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(DurationLabelConstants.edgesInset)
         }
+    }
+}
+
+private extension VideoTimelineCollectionViewCell {
+    func updateBorder() {
+        layer.borderWidth = isSelected ? 2 : 0
+        layer.borderColor = isSelected ? UIColor.white.cgColor : UIColor.clear.cgColor
     }
 }

@@ -40,6 +40,14 @@ extension VideoUseCase: SharingVideoUseCaseInterface {
 	}
 	
 	public func shareVideo(_ url: URL, resourceName: String) {
+        sharedVideos.append(
+            SharedVideo(
+                localUrl: url,
+                name: resourceName,
+                author: sharingVideoRepository.authorInformation()
+            )
+        )
+        
 		sharingVideoRepository.shareVideo(url: url, resourceName: resourceName)
 	}
 	

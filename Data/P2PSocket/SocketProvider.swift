@@ -143,30 +143,29 @@ extension SocketProvider: SocketResourceSendable {
         to peerID: String
     ) {
         guard let mcPeerID = MCPeerIDStorage.shared.peerIDByIdentifier[peerID]?.peerId else { return }
-        var url = localURL
         
-        if url.author().isEmpty {
-            url = localURL.append(author: self.peerID.displayName)
+        var authorAppendedName = resourceName
+        if authorAppendedName.author().isEmpty {
+            authorAppendedName = resourceName.append(author: self.peerID.displayName)
         }
         
         session.sendResource(
-            at: url,
-            withName: resourceName,
+            at: localURL,
+            withName: authorAppendedName,
             toPeer: mcPeerID
         )
     }
     
     public func broadcastResource(url localURL: URL, resourceName: String) {
-        var url = localURL
-        
-//        if url.author().isEmpty {
-//            url = localURL.append(author: self.peerID.displayName)
-//        }
+        var authorAppendedName = resourceName
+        if authorAppendedName.author().isEmpty {
+            authorAppendedName = resourceName.append(author: self.peerID.displayName)
+        }
         
         session.connectedPeers.forEach { peer in
             session.sendResource(
-                at: url,
-                withName: resourceName,
+                at: localURL,
+                withName: authorAppendedName,
                 toPeer: peer
             )
         }
@@ -234,14 +233,14 @@ extension SocketProvider: MCSessionDelegate {
         let fileSystemManager = FileSystemManager.shared
         guard
             let localURL,
-            let url = fileSystemManager.copyToFileSystem(tempURL: localURL, resourceName: resourceName),
+            let url = fileSystemManager.copyToFileSystem(tempURL: localURL, resourceName: resourceName.removeAuthor()),
             let socketPeer = mapToSocketPeer(peerID)
         else { return }
         
         let resource = SharedResource(
             url: url,
-            name: resourceName,
-            owner: url.author(),
+            name: resourceName.removeAuthor(),
+            owner: resourceName.author(),
             sender: socketPeer
         )
         
@@ -335,5 +334,23 @@ private extension SocketProvider {
         let id = peer.id
         
         return .init(id: id, name: name, state: state)
+    }
+}
+
+private extension String {
+    func author() -> String {
+        guard let authorPart = self.split(separator: "_").last,
+              authorPart.starts(with: "author=") else { return "" }
+        let author = authorPart.replacingOccurrences(of: "author=", with: "")
+        return author
+    }
+    
+    func append(author: String) -> String {
+        return self + "_author=\(author)"
+    }
+    
+    func removeAuthor() -> String {
+        guard let range = self.range(of: "_author=") else { return self }
+        return String(self[..<range.lowerBound])
     }
 }
