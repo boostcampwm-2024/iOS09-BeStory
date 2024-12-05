@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Core
 import Interfaces
 import Entity
 
@@ -32,7 +33,6 @@ public extension ConnectedUserUseCase {
     
     func leaveGroup() {
         repository.leaveGroup()
-        
     }
 }
 
@@ -40,10 +40,9 @@ public extension ConnectedUserUseCase {
 private extension ConnectedUserUseCase {
 	func bind() {
 		repository.updatedConnectedUser
-			.sink { [weak self] user in
-
-				self?.receivedUpdatedState(user: user)
-			}
+            .sink(with: self) { owner, user in
+                owner.receivedUpdatedState(user: user)
+            }
 			.store(in: &cancellables)
 	}
 	

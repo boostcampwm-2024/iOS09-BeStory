@@ -15,50 +15,66 @@
 |[S042 엄지혜](https://github.com/LURKS02)|[S008 김건우](https://github.com/around-forest)|[S017 김윤회](https://github.com/051198Hz)|[S062 정석영](https://github.com/jungseokyoung-cloud)|
 |:---:|:---:|:---:|:---:|
 |<img src="https://github.com/user-attachments/assets/d76291dd-3cda-463d-b788-12ce7383b787" width=150>|<img src="https://github.com/user-attachments/assets/f4ccfd6b-311d-4feb-ac16-df1f4edf3e0a" width=150>|<img src="https://github.com/user-attachments/assets/b4a7a216-1078-4f93-a234-d76e654de0f1" width=150>|<img src="https://github.com/user-attachments/assets/eb7b20a2-3e40-445e-9ba6-73ac909eccad" width=150>|
-|???|<- 장원영|나는 장원영 아님|1번 장원영|
+|나는 장원영|<- 장원영|나는 장원영 아님|1번 장원영|
 | iOS | iOS | iOS | iOS |
-
-### 팀 목표
-1. 얕은 기술 학습 보다는 깊은 기술 학습을 위한 딥다이브 하기!
-2. Test 가능한 코드 작성하기!
-3. 메인 비즈니스 로직 Test 하기!
-4. Epic-Story-Task를 활용한 Project Backlog 작성하기!
-
 <br>
 
-## :footprints: 발자취
-### iOS
-`기술 문서`
+# 서비스 소개
 
-<br>
+### 유저 찾기 기능 
+레이더가 그러진 그룹 맺기 화면에서 친구들과 그룹을 맺을 수 있어요! <br>
+- 가까운 거리의 친구들이 레이더 위에 보여져요. 
+- 아이콘 모양의 친구를 터치해서 그룹을 맺고, 함께 추억을 만들 준비를 해요!
 
-### ADR
-|제목|상태|
-|---|---|
-|[[ADR] Tuist 도입](https://github.com/boostcampwm-2024/iOS09-BeStory/wiki/%5BADR%5D-Tuist-%EB%8F%84%EC%9E%85)|`superseded`|
-|[[ADR] Clean Architecture 도입](https://github.com/boostcampwm-2024/iOS09-BeStory/wiki/%5BADR%5D-Clean-Architecture-%EB%8F%84%EC%9E%85)|`accepted`|
-
-<br>
-
-### 트러블 슈팅
-
-<br>
-
-## :heavy_check_mark: 규칙
-- [그라운드 룰](https://github.com/boostcampwm-2024/iOS09-BeStory/wiki/%F0%9F%93%9A%EA%B7%B8%EB%9D%BC%EC%9A%B4%EB%93%9C-%EB%A3%B0)
-- [코드 컨벤션](https://github.com/boostcampwm-2024/iOS09-BeStory/wiki/%EC%BD%94%EB%93%9C-%EC%BB%A8%EB%B2%A4%EC%85%98)
-- [커밋 전략](https://github.com/boostcampwm-2024/iOS09-BeStory/wiki/%EC%BB%A4%EB%B0%8B-%EC%A0%84%EB%9E%B5)
-- [브랜치 전략](https://github.com/boostcampwm-2024/iOS09-BeStory/wiki/%EB%B8%8C%EB%9E%9C%EC%B9%98-%EC%A0%84%EB%9E%B5)
-
+<img src ="https://github.com/user-attachments/assets/e544118b-c23a-4b07-9a23-88ff59aa7bda" width="700">
 <br>
 <br>
 
-## 📅 기록
-| | Day1 | Day2 | Day3 | Day4 | Day5 |
-| -- | -- | -- | -- | -- | -- |
-| 1주차 | | | | | [팀회고](https://github.com/boostcampwm-2024/iOS09-BeStory/wiki/%5B%ED%8C%80%ED%9A%8C%EA%B3%A0%5D-1%EC%A3%BC%EC%B0%A8) / 개인회고 |
-| 2주차 | [스크럼](https://github.com/boostcampwm-2024/iOS09-BeStory/wiki/11.04-%EB%8D%B0%EC%9D%BC%EB%A6%AC-%EC%8A%A4%ED%81%AC%EB%9F%BC)<br>[회의록](https://github.com/boostcampwm-2024/iOS09-BeStory/wiki/11.04-%ED%9A%8C%EC%9D%98%EB%A1%9D) | [스크럼](https://github.com/boostcampwm-2024/iOS09-BeStory/wiki/11.05-%EB%8D%B0%EC%9D%BC%EB%A6%AC-%EC%8A%A4%ED%81%AC%EB%9F%BC) | [스크럼](https://github.com/boostcampwm-2024/iOS09-BeStory/wiki/11.06-%EB%8D%B0%EC%9D%BC%EB%A6%AC-%EC%8A%A4%ED%81%AC%EB%9F%BC)<br>[회의록](https://github.com/boostcampwm-2024/iOS09-BeStory/wiki/11.06-%ED%9A%8C%EC%9D%98%EB%A1%9D) | [스크럼](https://github.com/boostcampwm-2024/iOS09-BeStory/wiki/11.07-%EB%8D%B0%EC%9D%BC%EB%A6%AC-%EC%8A%A4%ED%81%AC%EB%9F%BC)<br>[회의록](https://github.com/boostcampwm-2024/iOS09-BeStory/wiki/11.07-%ED%9A%8C%EC%9D%98%EB%A1%9D) |   |
-| 3주차 |   |   |   |   |   |
-| 4주차 |   |   |   |   |   |
-| 5주차 |   |   |   |   |   |
-| 6주차 |   |   |   |   |   |
+### 그룹 내 친구의 연결 상태 확인 기능 
+화면 상단에서 그룹을 맺은 친구들을 확인할 수 있어요! <br>
+- 잘 연결돼있다면 초록불, 불안정할 때는 빨간불로 바뀌어요.
+- 참여하고 있는 그룹에서 떠나고 싶을 때는, 나가기 버튼을 눌러 그룹을 떠날 수 있어요.
+
+<img src ="https://github.com/user-attachments/assets/e544118b-c23a-4b07-9a23-88ff59aa7bda" width="700">
+<br>
+<br>
+
+### 동영상 공유 기능 
+추억이 될 각자의 동영상을 공유해요! <br>
+- 각자의 앨범에서 동영상을 선택하면, 다 함께 볼 수 있는 목록에 추가돼요.
+- 목록에 있는 동영상을 터치해서, 다른 친구가 공유한 동영상을 재생해볼 수 있어요.
+- 공유한 여러 동영상들은 편집 후 하나의 동영상으로 추억으로 만들어져요!
+
+<img src ="https://github.com/user-attachments/assets/4e4e58f8-e5cc-40bc-b06f-ff7ce44d2d0e" width="700">
+<br>
+<br>
+
+
+### 동영상 동시 편집 기능
+공유한 동영상은 하나의 타임라인을 구성해요! <br>
+타임라인 안에 있는 동영상들을 친구들과 함께 편집해 추억을 만들 수 있어요 <br>
+- 타임라인 안에 있는 동영상들의 순서를 바꿀 수 있어요 <br>
+- 동영상마다 보여줄 구간을 조절해서 추억에 담고 싶은 부분을 지정할 수 있어요 <br>
+
+<img src = "https://github.com/user-attachments/assets/c8febe27-39fc-4993-8ab5-6a6980c3ffc3" width="700">
+<br>
+<br>
+
+
+# 핵심 기술 소개
+
+### 아키텍처
+<img src = "https://github.com/user-attachments/assets/a192c8fa-f1f1-45ad-bbe6-953d031dee8c" width="700">
+<br>
+
+- Clean Architecture기반으로 는 크게 3가지로(Feature, Domain, Data) 나누었습니다. 
+- 각 Layer간의 참조가 일어나는 경우, Dynamic Library를 통해 소스코드가 여러번 복사되지 않도록 했습니다. 
+- 구현부는 Compositional Root에서 조립하기에 Static Library로 구현했습니다.
+
+<br>
+
+### 기술 스택
+- Combine
+- MultipeerConnectivity
+- Consensus Algorithm
+- CRDT with LWW & Vector Clock

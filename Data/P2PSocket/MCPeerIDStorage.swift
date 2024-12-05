@@ -9,7 +9,8 @@ import MultipeerConnectivity
 
 final class MCPeerIDStorage {
 	struct Peer {
-		let id: MCPeerID
+		let peerId: MCPeerID
+        let id: String
 		var state: SocketPeerState
 	}
 	
@@ -23,44 +24,38 @@ final class MCPeerIDStorage {
 // MARK: - Internal Methods
 extension MCPeerIDStorage {
 	@discardableResult
-	/// peer를 append합니다. 리턴값은 메모리 값입니다.
-	func append(id: MCPeerID, state: SocketPeerState) -> String {
-		let identifier = identifier(for: id)
-		peerIDByIdentifier[identifier] = .init(id: id, state: state)
-		return identifier
+	/// peer를 append합니다. 리턴값은 ID 값입니다.
+    func append(peerId: MCPeerID, id: String, state: SocketPeerState) -> String {
+        peerIDByIdentifier[id] = .init(peerId: peerId, id: id, state: state)
+		return id
 	}
 		
+    @discardableResult
 	/// `MCPeerID`의 유저를 삭제합니다.
-	func remove(id: MCPeerID) {
-		guard let peer = findPeer(for: id) else { return }
-		remove(peer.key)
+    func remove(peerId: MCPeerID) -> Peer? {
+        guard let peer = findPeer(for: peerId) else { return nil }
+        return remove(peer.id)
 	}
 	
-	/// `메모리 값`을 통해 유저를 삭제합니다. 
-	func remove(_ identifier: String) {
-		peerIDByIdentifier.removeValue(forKey: identifier)
+    @discardableResult
+	/// `메모리 값`을 통해 유저를 삭제합니다.
+	func remove(_ identifier: String) -> Peer? {
+        defer { peerIDByIdentifier.removeValue(forKey: identifier) }
+    
+        return peerIDByIdentifier[identifier]
 	}
 	
 	@discardableResult
 	func update(state: SocketPeerState, id: MCPeerID) -> String? {
 		guard let peer = findPeer(for: id) else { return nil }
 
-		peerIDByIdentifier[peer.key]?.state = state
-		return peer.key
+		peerIDByIdentifier[peer.id]?.state = state
+		return peer.id
 	}
 	
 	/// `MCPeerID`를 통해 키와 값을 리턴합니다.
-	func findPeer(for id: MCPeerID) -> Dictionary<String, Peer>.Element? {
+    func findPeer(for id: MCPeerID) -> Peer? {
 		return peerIDByIdentifier
-			.first { $0.value.id == id }
-	}
-}
-
-// MARK: - Private Methods
-private extension MCPeerIDStorage {
-	/// 메모리 주소를 identifier로 리턴합니다.
-	func identifier(for peerID: MCPeerID) -> String {
-		let address = Unmanaged.passUnretained(peerID).toOpaque()
-		return String(describing: address)
+            .first { $0.value.peerId == id }?.value
 	}
 }
