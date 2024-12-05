@@ -18,14 +18,12 @@ struct EditVideoElement: Codable, Hashable {
     let endTime: Double
 
     func hash(into hasher: inout Hasher) {
-//        hasher.combine(url.lastPathComponent)
         hasher.combine(name)
     }
 
     static func == (lhs: EditVideoElement, rhs: EditVideoElement) -> Bool {
         return lhs.name == rhs.name
     }
-    // lhs.url.lastPathComponent == rhs.url.lastPathComponent &&
 }
 
 struct User: Codable, Hashable {
