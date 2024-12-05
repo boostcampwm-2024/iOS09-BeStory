@@ -140,6 +140,8 @@ private extension BrowsingUserUseCase {
     func connectedUserDidReceive(_ user: InvitedUser) {
         guard user.state == .accept else { return }
         connectedUser.send(user)
+        guard let index = browsedUsersID.firstIndex(where: { $0 == user.id }) else { return }
+        browsedUsersID.remove(at: index)
     }
     
     func invitationDidReceive(from user: BrowsedUser) {

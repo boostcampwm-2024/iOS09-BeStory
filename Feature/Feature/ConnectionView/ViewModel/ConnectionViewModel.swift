@@ -126,6 +126,7 @@ private extension ConnectionViewModel {
         usecase.connectedUser
             .sink(with: self) { owner, invitedUser in
                 guard invitedUser.state == .accept else { return }
+                owner.removeCurrentPosition(id: invitedUser.id)
                 owner.output.send(.connected(user: invitedUser))
             }
             .store(in: &cancellables)

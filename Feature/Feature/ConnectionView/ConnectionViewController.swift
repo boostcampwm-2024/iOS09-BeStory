@@ -69,7 +69,6 @@ final public class ConnectionViewController: UIViewController {
 
 extension ConnectionViewController {
     func setupBind() {
-        // 흠.. 애가 그룹 상태인지 아닌지는 어떻게 알아?
         let output = viewModel.transform(input.eraseToAnyPublisher())
         output.receive(on: DispatchQueue.main)
             .sink(with: self) { owner, result in
