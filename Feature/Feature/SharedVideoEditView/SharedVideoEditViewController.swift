@@ -105,6 +105,12 @@ private extension SharedVideoEditViewController {
 				owner.presentCancelAlertViewController()
 			}
 			.store(in: &cancellables)
+        
+        nextButton.bs.tap
+            .sink(with: self) { owner, _ in
+                return
+            }
+            .store(in: &cancellables)
 	}
 }
 
