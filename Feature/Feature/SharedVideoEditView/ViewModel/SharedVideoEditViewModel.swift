@@ -36,17 +36,8 @@ extension SharedVideoEditViewModel {
             case .viewDidLoad:
                 Task {
                     let videos = owner.usecase.fetchVideos()
-                    let timelineItems = await videos.enumerated().asyncCompactMap { index, video in
-                        let asset = AVAsset(url: video.url) // enumerated, index
-//                        owner.usecase.trimmingVideo(
-//                            url: video.url,
-//                            startTime: 0,
-//                            endTime: await asset.totalSeconds ?? 0
-//                        )
-//                        owner.usecase.reArrangingVideo(
-//                            url: video.url,
-//                            index: index
-//                        )
+                    let timelineItems = await videos.asyncCompactMap { video in
+                        let asset = AVAsset(url: video.url)
                         return await owner.makeVideoTimelineItem(with: video.url, asset: asset)
                     }
                     owner.output.send(.timelineItemsDidChanged(items: timelineItems))
@@ -108,7 +99,7 @@ private extension SharedVideoEditViewModel {
             let asset = AVAsset(url: video.url)
             guard let frameImage = await frameImage(
                 from: asset,
-                frameCount: Int(video.duration) // check duration
+                frameCount: Int(video.duration)
             ) else { return }
 
             let model = VideoPresentationModel(
