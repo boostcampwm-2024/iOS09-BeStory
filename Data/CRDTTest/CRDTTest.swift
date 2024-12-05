@@ -31,7 +31,6 @@ final class CRDTTest: XCTestCase {
     }
     
     func testIsMergeCompletWhenEventArrivedRandomly() async {
-        let peerCount = 3
         let peer0ID = UUID().uuidString
         let peer1ID = UUID().uuidString
         let peer2ID = UUID().uuidString
