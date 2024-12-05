@@ -123,7 +123,7 @@ extension SceneDelegate {
         DIContainer.shared.register(
             type: SharedVideoEditViewModel.self,
             instance: SharedVideoEditViewModel(
-                usecase: DIContainer.shared.resolve(type: VideoUseCaseInterface.self) as! EditVideoUseCaseInterface
+                usecase: DIContainer.shared.resolve(type: EditVideoUseCaseInterface.self)
             )
         )
     }
