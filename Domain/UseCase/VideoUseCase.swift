@@ -108,9 +108,7 @@ private extension VideoUseCase {
         
         editVideoRepository.editedVideos
             .sink(with: self) { (owner, videos) in
-                print(videos)
                 owner.editingVideos = videos
-//                videos.forEach {  owner.editingVideos[$0.url.path] = $0 }
                 owner.editedVideos.send(videos)
             }
             .store(in: &cancellables)
