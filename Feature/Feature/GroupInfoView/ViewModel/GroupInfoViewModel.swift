@@ -9,6 +9,10 @@ import Combine
 import Entity
 import Interfaces
 
+protocol GroupInfoCoordinatable: AnyObject {
+    func exitGroupButtonDidTap()
+}
+
 public final class GroupInfoViewModel {
     typealias Input = GroupInfoViewInput
     typealias Output = GroupInfoViewOutput
@@ -18,6 +22,8 @@ public final class GroupInfoViewModel {
     
     var output = PassthroughSubject<GroupInfoViewOutput, Never>()
     var cancellables: Set<AnyCancellable> = []
+
+    weak var coordinator: GroupInfoCoordinatable?
 
     public init(usecase: ConnectedUserUseCaseInterface) {
         self.usecase = usecase
@@ -85,5 +91,6 @@ private extension GroupInfoViewModel {
     
     func exitGroupButtonDidTab() {
         usecase.leaveGroup()
+        coordinator?.exitGroupButtonDidTap()
     }
 }

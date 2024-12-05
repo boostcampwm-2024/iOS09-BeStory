@@ -11,6 +11,10 @@ import Entity
 import Foundation
 import Interfaces
 
+protocol ConnectionCoordinatable: AnyObject {
+    func nextButtonDidTap()
+}
+
 final public class ConnectionViewModel {
     // MARK: - Typealias
 
@@ -27,6 +31,8 @@ final public class ConnectionViewModel {
     private var innerRadius: CGFloat?
     private var outerRadius: CGFloat?
     private var usedPositions: [String: CGPoint] = [:]
+
+    weak var coordinator: ConnectionCoordinatable?
 
     // MARK: - Initializer
 
@@ -141,8 +147,9 @@ private extension ConnectionViewModel {
         
         usecase.openingEvent
             .sink(with: self) { owner, _ in
-                owner.output.send(.openSharedVideoList)
+//                owner.output.send(.openSharedVideoList)
                 owner.usecase.rejectInvitation()
+                owner.coordinator?.nextButtonDidTap()
             }
             .store(in: &cancellables)
     }

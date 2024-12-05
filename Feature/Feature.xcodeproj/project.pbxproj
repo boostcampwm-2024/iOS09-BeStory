@@ -37,11 +37,13 @@
 		FE8208012CED782500307694 /* Exceptions for "Feature" folder in "Feature" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				ConnectionView/ConnectionCoordinator.swift,
 				ConnectionView/ConnectionViewController.swift,
 				ConnectionView/View/CustomCircleView.swift,
 				ConnectionView/ViewModel/ConnectionViewInput.swift,
 				ConnectionView/ViewModel/ConnectionViewModel.swift,
 				ConnectionView/ViewModel/ConnectionViewOutput.swift,
+				GroupInfoView/GroupInfoCoordinator.swift,
 				GroupInfoView/GroupInfoViewController.swift,
 				GroupInfoView/View/ParticipantCountView.swift,
 				GroupInfoView/View/ParticipantInfoView.swift,
@@ -63,8 +65,10 @@
 				"Helper/UIImage+convertColor.swift",
 				"Helper/UIImage+resize.swift",
 				"Helper/UIView+Extension.swift",
+				MainCoordinator.swift,
 				MainViewController.swift,
 				PresentationModel/VideoPresentationModel.swift,
+				SharedVideoEditView/SharedVideoEditCoordinator.swift,
 				SharedVideoEditView/SharedVideoEditViewController.swift,
 				SharedVideoEditView/VideoMerger/VideoMerger.swift,
 				SharedVideoEditView/View/CollectionView/VideoTimelineCollectionViewCell.swift,
@@ -84,6 +88,7 @@
 				SharedVideoEditView/ViewModel/SharedVideoEditViewOutput.swift,
 				VideoListView/TempViewController.swift,
 				VideoListView/VideoDetailView/VideoDetailViewController.swift,
+				VideoListView/VideoListCoordinator.swift,
 				VideoListView/VideoListViewController.swift,
 				VideoListView/View/CollectionView/VideoListCollectionViewCell.swift,
 				VideoListView/View/CollectionView/VideoListDataSource.swift,

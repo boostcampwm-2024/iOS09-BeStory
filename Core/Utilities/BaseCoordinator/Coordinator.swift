@@ -11,45 +11,52 @@ import UIKit
 public protocol CoordinatorListener: AnyObject { }
 
 /// 화면 전환 로직 및, `ViewController`와 `Interactor`생성을 담당하는 객체입니다.
-public protocol Coordinating: AnyObject {
-    var navigationController: UINavigationController { get }
-    var children: [Coordinating] { get }
-    
-    func start()
+public protocol Coordinatable: AnyObject {
+    var navigationController: UINavigationController? { get set }
+    var children: [Coordinatable] { get }
+
+    func start(_ navigationController: UINavigationController?)
     func stop()
-    func addChild(_ coordinator: Coordinating)
-    func removeChild(_ coordinator: Coordinating)
+    func addChild(_ coordinator: Coordinatable)
+    func removeChild(_ coordinator: Coordinatable)
 }
 
-public class Coordinator: Coordinating {
-    public let navigationController: UINavigationController
-    final public private(set)var children: [Coordinating] = []
-    
+open class Coordinator: Coordinatable {
+    public var navigationController: UINavigationController?
+    public final var children: [Coordinatable] = []
+
+    public init() { }
+
     public init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
     
     /// 부모에게 붙여졌을 때, 원하는 동작을 해당 메서드에 구현합니다.
-    public func start() { }
-    
+    open func start(_ navigationController: UINavigationController?) {
+        self.navigationController = navigationController
+    }
+
     /// 부모에게 제거되었을 때 원하는 동작을 해당 메서드에 구현합니다.
-    public func stop() {
-        self.removeAllChild()
+    open func stop() {
+        navigationController?.popViewController(animated: true)
+        navigationController = nil
     }
     
-    public final func addChild(_ coordinator: Coordinating) {
+    public final func addChild(_ coordinator: Coordinatable) {
         guard !children.contains(where: { $0 === coordinator }) else { return }
         
         children.append(coordinator)
-        start()
     }
     
-    public final func removeChild(_ coordinator: Coordinating) {
+    public final func removeChild(_ coordinator: Coordinatable) {
         guard let index = children.firstIndex(where: { $0 === coordinator }) else { return }
         
         children.remove(at: index)
-        
-        coordinator.stop()
+    }
+
+    deinit {
+        self.stop()
+        if !children.isEmpty { removeAllChild() }
     }
 }
 

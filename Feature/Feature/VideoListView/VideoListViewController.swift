@@ -101,8 +101,8 @@ private extension VideoListViewController {
                 switch output {
                 case .videoListDidChanged(let videos):
                     self?.items = videos
-                case .readyForNextScreen:
-                    self?.navigateToEditor()
+//                case .readyForNextScreen:
+//                    self?.navigateToEditor()
                 }
             }
             .store(in: &cancellables)
@@ -189,12 +189,12 @@ private extension VideoListViewController {
         present(picker, animated: true, completion: nil)
     }
     
-    func navigateToEditor() {
-        let sharedVideoEditViewController = SharedVideoEditViewController(
-            viewModel: DIContainer.shared.resolve(type: SharedVideoEditViewModel.self)
-        )
-        navigationController?.pushViewController(sharedVideoEditViewController, animated: true)
-    }
+//    func navigateToEditor() {
+//        let sharedVideoEditViewController = SharedVideoEditViewController(
+//            viewModel: DIContainer.shared.resolve(type: SharedVideoEditViewModel.self)
+//        )
+//        navigationController?.pushViewController(sharedVideoEditViewController, animated: true)
+//    }
 }
 
 // MARK: - Collection View

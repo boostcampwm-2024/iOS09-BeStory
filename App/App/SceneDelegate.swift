@@ -21,14 +21,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         registerDependency()
 
 		let window = UIWindow(windowScene: windowScene)
+//        let viewController = UIViewController()
+        let navigationController = UINavigationController()
+        let socketProvider = SocketProvider()
+        let repository = ConnectedUserRepository(socketProvider: socketProvider)
+        let usecase = ConnectedUserUseCase(repository: repository)
+        let viewModel = GroupInfoViewModel(usecase: usecase)
+//        let groupInfoCoordinator = GroupInfoCoordinator(socketProvider: socketProvider)
+        let mainCoordinator = MainCoordinator(socketProvider: socketProvider)
 
-        let groupInfoViewController = GroupInfoViewController(viewModel: DIContainer.shared.resolve(type: GroupInfoViewModel.self))
-        let connectionViewController = ConnectionViewController(viewModel: DIContainer.shared.resolve(type: ConnectionViewModel.self))
+        let groupInfoViewController = GroupInfoViewController(viewModel: viewModel)
+//        let connectionViewController = ConnectionViewController(viewModel: DIContainer.shared.resolve(type: ConnectionViewModel.self))
 
         window.rootViewController = MainViewController(
             topViewController: groupInfoViewController,
-            initialViewController: connectionViewController
+            initialViewController: navigationController
         )
+
+        mainCoordinator.start(navigationController)
 
 		self.window = window
 		window.makeKeyAndVisible()
