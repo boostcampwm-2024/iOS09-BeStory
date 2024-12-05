@@ -18,6 +18,7 @@ public final class SocketProvider: NSObject {
     public var displayName: String { peerID.displayName }
     public let id: String = UUID().uuidString
     public let updatedPeer = PassthroughSubject<SocketPeer, Never>()
+    public let isInGroup = CurrentValueSubject<Bool, Never>(false)
     public let invitationReceived = PassthroughSubject<SocketPeer, Never>()
     public let resourceShared = PassthroughSubject<SharedResource, Never>()
     public let dataShared = PassthroughSubject<(Data, SocketPeer), Never>()
@@ -192,6 +193,7 @@ extension SocketProvider: MCSessionDelegate {
         peer peerID: MCPeerID,
         didChange state: MCSessionState
     ) {
+        checkIsInGroup()
         guard var socketPeer = mapToSocketPeer(peerID) else { return }
         
         switch state {
@@ -308,10 +310,8 @@ extension SocketProvider: MCNearbyServiceAdvertiserDelegate {
             isAllowedInvitation,
             let invitationPeer = mapToSocketPeer(peerID)
         else {
-            print("isNowAllowedInvitation: \(mapToSocketPeer(peerID))")
             return invitationHandler(false, session)
         }
-        print("invitationReceive")
         invitationReceived.send(invitationPeer)
         self.invitationHandler = invitationHandler
     }
@@ -332,5 +332,12 @@ private extension SocketProvider {
         let id = peer.id
         
         return .init(id: id, name: name, state: state)
+    }
+    
+    func checkIsInGroup() {
+        let current = !session.connectedPeers.isEmpty
+        
+        guard current != isInGroup.value else { return }
+        isInGroup.send(current)
     }
 }
