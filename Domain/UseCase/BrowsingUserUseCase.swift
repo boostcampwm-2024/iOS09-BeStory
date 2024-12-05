@@ -6,12 +6,15 @@
 //
 
 import Combine
+import Core
 import Entity
 import Foundation
 import Interfaces
 
 public final class BrowsingUserUseCase: BrowsingUserUseCaseInterface {
     private var isInvitating: Bool { invitationTimer != nil }
+    /// 초대를 보낸 유저의 ID입니다.
+    private var invitationUserID: String?
     private var invitationTimer: Timer?
     private var cancellables: Set<AnyCancellable> = []
     private var browsedUsersID: [String] = []
@@ -20,14 +23,17 @@ public final class BrowsingUserUseCase: BrowsingUserUseCaseInterface {
     private let invitationTimeout: Double
     
     public let browsedUser = PassthroughSubject<BrowsedUser, Never>()
+    public let isInGroup: CurrentValueSubject<Bool, Never>
     public let invitationResult = PassthroughSubject<InvitedUser, Never>()
     public let invitationReceived = PassthroughSubject<BrowsedUser, Never>()
     public let invitationDidFired = PassthroughSubject<Void, Never>()
-    public var openingEvent = PassthroughSubject<Void, Never>()
+    public let connectedUser = PassthroughSubject<BrowsedUser, Never>()
+    public let openingEvent = PassthroughSubject<Void, Never>()
     
-    public init(repository: BrowsingUserRepositoryInterface, invitationTimeout: Double = 2.0) {
+    public init(repository: BrowsingUserRepositoryInterface, invitationTimeout: Double = 30.0) {
         self.repository = repository
         self.invitationTimeout = invitationTimeout
+        self.isInGroup = repository.isInGroup
         bind()
     }
 }
@@ -51,6 +57,14 @@ public extension BrowsingUserUseCase {
         repository.acceptInvitation()
     }
     
+    func startAdvertising() {
+        repository.startAdvertising()
+    }
+    
+    func stopAdvertising() {
+        repository.stopAdvertising()
+    }
+    
     func rejectInvitation() {
         stopInvitationTimer()
         repository.startReceiveInvitation()
@@ -67,26 +81,27 @@ public extension BrowsingUserUseCase {
 private extension BrowsingUserUseCase {
     func bind() {
         repository.updatedBrowsingUser
-            .sink { [weak self] user in
-                self?.receivedBrowsedUser(user)
+            .sink(with: self) { owner, user in
+                owner.receivedBrowsedUser(user)
             }
             .store(in: &cancellables)
         
         repository.updatedInvitedUser
-            .sink { [weak self] invitedUser in
-                self?.invitationResultDidReceive(with: invitedUser)
+            .sink(with: self) { owner, invitedUser in
+                owner.invitationResultDidReceive(with: invitedUser)
             }
             .store(in: &cancellables)
         
         repository.invitationReceived
-            .sink { [weak self] user in
-                self?.invitationDidReceive(from: user)
+            .sink(with: self) { owner, user in
+                owner.invitationDidReceive(from: user)
             }
             .store(in: &cancellables)
+        
         repository.receivedEvent
-            .sink { [weak self] event in
+            .sink(with: self) { owner, event in
                 guard event == .sharedContainer else { return }
-                self?.openingEvent.send()
+                owner.openingEvent.send()
             }
             .store(in: &cancellables)
     }
@@ -102,10 +117,18 @@ private extension BrowsingUserUseCase {
         }
         self.browsedUser.send(user)
     }
-    
+
     func invitationResultDidReceive(with invitedUser: InvitedUser) {
         repository.startReceiveInvitation()
-        invitationResult.send(invitedUser)
+        switch invitedUser.state {
+            case .accept:
+                invitationResult.send(invitedUser)
+                guard let index = browsedUsersID.firstIndex(where: { $0 == invitedUser.id }) else { return }
+                browsedUsersID.remove(at: index)
+            case .reject where browsedUsersID.contains(invitedUser.id):
+                invitationResult.send(invitedUser)
+            default: break
+        }
     }
     
     func invitationDidReceive(from user: BrowsedUser) {
