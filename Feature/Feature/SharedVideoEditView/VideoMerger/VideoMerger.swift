@@ -99,6 +99,10 @@ enum VideoMerger {
         videoComposition.frameDuration = CMTime(value: 1, timescale: frameRate)
         videoComposition.renderSize = resultSize
         videoComposition.instructions =  layerInstructions
+        //hdr무시
+        videoComposition.colorPrimaries = AVVideoColorPrimaries_ITU_R_709_2
+        videoComposition.colorTransferFunction = AVVideoTransferFunction_ITU_R_709_2
+        videoComposition.colorYCbCrMatrix = AVVideoYCbCrMatrix_ITU_R_709_2
         
         return (composition, videoComposition)
     }
