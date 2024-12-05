@@ -6,9 +6,10 @@
 //
 
 import Core
+import Foundation
 
 struct VideoPresentationModel {
-	let url: String
+	let url: URL
 	let index: Int
 	let duration: Double
 	let startTime: Double

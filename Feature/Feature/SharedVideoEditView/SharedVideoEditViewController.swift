@@ -37,7 +37,8 @@ public final class SharedVideoEditViewController: UIViewController {
 	private let middleContainerView = UIView()
 	private let optionButtonStackView = OptionButtonStackView()
 	private let videoTrimmingSliderBar = VideoTrimmingSliderBar()
-	
+    private var nextButton = UIButton(type: .system)
+
 	private var videoTimelineDataSource: VideoTimelineDataSource!
 	
     // MARK: - Initializer
@@ -58,12 +59,7 @@ public final class SharedVideoEditViewController: UIViewController {
 		setupUI()
         setupViewBinding()
         
-        input.send(.setInitialState)
-    }
-    
-    public override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: true)
+        input.send(.viewDidLoad)
     }
 }
 
@@ -79,12 +75,14 @@ private extension SharedVideoEditViewController {
 
         output
             .receive(on: DispatchQueue.main)
-            .sink(with: self, onReceive: { (owner, output) in
+            .sink(with: self) { (owner, output) in
                 switch output {
-                case .timeLineDidChanged(let items):
+                case .timelineItemsDidChanged(let items):
                     owner.reload(with: items)
+                case .sliderModelDidChanged(let model):
+                    owner.videoTrimmingSliderBar.configure(with: model)
                 }
-            })
+            }
             .store(in: &cancellables)
     }
 	
@@ -97,14 +95,13 @@ private extension SharedVideoEditViewController {
 		
 		editSaveButton.bs.tap
 			.sink(with: self) { owner, _ in
-				// TODO: - ViewModel로 저장 정보 전송
+                owner.input.send(.sliderEditSaveButtonDidTapped)
 				owner.mode = .default
 			}
 			.store(in: &cancellables)
 		
 		editCancelButton.bs.tap
 			.sink(with: self) { owner, _ in
-				// TODO: - ViewModel로 저장 정보 전송
 				owner.presentCancelAlertViewController()
 			}
 			.store(in: &cancellables)
@@ -142,11 +139,19 @@ private extension SharedVideoEditViewController {
             alpha: 1
         )
         static let spacing: CGFloat = 10
-        static let topMargin: CGFloat = 14
+        static let topMargin: CGFloat = 22
         static let height: CGFloat = 120
         static let itemSize: CGSize = .init(width: 160, height: 90)
     }
-	
+
+    enum NextButtonConstants {
+        static let fontSize: CGFloat = 20
+        static let cornerRadius: CGFloat = 25
+        static let bottomOffset: CGFloat = -50
+        static let width: CGFloat = 160
+        static let height: CGFloat = 50
+    }
+
 	func setupUI() {
 		setupViewAttributes()
 		setupViewHierarchies()
@@ -159,6 +164,8 @@ private extension SharedVideoEditViewController {
 		setupEditSaveButton()
 		setupEditCancelButton()
         setupVideoTimelineCollectionView()
+        setupVideoTrimmingSliderBar()
+        setupNextButton()
     }
 	
 	func setupEditCancelButton() {
@@ -182,6 +189,7 @@ private extension SharedVideoEditViewController {
         let dataSource = setupDataSource()
         self.videoTimelineDataSource = dataSource
         videoTimelineCollectionView.dataSource = dataSource
+        videoTimelineCollectionView.delegate = self
         videoTimelineCollectionView.dragDelegate = self
         videoTimelineCollectionView.dropDelegate = self
         videoTimelineCollectionView.dragInteractionEnabled = true
@@ -192,13 +200,26 @@ private extension SharedVideoEditViewController {
         )
     }
 
+    func setupVideoTrimmingSliderBar() {
+        videoTrimmingSliderBar.delegate = self
+    }
+
+    func setupNextButton() {
+        nextButton.backgroundColor = .white
+        nextButton.setTitle("미리보기", for: .normal)
+        nextButton.setTitleColor(.black, for: .normal)
+        nextButton.titleLabel?.font = .systemFont(ofSize: NextButtonConstants.fontSize)
+        nextButton.layer.cornerRadius = NextButtonConstants.cornerRadius
+    }
+
     func setupViewHierarchies() {
 		view.addSubviews(
 			editButtonView,
 			videoPlayerView,
 			videoTimelineCollectionView,
 			editButtonView,
-			middleContainerView
+			middleContainerView,
+            nextButton
 		)
 		editButtonView.addSubviews(editCancelButton, editSaveButton)
 		middleContainerView.addSubviews(optionButtonStackView, videoTrimmingSliderBar)
@@ -250,6 +271,13 @@ private extension SharedVideoEditViewController {
             $0.trailing.equalToSuperview()
             $0.height.equalTo(VideoTimelineCollectionViewConstants.height)
         }
+
+        nextButton.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(NextButtonConstants.bottomOffset)
+            $0.width.equalTo(NextButtonConstants.width)
+            $0.height.equalTo(NextButtonConstants.height)
+        }
     }
 	
 	func setupUI(for mode: Mode) {
@@ -264,7 +292,8 @@ private extension SharedVideoEditViewController {
 		optionButtonStackView.isHidden = false
 		videoTrimmingSliderBar.isHidden = true
 		editButtonView.isHidden = true
-		
+        nextButton.isHidden = false
+
 		videoPlayerView.snp.updateConstraints {
 			$0.top.equalTo(view.safeAreaLayoutGuide).offset(VideoPlayerViewConstants.topMargin)
 		}
@@ -274,7 +303,8 @@ private extension SharedVideoEditViewController {
 		videoPlayerView.isHiddenSliderBar = true
 		optionButtonStackView.isHidden = true
 		editButtonView.isHidden = false
-		
+        nextButton.isHidden = true
+
 		let topMargin = VideoPlayerViewConstants.topMargin + EditButtonViewConstants.height
 		videoPlayerView.snp.updateConstraints {
 			$0.top.equalTo(view.safeAreaLayoutGuide).offset(topMargin)
@@ -332,30 +362,51 @@ private extension SharedVideoEditViewController {
 
 // MARK: - VideoTrimmingSliderBarDelegate
 extension SharedVideoEditViewController: VideoTrimmingSliderBarDelegate {
-	func lowerValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double) { }
+	func lowerValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double) {
+        input.send(.sliderModelLowerValueDidChanged(value: value))
+    }
 	
-	func upperValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double) { }
+	func upperValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double) {
+        input.send(.sliderModelUpperValueDidChanged(value: value))
+    }
 	
-	func playerValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double) { }
+    func playerValueDidChanged(_ sliderBar: VideoTrimmingSliderBar, value: Double) {
+        videoPlayerView.updateVideoTime(with: value)
+    }
 }
 
 // MARK: - Private Methods
 private extension SharedVideoEditViewController {
 	func presentCancelAlertViewController() {
-		let yesAction = UIAlertController.ActionType.custom(title: "네", style: .default) { [weak self] in
-			self?.mode = .default
-		}
-		let cancelAction = UIAlertController.ActionType.custom(title: "아니오", style: .destructive, handler: nil)
-		let alertMessage = "편집을 취소하게 되면, 편집된 내용은 삭제됩니다. 그래도 취소하시겠습니까?"
-		let alertController = UIAlertController(
-			type: .custom(title: "Cancel Editing", message: alertMessage),
-			actions: [cancelAction, yesAction]
-		)
-		present(alertController, animated: true)
+        present(UIAlertController(
+            type: .custom(
+                title: "Cancel Editing",
+                message: "편집을 취소하게 되면, 편집된 내용은 삭제됩니다. 그래도 취소하시겠습니까?"),
+            actions: [
+                .confirm(handler: { [weak self] in
+                    self?.mode = .default
+                }),
+                .cancel()]
+        ), animated: true)
 	}
 }
 
 // MARK: - UICollectionViewDelegate
+
+extension SharedVideoEditViewController: UICollectionViewDelegate {
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        didSelectItemAt indexPath: IndexPath
+    ) {
+        guard let selectedItem = videoTimelineDataSource.itemIdentifier(for: indexPath),
+              let selectedCell = collectionView.cellForItem(at: indexPath)
+        else { return }
+        
+        selectedCell.isSelected = true
+        videoPlayerView.replaceVideo(url: selectedItem.url)
+        input.send(.timelineCellDidTap(url: selectedItem.url))
+    }
+}
 
 extension SharedVideoEditViewController: UICollectionViewDragDelegate {
     public func collectionView(
@@ -399,7 +450,7 @@ extension SharedVideoEditViewController: UICollectionViewDropDelegate {
             }
             return nil
         }
-        
+
         snapshot.deleteItems(draggedItems)
         let targetIndex = destinationIndexPath.item
         let currentItems = snapshot.itemIdentifiers
@@ -407,7 +458,7 @@ extension SharedVideoEditViewController: UICollectionViewDropDelegate {
         updatedItems.insert(contentsOf: draggedItems, at: targetIndex)
         
         applySnapShot(with: updatedItems)
-        
+
         coordinator.items.forEach { item in
             coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
         }

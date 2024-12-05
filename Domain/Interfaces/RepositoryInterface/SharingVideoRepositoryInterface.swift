@@ -15,4 +15,5 @@ public protocol SharingVideoRepositoryInterface {
 
     func shareVideo(url: URL, resourceName: String)
     func broadcastHashes()
+    func authorInformation() -> String
 }

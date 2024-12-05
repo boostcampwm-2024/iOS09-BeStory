@@ -56,15 +56,25 @@ extension VideoPlayerView {
         let videoItem = AVPlayerItem(asset: video)
         replaceVideo(playerItem: videoItem)
     }
-    
+
     func replaceVideo(url: URL) {
         let videoItem = AVPlayerItem(url: url)
         replaceVideo(playerItem: videoItem)
     }
-    
+
     func replaceVideo(playerItem: AVPlayerItem) {
         player.pause()
         player.replaceCurrentItem(with: playerItem)
+    }
+
+    func updateVideoTime(with value: Double) {
+        let time = CMTime(seconds: value, preferredTimescale: 600)
+        guard let playerDuration = self.player.currentItem?.duration else { return }
+        let currentTime = CMTimeGetSeconds(time)
+        let duration = CMTimeGetSeconds(playerDuration)
+        let progress = Float(currentTime / duration)
+        self.seekingSlider.value = progress * 100
+        self.updateVideoTime(to: self.seekingSlider.value)
     }
 }
 
@@ -107,7 +117,7 @@ private extension VideoPlayerView {
     
     func setupPlayPauseButton() {
         var buttonConfigurarion = UIButton.Configuration.plain()
-        buttonConfigurarion.image = UIImage(systemName: "pause.circle")
+        buttonConfigurarion.image = UIImage(systemName: "play.circle.fill")
         buttonConfigurarion.preferredSymbolConfigurationForImage =  UIImage.SymbolConfiguration(pointSize: 30)
         buttonConfigurarion.baseForegroundColor = .white
         playPauseButton.configuration = buttonConfigurarion
@@ -124,6 +134,13 @@ private extension VideoPlayerView {
 // MARK: - Binding
 private extension VideoPlayerView {
 	func setupViewBinding() {
+        NotificationCenter.default
+            .publisher(for: .AVPlayerItemDidPlayToEndTime, object: player.currentItem)
+            .sink(with: self) { owner, _ in
+                owner.handleVideoCompletion()
+            }
+            .store(in: &cancellables)
+        
 		// Thanks to LURKS02
 		playPauseButton.publisher(for: .touchUpInside)
 			.receive(on: DispatchQueue.main)
@@ -196,4 +213,13 @@ private extension VideoPlayerView {
 		let seekTime = CMTime(seconds: newTime, preferredTimescale: 1)
 		player.seek(to: seekTime)
 	}
+    
+    func handleVideoCompletion() {
+            seekingSlider.value = 100
+
+            let image = UIImage(systemName: "play.circle.fill")
+            playPauseButton.setImage(image, for: .normal)
+
+            player.seek(to: .zero)
+        }
 }

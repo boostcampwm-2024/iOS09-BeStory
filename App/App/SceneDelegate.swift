@@ -90,11 +90,21 @@ extension SceneDelegate {
         )
         
         DIContainer.shared.register(
-            type: SharingVideoUseCaseInterface.self,
+            type: VideoUseCase.self,
             instance: VideoUseCase(
                 sharingVideoRepository: DIContainer.shared.resolve(type: SharingVideoRepositoryInterface.self),
                 editVideoRepository: DIContainer.shared.resolve(type: EditVideoRepositoryInterface.self)
             )
+        )
+        
+        DIContainer.shared.register(
+            type: SharingVideoUseCaseInterface.self,
+            instance: DIContainer.shared.resolve(type: VideoUseCase.self)
+        )
+
+        DIContainer.shared.register(
+            type: EditVideoUseCaseInterface.self,
+            instance: DIContainer.shared.resolve(type: VideoUseCase.self)
         )
     }
 
@@ -122,7 +132,9 @@ extension SceneDelegate {
 
         DIContainer.shared.register(
             type: SharedVideoEditViewModel.self,
-            instance: SharedVideoEditViewModel()
+            instance: SharedVideoEditViewModel(
+                usecase: DIContainer.shared.resolve(type: EditVideoUseCaseInterface.self)
+            )
         )
     }
 }

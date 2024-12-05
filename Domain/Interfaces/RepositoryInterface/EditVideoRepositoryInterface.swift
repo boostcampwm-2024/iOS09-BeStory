@@ -10,8 +10,8 @@ import Entity
 
 public protocol EditVideoRepositoryInterface {
     var editedVideos: PassthroughSubject<[Video], Never> { get }
-    
-    func updateVideo(_ video: [Video])
+
+    func initializedVideo(_ videos: [Video])
     func trimmingVideo(_ video: Video)
     func reArrangingVideo(_ videos: [Video])
 }

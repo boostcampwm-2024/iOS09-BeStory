@@ -59,6 +59,7 @@ public final class VideoListViewController: UIViewController {
 // MARK: - Setting
 private extension VideoListViewController {
     func setupViewAttributes() {
+        navigationController?.isNavigationBarHidden = true
         view.backgroundColor = .black
         collectionView.register(VideoListCollectionViewCell.self,
                                 forCellWithReuseIdentifier: VideoListCollectionViewCell.identifier)

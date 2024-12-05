@@ -32,7 +32,7 @@ public final class FileSystemManager {
         }
         let destinationURL = folder.appending(path: originalFileName)
         
-        guard !fileManager.fileExists(atPath: destinationURL.path) else { return nil }
+        guard fileManager.fileExists(atPath: destinationURL.path) else { return nil }
         return destinationURL
     }
     

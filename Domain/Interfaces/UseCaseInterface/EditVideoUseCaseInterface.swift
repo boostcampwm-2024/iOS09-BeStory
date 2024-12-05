@@ -12,7 +12,7 @@ import Foundation
 public protocol EditVideoUseCaseInterface {
     var editedVideos: PassthroughSubject<[Video], Never> { get }
     
-    func fetchVideos() -> [Video]
+    func fetchVideos() async -> [Video]
     
     func trimmingVideo(url: URL, startTime: Double, endTime: Double)
     func reArrangingVideo(url: URL, index: Int)
