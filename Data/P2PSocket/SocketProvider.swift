@@ -192,26 +192,20 @@ extension SocketProvider: MCSessionDelegate {
         peer peerID: MCPeerID,
         didChange state: MCSessionState
     ) {
-        guard let socketPeer = mapToSocketPeer(peerID) else { return }
-        
-        var willRemovedAtStorage: Bool = false
+        guard var socketPeer = mapToSocketPeer(peerID) else { return }
         
         switch state {
             case .connected:
+                socketPeer.state = .connected
                 MCPeerIDStorage.shared.update(state: .connected, id: peerID)
             case .notConnected:
-                willRemovedAtStorage = socketPeer.state == .connected
-                MCPeerIDStorage.shared.update(state: .disconnected, id: peerID)
+                MCPeerIDStorage.shared.update(state: .found, id: peerID)
+                socketPeer.state = .disconnected
+
             default: break
         }
         
-        if let sendSocketPeer = mapToSocketPeer(peerID) {
-            updatedPeer.send(sendSocketPeer)
-        }
-        
-        if willRemovedAtStorage {
-            MCPeerIDStorage.shared.remove(peerId: peerID)
-        }
+        updatedPeer.send(socketPeer)
     }
     
     public func session(
@@ -219,6 +213,10 @@ extension SocketProvider: MCSessionDelegate {
         didReceive data: Data,
         fromPeer peerID: MCPeerID
     ) {
+        if let message = try? JSONDecoder().decode(SocketMessage.self, from: data) {
+            print(message)
+        }
+        
         guard let socketPeer = mapToSocketPeer(peerID) else { return }
         
         dataShared.send((data, socketPeer))
@@ -270,12 +268,10 @@ extension SocketProvider: MCNearbyServiceBrowserDelegate {
         foundPeer peerID: MCPeerID,
         withDiscoveryInfo info: [String: String]?
     ) {
-        // 없어지는 경우, disConnected / lost
         if var peer = mapToSocketPeer(peerID) {
             peer.state = .found
             MCPeerIDStorage.shared.update(state: .found, id: peerID)
             updatedPeer.send(peer)
-            
         }
         
         guard
@@ -284,7 +280,7 @@ extension SocketProvider: MCNearbyServiceBrowserDelegate {
             let id = info["id"]
         else { return }
         MCPeerIDStorage.shared.append(peerId: peerID, id: id, state: .found)
-        // 여기 까진 잘되는 거 아냐? MCPeerID가 달라..?
+
         guard let peer = mapToSocketPeer(peerID) else { return }
         updatedPeer.send(peer)
     }
@@ -311,8 +307,11 @@ extension SocketProvider: MCNearbyServiceAdvertiserDelegate {
         guard
             isAllowedInvitation,
             let invitationPeer = mapToSocketPeer(peerID)
-        else { return invitationHandler(false, session) }
-        
+        else {
+            print("isNowAllowedInvitation: \(mapToSocketPeer(peerID))")
+            return invitationHandler(false, session)
+        }
+        print("invitationReceive")
         invitationReceived.send(invitationPeer)
         self.invitationHandler = invitationHandler
     }
