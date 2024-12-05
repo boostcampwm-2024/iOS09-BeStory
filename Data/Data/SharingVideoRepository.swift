@@ -29,6 +29,7 @@ public final class SharingVideoRepository: SharingVideoRepositoryInterface {
     
     public let updatedSharedVideo = PassthroughSubject<SharedVideo, Never>()
     public let isSynchronized = PassthroughSubject<Void, Never>()
+    public let startSynchronize = PassthroughSubject<Void, Never>()
     
     public init(socketProvider: SharingVideoSocketProvidable) {
         self.socketProvider = socketProvider
@@ -45,6 +46,7 @@ public final class SharingVideoRepository: SharingVideoRepositoryInterface {
                 guard let data = try? JSONDecoder().decode(SyncMessage.self, from: data) else { return }
                 switch data {
                     case .hash(let hashes):
+                        startSynchronize.send(())
                         sendComparingResult(with: hashes, to: peerID.id)
                     case .hashMatch(let result):
                         synchronize(with: result, to: peerID.id)

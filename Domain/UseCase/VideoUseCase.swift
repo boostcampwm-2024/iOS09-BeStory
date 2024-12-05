@@ -20,6 +20,7 @@ public final class VideoUseCase {
     private let editVideoRepository: EditVideoRepositoryInterface
 
 	public let isSynchronized = PassthroughSubject<Void, Never>()
+    public let startSynchronize = PassthroughSubject<Void, Never>()
     public let updatedSharedVideo = PassthroughSubject<SharedVideo, Never>()
     public let editedVideos = PassthroughSubject<[Video], Never>()
 	
@@ -105,6 +106,10 @@ private extension VideoUseCase {
 		sharingVideoRepository.isSynchronized
 			.subscribe(isSynchronized)
 			.store(in: &cancellables)
+        
+        sharingVideoRepository.startSynchronize
+            .subscribe(startSynchronize)
+            .store(in: &cancellables)
         
         editVideoRepository.editedVideos
             .sink(with: self) { owner, videos in
