@@ -29,6 +29,8 @@ public final class EditVideoRepository: EditVideoRepositoryInterface {
         let id = socketProvider.id
         let peerIDs = socketProvider.connectedPeers().map { $0.id }
         self.elementSet = .init(id: id, peerIDs: peerIDs)
+        
+        binding()
     }
 }
 
@@ -53,12 +55,6 @@ public extension EditVideoRepository {
             socketProvider.broadcast(data: elementData)
         }
     }
-    
-    func updateVideo(_ videos: [Video]) {
-        Task {
-            await elementSetState(videos)
-        }
-    }
 }
 
 // MARK: - Binding
@@ -66,7 +62,7 @@ private extension EditVideoRepository {
     func binding() {
         socketProvider.dataShared
             .sink(with: self) { owner, data in
-                owner.merge(data: data.0, from: data.1)
+                owner.merge(data: data.0)
             }
             .store(in: &cancellables)
         
@@ -87,7 +83,8 @@ private extension EditVideoRepository {
         let elements = vidoes.map {
             DataMapper.mappingToEditVideoElement(
                 $0,
-                editor: socketProvider.displayName
+                editorID: socketProvider.id,
+                editorName: socketProvider.displayName
             )
         }
         
@@ -98,13 +95,14 @@ private extension EditVideoRepository {
     func elementSetState(_ video: Video) async -> LWWElementSetState<EditVideoElement> {
         let element = DataMapper.mappingToEditVideoElement(
             video,
-            editor: socketProvider.displayName
+            editorID: socketProvider.id,
+            editorName: socketProvider.displayName
         )
         
         return await elementSet.localAdd(element: element)
     }
     
-    func merge(data: Data, from user: SocketPeer) {
+    func merge(data: Data) {
         guard
             let elementSetState = try? JSONDecoder().decode(LWWElementSetState<EditVideoElement>.self, from: data)
         else { return }
