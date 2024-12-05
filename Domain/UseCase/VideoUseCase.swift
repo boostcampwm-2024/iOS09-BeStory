@@ -139,10 +139,11 @@ private extension VideoUseCase {
         let video = editingVideos.remove(at: oldIndex)
         editingVideos.insert(video, at: index)
         
-        let newVideos = editingVideos.enumerated().map { (index, video) in
+        let listIndexOrderedVideo = editingVideos.enumerated().map { (index, video) in
             updatedVideo(video: video, index: index)
         }
-
+        
+        editingVideos = listIndexOrderedVideo
         return newVideos
     }
     
