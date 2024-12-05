@@ -8,6 +8,7 @@
 import Foundation
 
 struct VideoTimelineItem: Codable, Hashable {
+    let date: Date
     let url: URL
     let thumbnailImage: Data
     let duration: String

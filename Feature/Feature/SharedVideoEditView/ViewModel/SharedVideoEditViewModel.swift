@@ -201,6 +201,7 @@ private extension SharedVideoEditViewModel {
         let durationString = convertToDurationString(with: await asset.totalSeconds)
 
         return VideoTimelineItem(
+            date: Date.now,
             url: url,
             thumbnailImage: thumbnailData ?? Data(),
             duration: durationString

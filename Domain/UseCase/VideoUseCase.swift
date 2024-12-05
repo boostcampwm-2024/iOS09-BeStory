@@ -64,12 +64,12 @@ extension VideoUseCase: EditVideoUseCaseInterface {
                 author: video.author,
                 duration: duration
             )
-            
+
             videos.append(video)
         }
         
         videos.forEach { editingVideos[$0.url.path] = $0 }
-        
+        editVideoRepository.initializedVideo(videos)
         return videos
     }
     
