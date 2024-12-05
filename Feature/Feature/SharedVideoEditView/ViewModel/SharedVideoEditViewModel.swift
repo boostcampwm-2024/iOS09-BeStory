@@ -43,7 +43,11 @@ extension SharedVideoEditViewModel {
                 owner.updateTappedVideoPresentationModel(upperValue: value)
             case .sliderEditSaveButtonDidTapped:
                 guard let currentTappedVideoPresentationModel = owner.tappedVideoPresentationModel else { return }
-
+                if let index = owner.videoPresentationModels.firstIndex(where: {
+                    $0 == currentTappedVideoPresentationModel
+                }) {
+                    owner.videoPresentationModels[index] = currentTappedVideoPresentationModel
+                }
                 owner.usecase.trimmingVideo(
                     url: currentTappedVideoPresentationModel.url,
                     startTime: currentTappedVideoPresentationModel.startTime,
