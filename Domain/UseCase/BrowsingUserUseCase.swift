@@ -27,7 +27,7 @@ public final class BrowsingUserUseCase: BrowsingUserUseCaseInterface {
     public let invitationResult = PassthroughSubject<InvitedUser, Never>()
     public let invitationReceived = PassthroughSubject<BrowsedUser, Never>()
     public let invitationDidFired = PassthroughSubject<Void, Never>()
-    public let connectedUser = PassthroughSubject<BrowsedUser, Never>()
+    public let connectedUser = PassthroughSubject<InvitedUser, Never>()
     public let openingEvent = PassthroughSubject<Void, Never>()
     
     public init(repository: BrowsingUserRepositoryInterface, invitationTimeout: Double = 30.0) {
@@ -47,6 +47,7 @@ public extension BrowsingUserUseCase {
     }
     
     func inviteUser(with id: String) {
+        invitationUserID = id
         repository.stopReceiveInvitation()
         repository.inviteUser(with: id, timeout: invitationTimeout)
     }
@@ -119,6 +120,11 @@ private extension BrowsingUserUseCase {
     }
 
     func invitationResultDidReceive(with invitedUser: InvitedUser) {
+        guard invitationUserID == invitedUser.id else {
+            return connectedUserDidReceive(invitedUser)
+        }
+        invitationUserID = nil
+
         repository.startReceiveInvitation()
         switch invitedUser.state {
             case .accept:
@@ -129,6 +135,11 @@ private extension BrowsingUserUseCase {
                 invitationResult.send(invitedUser)
             default: break
         }
+    }
+    
+    func connectedUserDidReceive(_ user: InvitedUser) {
+        guard user.state == .accept else { return }
+        connectedUser.send(user)
     }
     
     func invitationDidReceive(from user: BrowsedUser) {
