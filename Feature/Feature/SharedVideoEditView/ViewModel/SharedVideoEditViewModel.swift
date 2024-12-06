@@ -11,6 +11,10 @@ import Core
 import Entity
 import Interfaces
 
+protocol SharedVideoEditCoordinatable: AnyObject {
+    func nextButtonDidTap()
+}
+
 public final class SharedVideoEditViewModel {
     typealias Input = SharedVideoEditViewInput
     typealias Output = SharedVideoEditViewOutput
@@ -21,6 +25,8 @@ public final class SharedVideoEditViewModel {
     private var videoPresentationModels: [VideoPresentationModel] = []
     private var tappedVideoPresentationModel: VideoPresentationModel?
     private let usecase: EditVideoUseCaseInterface
+
+    weak var coordinator: SharedVideoEditCoordinatable?
 
     public init(usecase: EditVideoUseCaseInterface) {
         self.usecase = usecase
@@ -49,6 +55,8 @@ extension SharedVideoEditViewModel {
                     startTime: currentTappedVideoPresentationModel.startTime,
                     endTime: currentTappedVideoPresentationModel.endTime
                 )
+            case .nextButtonDidTap:
+                owner.coordinator?.nextButtonDidTap()
             }
         }
         .store(in: &cancellables)

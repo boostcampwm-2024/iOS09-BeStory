@@ -33,9 +33,7 @@ public final class SharingVideoRepository: SharingVideoRepositoryInterface {
     public init(socketProvider: SharingVideoSocketProvidable) {
         self.socketProvider = socketProvider
         socketProvider.resourceShared
-            .compactMap { resource in
-                DataMapper.mappingToSharedVideo(resource)
-            }
+            .compactMap { DataMapper.mappingToSharedVideo($0) }
             .subscribe(updatedSharedVideo)
             .store(in: &cancellables)
         
