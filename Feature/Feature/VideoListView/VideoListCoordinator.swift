@@ -34,7 +34,7 @@ final class VideoListCoordinator: Coordinator, VideoListCoordinatable {
         navigationController?.pushViewController(viewController, animated: true)
     }
 
-    func nextButtonDidTap() {
+    func attachSharedEditVideo() {
         guard sharedEditVideoCoordinator == nil else { return }
         
         let coordinator = sharedEditVideoContainer.coordinator(listener: self)

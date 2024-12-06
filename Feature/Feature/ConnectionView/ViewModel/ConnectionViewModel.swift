@@ -57,6 +57,7 @@ final public class ConnectionViewModel {
     }
     
     func fetchBrowedUsers() {
+        self.isCurrentPresentedView = true
         usecase.startAdvertising()
         usecase.fetchBrowsedUsers().forEach({ self.found(user: $0) })
     }
@@ -98,8 +99,6 @@ extension ConnectionViewModel {
 // MARK: - Binding
 private extension ConnectionViewModel {
     func setupBind() {
-        // isInGroup
-        // group을 어떻게 감지해????????
         usecase.isInGroup
             .filter { [weak self] _ in self?.isCurrentPresentedView ?? false }
             .sink(with: self) { owner, value in

@@ -12,7 +12,7 @@ import Entity
 import Interfaces
 
 protocol VideoListCoordinatable: AnyObject {
-    func nextButtonDidTap()
+    func attachSharedEditVideo()
 }
 
 public final class MultipeerVideoListViewModel {
@@ -45,7 +45,7 @@ private extension MultipeerVideoListViewModel {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 guard let self else { return }
-                coordinator?.nextButtonDidTap()
+                coordinator?.attachSharedEditVideo()
             }
             .store(in: &cancellables)
         
