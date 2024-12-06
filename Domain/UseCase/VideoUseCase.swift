@@ -15,13 +15,18 @@ import Interfaces
 public final class VideoUseCase {
 	private var cancellables: Set<AnyCancellable> = []
 	private var sharedVideos: [SharedVideo] = []
-    private var editingVideos = [String: Video]()
+    private var editingVideos = [Video]()
 	private let sharingVideoRepository: SharingVideoRepositoryInterface
     private let editVideoRepository: EditVideoRepositoryInterface
 
 	public let isSynchronized = PassthroughSubject<Void, Never>()
+    public let startSynchronize = PassthroughSubject<Void, Never>()
     public let updatedSharedVideo = PassthroughSubject<SharedVideo, Never>()
     public let editedVideos = PassthroughSubject<[Video], Never>()
+    
+    public var videos: [Video] {
+        editingVideos.sorted(by: { $0.index < $1.index })
+    }
 	
     public init(
         sharingVideoRepository: SharingVideoRepositoryInterface,
@@ -61,7 +66,7 @@ extension VideoUseCase: EditVideoUseCaseInterface {
     public func fetchVideos() async -> [Video] {
         var videos = [Video]()
         let sortedVideos = sharedVideos
-            .sorted { $0.localUrl.path < $1.localUrl.path }
+            .sorted { $0.localUrl.lastPathComponent < $1.localUrl.lastPathComponent }
         
         for (index, video) in sortedVideos.enumerated() {
             let duration = await duration(url: video.localUrl)
@@ -76,8 +81,8 @@ extension VideoUseCase: EditVideoUseCaseInterface {
             videos.append(video)
         }
         
-        videos.forEach { editingVideos[$0.url.path] = $0 }
         editVideoRepository.initializedVideo(videos)
+        editingVideos = videos
         return videos
     }
     
@@ -87,7 +92,7 @@ extension VideoUseCase: EditVideoUseCaseInterface {
     }
     
     public func reArrangingVideo(url: URL, index: Int) {
-        let videos = updatedVideos(url: url, index: index)
+        let videos = updatedVideos(url: url, to: index)
         editVideoRepository.reArrangingVideo(videos)
     }
 }
@@ -106,13 +111,21 @@ private extension VideoUseCase {
 			.subscribe(isSynchronized)
 			.store(in: &cancellables)
         
+        sharingVideoRepository.startSynchronize
+            .subscribe(startSynchronize)
+            .store(in: &cancellables)
+        
         editVideoRepository.editedVideos
-            .subscribe(editedVideos)
+            .sink(with: self) { (owner, videos) in
+                owner.editingVideos = videos
+                owner.editedVideos.send(videos)
+            }
             .store(in: &cancellables)
 	}
     
     func updatedVideo(url: URL, startTime: Double, endTime: Double) -> Video? {
-        guard let video = editingVideos[url.path] else { return nil }
+        guard let video = editingVideos.first(where: { $0.url.path == url.path })
+        else { return nil }
                 
         let newVideo = Video(
             url: video.url,
@@ -125,36 +138,29 @@ private extension VideoUseCase {
             endTime: endTime
         )
         
-        editingVideos[url.path] = video
-        
         return newVideo
     }
     
-    func updatedVideos(url: URL, index: Int) -> [Video] {
-        guard let video = editingVideos[url.path] else { return [] }
-        var newVideos = [Video]()
-        let beforeIndex = video.index
-        let adder = beforeIndex < index ? -1 : 1
-        
-        let lowerBound = min(beforeIndex, index)
-        let upperBound = min(beforeIndex, index)
-        
-        let videos = editingVideos.values
-            .filter { $0.index >= lowerBound && $0.index < upperBound }
-            .map { updatedVideo(video: $0, index: index + adder) }
+    func updatedVideos(url: URL, to index: Int) -> [Video] {
+        guard let oldIndex = editingVideos.firstIndex(where: { $0.url.lastPathComponent == url.lastPathComponent })
+        else { return editingVideos }
 
-        newVideos.append(contentsOf: videos)
-        newVideos.append(updatedVideo(video: video, index: index))
-        newVideos.forEach { editingVideos[$0.url.path] = $0 }
+        let video = editingVideos.remove(at: oldIndex)
+        editingVideos.insert(video, at: index)
         
-        return newVideos
+        let listIndexOrderedVideo = editingVideos.enumerated().map { (index, video) in
+            updatedVideo(video: video, index: index)
+        }
+        
+        editingVideos = listIndexOrderedVideo
+        return editingVideos
     }
     
     func updatedVideo(video: Video, index: Int) -> Video {
         return Video(
             url: video.url,
             name: video.name,
-            index: video.index,
+            index: index,
             duration: video.duration,
             author: video.author,
             editor: video.editor,

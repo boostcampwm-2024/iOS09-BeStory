@@ -61,6 +61,11 @@ public final class SharedVideoEditViewController: UIViewController {
         
         input.send(.viewDidLoad)
     }
+    
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: true)
+    }
 }
 
 // MARK: - Binding
@@ -105,6 +110,12 @@ private extension SharedVideoEditViewController {
 				owner.presentCancelAlertViewController()
 			}
 			.store(in: &cancellables)
+        
+        nextButton.bs.tap
+            .sink(with: self) { owner, _ in
+                owner.navigateToPreview()
+            }
+            .store(in: &cancellables)
 	}
 }
 
@@ -389,6 +400,13 @@ private extension SharedVideoEditViewController {
                 .cancel()]
         ), animated: true)
 	}
+    
+    func navigateToPreview() {
+        let previewViewController = PreviewViewController(
+            viewModel: DIContainer.shared.resolve(type: PreviewViewModel.self)
+        )
+        navigationController?.pushViewController(previewViewController, animated: true)
+    }
 }
 
 // MARK: - UICollectionViewDelegate
@@ -453,14 +471,25 @@ extension SharedVideoEditViewController: UICollectionViewDropDelegate {
 
         snapshot.deleteItems(draggedItems)
         let targetIndex = destinationIndexPath.item
+        
         let currentItems = snapshot.itemIdentifiers
         var updatedItems = currentItems
         updatedItems.insert(contentsOf: draggedItems, at: targetIndex)
-        
-        applySnapShot(with: updatedItems)
 
         coordinator.items.forEach { item in
             coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
         }
+        
+        applySnapShot(with: updatedItems)
+        
+        collectionView.scrollToItem(
+            at: destinationIndexPath,
+            at: .centeredHorizontally,
+            animated: true
+        )
+        
+        guard let reorderItem = videoTimelineDataSource.itemIdentifier(for: destinationIndexPath) else { return }
+
+        input.send(.timelineCellOrderDidChanged(to: targetIndex, url: reorderItem.url))
     }
 }

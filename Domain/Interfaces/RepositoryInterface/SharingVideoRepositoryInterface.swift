@@ -12,6 +12,7 @@ import Foundation
 public protocol SharingVideoRepositoryInterface {
     var updatedSharedVideo: PassthroughSubject<SharedVideo, Never> { get }
     var isSynchronized: PassthroughSubject<Void, Never> { get }
+    var startSynchronize: PassthroughSubject<Void, Never> { get }
 
     func shareVideo(url: URL, resourceName: String)
     func broadcastHashes()

@@ -16,3 +16,10 @@ struct VideoPresentationModel {
 	let endTime: Double
 	let frameImage: UIImageWrapper
 }
+
+extension VideoPresentationModel: Equatable {
+    static func == (lhs: VideoPresentationModel, rhs: VideoPresentationModel) -> Bool {
+        if lhs.url == rhs.url { return true }
+        return false
+    }
+}

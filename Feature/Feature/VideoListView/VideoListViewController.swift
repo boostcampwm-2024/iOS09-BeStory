@@ -101,6 +101,10 @@ private extension VideoListViewController {
                 switch output {
                 case .videoListDidChanged(let videos):
                     self?.items = videos
+                case .readyForNextScreen:
+                    self?.view.hideToast()
+                case .startSynchronize:
+                    self?.pause()
                 }
             }
             .store(in: &cancellables)
@@ -116,6 +120,7 @@ private extension VideoListViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.input.send(.validateSynchronization)
+                self?.pause()
             }
             .store(in: &cancellables)
     }
@@ -185,6 +190,11 @@ private extension VideoListViewController {
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
         present(picker, animated: true, completion: nil)
+    }
+    
+    func pause() {
+        view.showToast(message: "동기화 중입니다...")
+        nextButton.isEnabled = false
     }
 }
 

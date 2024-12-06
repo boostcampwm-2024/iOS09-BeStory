@@ -48,6 +48,13 @@ private extension MultipeerVideoListViewModel {
                 coordinator?.nextButtonDidTap()
             }
             .store(in: &cancellables)
+        
+        usecase.startSynchronize
+            .sink { [weak self] _ in
+                guard let self else { return }
+                output.send(.startSynchronize)
+            }
+            .store(in: &cancellables)
     }
 }
 
