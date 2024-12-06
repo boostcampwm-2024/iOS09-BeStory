@@ -6,8 +6,10 @@
 //
 
 import AVFoundation
+import Core
 import Combine
 import UIKit
+import SnapKit
 
 public final class PreviewViewController: UIViewController {
     private let videoView = VideoPlayerView()
@@ -100,12 +102,12 @@ private extension PreviewViewController {
         videoView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.horizontalEdges.equalToSuperview()
-            make.height.equalTo(550)
+            make.height.equalTo(500)
         }
         
         saveButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(videoView.snp.bottom).offset(30)
+            make.top.equalTo(videoView.snp.bottom).offset(20)
             make.width.equalTo(160)
             make.height.equalTo(50)
         }

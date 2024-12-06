@@ -11,13 +11,19 @@ import Core
 import Entity
 import Interfaces
 
+protocol VideoListCoordinatable: AnyObject {
+    func attachSharedEditVideo()
+}
+
 public final class MultipeerVideoListViewModel {
     private var videoItems: [VideoListItem] = []
     private let usecase: SharingVideoUseCaseInterface
     
     var output = PassthroughSubject<Output, Never>()
     var cancellables: Set<AnyCancellable> = []
-    
+
+    weak var coordinator: VideoListCoordinatable?
+
     public init(usecase: SharingVideoUseCaseInterface) {
         self.usecase = usecase
         setupBind()
@@ -36,9 +42,10 @@ private extension MultipeerVideoListViewModel {
             .store(in: &cancellables)
         
         usecase.isSynchronized
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 guard let self else { return }
-                output.send(.readyForNextScreen)
+                coordinator?.attachSharedEditVideo()
             }
             .store(in: &cancellables)
         

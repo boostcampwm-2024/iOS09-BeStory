@@ -103,7 +103,6 @@ private extension VideoListViewController {
                     self?.items = videos
                 case .readyForNextScreen:
                     self?.view.hideToast()
-                    self?.navigateToEditor()
                 case .startSynchronize:
                     self?.pause()
                 }
@@ -191,13 +190,6 @@ private extension VideoListViewController {
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
         present(picker, animated: true, completion: nil)
-    }
-    
-    func navigateToEditor() {
-        let sharedVideoEditViewController = SharedVideoEditViewController(
-            viewModel: DIContainer.shared.resolve(type: SharedVideoEditViewModel.self)
-        )
-        navigationController?.pushViewController(sharedVideoEditViewController, animated: true)
     }
     
     func pause() {

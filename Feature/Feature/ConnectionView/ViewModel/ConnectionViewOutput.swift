@@ -23,5 +23,4 @@ enum ConnectionViewOutput {
     case connected(user: InvitedUser)
     case invitationRejectedBy(name: String)
     case invitationTimeout
-    case openSharedVideoList
 }

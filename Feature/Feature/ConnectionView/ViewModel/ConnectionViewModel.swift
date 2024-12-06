@@ -11,6 +11,10 @@ import Entity
 import Foundation
 import Interfaces
 
+protocol ConnectionCoordinatable: AnyObject {
+    func attachVideoList()
+}
+
 final public class ConnectionViewModel {
     // MARK: - Typealias
 
@@ -18,7 +22,7 @@ final public class ConnectionViewModel {
     typealias Output = ConnectionViewOutput
 
     // MARK: - Properties
-
+    private var isCurrentPresentedView = true
     private let usecase: BrowsingUserUseCaseInterface
     private var output = PassthroughSubject<Output, Never>()
     private var cancellables: Set<AnyCancellable> = []
@@ -27,6 +31,8 @@ final public class ConnectionViewModel {
     private var innerRadius: CGFloat?
     private var outerRadius: CGFloat?
     private var usedPositions: [String: CGPoint] = [:]
+
+    weak var coordinator: ConnectionCoordinatable?
 
     // MARK: - Initializer
 
@@ -49,6 +55,16 @@ final public class ConnectionViewModel {
         guard self.centerPosition == currentCenter else { return false }
         return true
     }
+    
+    func fetchBrowedUsers() {
+        self.isCurrentPresentedView = true
+        usecase.startAdvertising()
+        usecase.fetchBrowsedUsers().forEach({ self.found(user: $0) })
+    }
+    
+    func isNotCurrentPresentedView() {
+        self.isCurrentPresentedView = false
+    }
 }
 
 // MARK: - Transform
@@ -61,7 +77,7 @@ extension ConnectionViewModel {
             switch result {
             // Connection Input
             case .fetchUsers:
-                usecase.fetchBrowsedUsers().forEach({ self.found(user: $0) })
+                fetchBrowedUsers()
             case .inviteUser(let id):
                 usecase.inviteUser(with: id)
             // Invitation Input
@@ -81,11 +97,10 @@ extension ConnectionViewModel {
 }
 
 // MARK: - Binding
-
 private extension ConnectionViewModel {
     func setupBind() {
-        // isInGroup
         usecase.isInGroup
+            .filter { [weak self] _ in self?.isCurrentPresentedView ?? false }
             .sink(with: self) { owner, value in
                 value ? owner.usecase.stopAdvertising() : owner.usecase.startAdvertising()
             }
@@ -140,9 +155,10 @@ private extension ConnectionViewModel {
             .store(in: &cancellables)
         
         usecase.openingEvent
+            .receive(on: DispatchQueue.main)
             .sink(with: self) { owner, _ in
-                owner.output.send(.openSharedVideoList)
-                owner.usecase.rejectInvitation()
+                owner.usecase.stopAdvertising()
+                owner.coordinator?.attachVideoList()
             }
             .store(in: &cancellables)
     }

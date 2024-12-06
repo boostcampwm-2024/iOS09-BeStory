@@ -25,7 +25,7 @@ public final class VideoUseCase {
     public let editedVideos = PassthroughSubject<[Video], Never>()
     
     public var videos: [Video] {
-        editingVideos.values.sorted(by: { $0.index < $1.index })
+        editingVideos.sorted(by: { $0.index < $1.index })
     }
 	
     public init(
@@ -123,12 +123,6 @@ private extension VideoUseCase {
             .store(in: &cancellables)
 	}
     
-    func updateEditingVideos(_ videos: [Video]) {
-        videos.forEach {
-            editingVideos[$0.url.path] = $0
-        }
-    }
-    
     func updatedVideo(url: URL, startTime: Double, endTime: Double) -> Video? {
         guard let video = editingVideos.first(where: { $0.url.path == url.path })
         else { return nil }
@@ -159,7 +153,7 @@ private extension VideoUseCase {
         }
         
         editingVideos = listIndexOrderedVideo
-        return newVideos
+        return editingVideos
     }
     
     func updatedVideo(video: Video, index: Int) -> Video {

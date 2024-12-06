@@ -13,5 +13,6 @@ enum SharedVideoEditViewInput {
     case sliderModelLowerValueDidChanged(value: Double)
     case sliderModelUpperValueDidChanged(value: Double)
     case sliderEditSaveButtonDidTapped
+    case nextButtonDidTap
     case timelineCellOrderDidChanged(to: Int, url: URL)
 }

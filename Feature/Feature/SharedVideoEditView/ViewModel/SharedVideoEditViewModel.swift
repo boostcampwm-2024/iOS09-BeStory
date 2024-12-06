@@ -11,6 +11,10 @@ import Core
 import Entity
 import Interfaces
 
+protocol SharedVideoEditCoordinatable: AnyObject {
+    func attachPreview()
+}
+
 public final class SharedVideoEditViewModel {
     typealias Input = SharedVideoEditViewInput
     typealias Output = SharedVideoEditViewOutput
@@ -21,6 +25,8 @@ public final class SharedVideoEditViewModel {
     private var videoPresentationModels: [VideoPresentationModel] = []
     private var tappedVideoPresentationModel: VideoPresentationModel?
     private let usecase: EditVideoUseCaseInterface
+
+    weak var coordinator: SharedVideoEditCoordinatable?
 
     public init(usecase: EditVideoUseCaseInterface) {
         self.usecase = usecase
@@ -53,6 +59,8 @@ extension SharedVideoEditViewModel {
                     startTime: currentTappedVideoPresentationModel.startTime,
                     endTime: currentTappedVideoPresentationModel.endTime
                 )
+            case .nextButtonDidTap:
+                owner.coordinator?.attachPreview()
             case .timelineCellOrderDidChanged(let to, let url):
                 owner.videoOrderChanged(to: to, url: url)
             }
@@ -89,9 +97,6 @@ private extension SharedVideoEditViewModel {
                         async let item = owner.makeVideoTimelineItem(with: video.url, asset: asset)
                         await timeLineItem.append(item)
                     }
-//                    let newTimelineItems = await orderdVideos.asyncCompactMap { video in
-//                        return await
-//                    }
                     owner.output.send(.timelineItemsDidChanged(items: timeLineItem))
                 }
             }

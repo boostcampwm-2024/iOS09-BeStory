@@ -19,7 +19,7 @@ public final class EditVideoRepository: EditVideoRepositoryInterface {
     // MARK: - Properties
     private var cancellables: Set<AnyCancellable> = []
     private let socketProvider: EditVideoSocketProvidable
-    private var elementSet: LWWElementSet<EditVideoElement>
+    private let elementSet: LWWElementSet<EditVideoElement>
     
     public let editedVideos = PassthroughSubject<[Video], Never>()
     
@@ -74,28 +74,20 @@ public extension EditVideoRepository {
 // MARK: - Binding
 private extension EditVideoRepository {
     func binding() {
-        socketProvider.updatedPeer.sink(with: self) { owner, _ in
-            let id = owner.socketProvider.id
-            let peerIDs = owner.socketProvider.connectedPeers().map { $0.id }
-            owner.elementSet = .init(id: id, peerIDs: peerIDs)
-            owner.bindUpdatedElements()
-        }.store(in: &cancellables)
+        Task {
+            await elementSet.updatedElements
+                .sink(with: self) { owner, elements in
+                    print(elements.count)
+                    owner.sendVideo(elements: elements)
+                }
+                .store(in: &cancellables)
+        }
 
         socketProvider.dataShared
             .sink(with: self) { owner, data in
                 owner.merge(data: data.0)
             }
             .store(in: &cancellables)
-    }
-
-    func bindUpdatedElements() {
-        Task {
-            await elementSet.updatedElements
-                .sink(with: self) { owner, elements in
-                    owner.sendVideo(elements: elements)
-                }
-                .store(in: &cancellables)
-        }
     }
 }
 

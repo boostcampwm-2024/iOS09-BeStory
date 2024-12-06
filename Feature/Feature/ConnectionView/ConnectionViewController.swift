@@ -102,8 +102,6 @@ extension ConnectionViewController {
                     case .invitationTimeout:
                         owner.resetCurrentAlert()
                         owner.invitationTimeoutAlert()
-                    case .openSharedVideoList:
-                        owner.openVideoList()
                 }
             }
             .store(in: &cancellables)
@@ -185,14 +183,6 @@ private extension ConnectionViewController {
     
     func resetCurrentUserId() {
         currentUserId = nil
-    }
-    
-    func openVideoList() {
-        let videoListViewController = VideoListViewController(
-            viewModel: DIContainer.shared.resolve(type: MultipeerVideoListViewModel.self)
-        )
-        guard navigationController?.viewControllers.last === self else { return }
-        self.navigationController?.pushViewController(videoListViewController, animated: true)
     }
     
     func presentInvitationReceivedAlert(by user: BrowsedUser) {

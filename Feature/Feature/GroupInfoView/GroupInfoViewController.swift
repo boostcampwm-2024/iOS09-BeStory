@@ -68,24 +68,22 @@ private extension GroupInfoViewController {
         view.addSubview(participantScrollView)
         view.addSubview(exitButton)
       
-//        exitButton.isEnabled = false
         participantScrollView.addSubview(participantStackView)
     }
     
     func setupViewConstraints() {
         countView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(10)
+            $0.top.equalToSuperview().offset(10)
             $0.trailing.equalToSuperview().inset(28)
             $0.height.equalTo(20)
         }
         participantScrollView.snp.makeConstraints {
-            $0.leading.equalToSuperview().inset(20)
-            $0.trailing.equalTo(exitButton.snp.leading).offset(-8)
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(30)
+            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.top.equalTo(countView.snp.bottom).offset(20)
             $0.height.equalTo(35)
         }
         exitButton.snp.makeConstraints {
-            $0.top.equalTo(countView.snp.bottom).offset(10)
+            $0.top.equalTo(participantScrollView.snp.bottom).offset(10)
             $0.height.equalTo(38)
             $0.trailing.equalToSuperview().inset(14)
         }
