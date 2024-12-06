@@ -11,10 +11,13 @@ import Foundation
 import Photos
 import Interfaces
 
+protocol PreviewCoordinatable: AnyObject { }
+
 public final class PreviewViewModel {
     typealias Input = PreviewViewInput
     typealias Output = PreviewViewOutput
     
+    weak var coordinator: PreviewCoordinatable?
     var output = PassthroughSubject<Output, Never>()
     var cancellables: Set<AnyCancellable> = []
     
