@@ -10,6 +10,7 @@ import Interfaces
 
 public protocol SharedEditVideoDependency {
     var editVideoUseCase: EditVideoUseCaseInterface { get }
+    var previewContainer: PreviewContainable { get }
 }
 
 public protocol SharedEditVideoContainable {
@@ -21,7 +22,10 @@ public final class SharedVideoEditContainer:
     public func coordinator(listener: SharedVideoEditListener) -> Coordinatable {
         let viewModel = SharedVideoEditViewModel(usecase: dependency.editVideoUseCase)
         
-        let coordinator = SharedVideoEditCoordinator(viewModel: viewModel)
+        let coordinator = SharedVideoEditCoordinator(
+            viewModel: viewModel,
+            previewContainer: dependency.previewContainer
+        )
         
         coordinator.listener = listener
         

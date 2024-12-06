@@ -12,7 +12,7 @@ import Entity
 import Interfaces
 
 protocol SharedVideoEditCoordinatable: AnyObject {
-    func nextButtonDidTap()
+    func attachPreview()
 }
 
 public final class SharedVideoEditViewModel {
@@ -60,7 +60,7 @@ extension SharedVideoEditViewModel {
                     endTime: currentTappedVideoPresentationModel.endTime
                 )
             case .nextButtonDidTap:
-                owner.coordinator?.nextButtonDidTap()
+                owner.coordinator?.attachPreview()
             case .timelineCellOrderDidChanged(let to, let url):
                 owner.videoOrderChanged(to: to, url: url)
             }
@@ -97,9 +97,6 @@ private extension SharedVideoEditViewModel {
                         async let item = owner.makeVideoTimelineItem(with: video.url, asset: asset)
                         await timeLineItem.append(item)
                     }
-//                    let newTimelineItems = await orderdVideos.asyncCompactMap { video in
-//                        return await
-//                    }
                     owner.output.send(.timelineItemsDidChanged(items: timeLineItem))
                 }
             }

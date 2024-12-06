@@ -113,7 +113,7 @@ private extension SharedVideoEditViewController {
         
         nextButton.bs.tap
             .sink(with: self) { owner, _ in
-                owner.navigateToPreview()
+                owner.input.send(.nextButtonDidTap)
             }
             .store(in: &cancellables)
 	}
@@ -400,13 +400,6 @@ private extension SharedVideoEditViewController {
                 .cancel()]
         ), animated: true)
 	}
-    
-    func navigateToPreview() {
-        let previewViewController = PreviewViewController(
-            viewModel: DIContainer.shared.resolve(type: PreviewViewModel.self)
-        )
-        navigationController?.pushViewController(previewViewController, animated: true)
-    }
 }
 
 // MARK: - UICollectionViewDelegate
